@@ -6,8 +6,8 @@ x3 = x1 * x2
 print x3
 print "Bazinga"
 print "Bazinga"
-napis = "Jestem zmienna"
-print napis
+# napis = "Jestem zmienna"
+# print napis
 
 print "Liczby calkowite:"
 print 5 + 1

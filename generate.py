@@ -54,9 +54,9 @@ class LLVMGenerator:
     def assign_real(self, id, value):
         self.main_text += "store double "+value+", double* %"+id+"\n"
 
-    # @staticmethod
-    # def assign_str(self, id, value):
-    #     self.main_text += "store double "+value+", double* %"+id+"\n"
+    @staticmethod
+    def assign_str(self, id, value):
+        self.main_text += "store double "+value+", double* %"+id+"\n"
 
     @staticmethod
     def load_i32(self, id):
