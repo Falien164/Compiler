@@ -29,6 +29,13 @@ class LLVMGenerator:
 
     @staticmethod
     def printf_str(self, id):
+        # matched_lines = [line for line in self.main_text.split('\n') if "@"+id in line]
+        # print(matched_lines)
+        self.main_text += "%"+str(self.reg)+" = call i32 (i8*, ...) @printf(i8* getelementptr inbounds (["+str(len(id))+" x i8], ["+str(len(id))+" x i8]* @"+id+", i32 0, i32 0))\n"
+        self.reg+=1
+            
+    @staticmethod
+    def printf_undefined_str(self, id):
         self.header_text += "@.str"+str(self.reg)+" = private unnamed_addr constant ["+str(len(id)+2)+" x i8] c\""+id+"\\0A\\00\"\n"        #+2 bo dodajemy dwa znaki
         self.main_text += "%"+str(self.reg)+" = call i32 (i8*, ...) @printf(i8* getelementptr inbounds (["+str(len(id)+2)+" x i8], ["+str(len(id)+2)+" x i8]* @.str"+str(self.reg)+", i32 0, i32 0))\n"
         self.reg+=1
@@ -54,9 +61,11 @@ class LLVMGenerator:
     def assign_real(self, id, value):
         self.main_text += "store double "+value+", double* %"+id+"\n"
 
-    @staticmethod
-    def assign_str(self, id, value):
-        self.main_text += "store double "+value+", double* %"+id+"\n"
+    # @staticmethod
+    # def assign_str(self, id, value):   
+    #     self.header_text += "@"+id+" = private unnamed_addr constant ["+str(len(value)+1)+" x i8] c"+value+"\\0A\\00\"\n"  
+    #     self.main_text += "%" +str(self.reg)+"= bitcast ["+str(len(value)+1)+"x i8]* @"+id+" to i8*\n"
+    #     self.reg+=1
 
     @staticmethod
     def load_i32(self, id):

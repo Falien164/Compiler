@@ -37,8 +37,8 @@ class RewriteHelloListener(HelloListener):
         for i in range(0,self.stack.qsize()):
             print(self.stack.get())
 
-    # Exit a parse tree produced by HelloParser#stat.
-    def exitStat(self, ctx:HelloParser.StatContext):
+    # Exit a parse tree produced by HelloParser#block.
+    def exitBlock(self, ctx:HelloParser.BlockContext):
         self.line+=1
 
     # Exit a parse tree produced by HelloParser#printf.
@@ -50,19 +50,22 @@ class RewriteHelloListener(HelloListener):
             if(species=="INT"):
                 LLVMGenerator.printf_i32(self.llvmGenerator, ID)
             elif(species=="REAL"):
-                LLVMGenerator.printf_real(self.llvmGenerator, ID)
+                LLVMGenerator.printf_real(self.llvmGenerator, ID)            
+            elif(species=="STR"):
+                LLVMGenerator.printf_str(self.llvmGenerator, ID)
 
         elif(not self.stack.empty()):
             v = self.stack.get_nowait()
+            print(v)
             if(v[1]=="INT"):
                 LLVMGenerator.printf_undefined_i32(self.llvmGenerator, v[0])
             if(v[1]=="REAL"):
                 LLVMGenerator.printf_undefined_real(self.llvmGenerator, v[0])            
-            elif(v[1]=="STR"):
+            elif(v[-1]=="STR"):
                 value = v[0]
                 value = value[:-1]
                 value = value[1:]
-                LLVMGenerator.printf_str(self.llvmGenerator, value)
+                LLVMGenerator.printf_undefined_str(self.llvmGenerator, value)
         else:
             print(ctx.getRuleIndex())
             self.error("unknown variable "+ID)
@@ -74,7 +77,6 @@ class RewriteHelloListener(HelloListener):
             v = self.stack.get_nowait()
         else:
             self.error("EMPTY STACK with ID = " + ID)
-        print(v[0] , v[1])
         if(ID not in self.variables):                   #for int and real not for string
             if(v[1]=="INT"):
                 LLVMGenerator.declare_i32(self.llvmGenerator, ID)
@@ -85,13 +87,56 @@ class RewriteHelloListener(HelloListener):
             LLVMGenerator.assign_i32(self.llvmGenerator, ID, v[0])
         if(v[1]=="REAL"):
             LLVMGenerator.assign_real(self.llvmGenerator, ID, v[0])
-        if(v[1]=="STR"):
-            print(v)
-            LLVMGenerator.assign_str(self.llvmGenerator, v[0], ID)
+        # if(v[1]=="STR"):
+        #     value = v[0][:-1]
+        #     LLVMGenerator.assign_str(self.llvmGenerator,ID, value)
         
 
     # Exit a parse tree produced by HelloParser#expr0.
-    def exitAdd(self, ctx:HelloParser.Expr0Context):     #ADD
+    # def exitAdd(self, ctx:HelloParser.Expr0Context):     #ADD
+    #     if(not self.stack.empty()):
+    #         v1 = self.stack.get_nowait()
+    #     else:
+    #         self.error("EMPTY STACK with ID = " + ctx.expr1().getText())
+    #     if(not self.stack.empty()):
+    #         v2 = self.stack.get_nowait()
+    #     else:
+    #         self.error("EMPTY STACK with ID = " + ctx.expr1().getText())
+        
+    #     if(v1[1]==(v2[1])):
+    #         if(v1[1]=="INT"):
+    #             LLVMGenerator.add_i32(self.llvmGenerator, v1[0], v2[0])
+    #             self.stack.put(("%"+str(self.llvmGenerator.reg-1), "INT"))
+    #         if(v1[1]=="REAL"):
+    #             LLVMGenerator.add_real(self.llvmGenerator, v1[0], v2[0])
+    #             self.stack.put(("%"+str(self.llvmGenerator.reg-1), "REAL"))
+    #     else:
+    #         self.error(ctx.getStart().getLine(), "add type mismatch")
+
+    # # Exit a parse tree produced by HelloParser#expr1.
+    # def exitSub(self, ctx:HelloParser.Expr1Context):          #SUB
+    #     if(not self.stack.empty()):
+    #         v1 = self.stack.get_nowait()
+    #     else:
+    #         self.error("EMPTY STACK with ID = " + "ODEJMOWANIE 1")
+    #     if(not self.stack.empty()):
+    #         v2 = self.stack.get_nowait()
+    #     else:
+    #         self.error("EMPTY STACK with ID = " + "ODEJMOWANIE 2")
+        
+    #     if(v1[1]==(v2[1])):
+    #         if(v1[1]=="INT"):
+    #             LLVMGenerator.sub_i32(self.llvmGenerator, v1[0], v2[0])
+    #             self.stack.put(("%"+str(self.llvmGenerator.reg-1), "INT"))
+    #         if(v1[1]=="REAL"):
+    #             LLVMGenerator.sub_real(self.llvmGenerator, v1[0], v2[0])
+    #             self.stack.put(("%"+str(self.llvmGenerator.reg-1), "REAL"))
+    #     else:
+    #         self.error(ctx.getStart().getLine(), "add type mismatch")
+
+
+    # Exit a parse tree produced by HelloParser#additiveExpr.
+    def exitAdditiveExpr(self, ctx:HelloParser.AdditiveExprContext):
         if(not self.stack.empty()):
             v1 = self.stack.get_nowait()
         else:
@@ -101,78 +146,80 @@ class RewriteHelloListener(HelloListener):
         else:
             self.error("EMPTY STACK with ID = " + ctx.expr1().getText())
         
-        if(v1[1]==(v2[1])):
-            if(v1[1]=="INT"):
-                LLVMGenerator.add_i32(self.llvmGenerator, v1[0], v2[0])
-                self.stack.put(("%"+str(self.llvmGenerator.reg-1), "INT"))
-            if(v1[1]=="REAL"):
-                LLVMGenerator.add_real(self.llvmGenerator, v1[0], v2[0])
-                self.stack.put(("%"+str(self.llvmGenerator.reg-1), "REAL"))
+        if(str(ctx.ADD()) == '+'):
+            if(v1[1]==(v2[1])):
+                if(v1[1]=="INT"):
+                    LLVMGenerator.add_i32(self.llvmGenerator, v1[0], v2[0])
+                    self.stack.put(("%"+str(self.llvmGenerator.reg-1), "INT"))
+                if(v1[1]=="REAL"):
+                    LLVMGenerator.add_real(self.llvmGenerator, v1[0], v2[0])
+                    self.stack.put(("%"+str(self.llvmGenerator.reg-1), "REAL"))
+                if(v1[-1]=="STR"):
+                    concrete_string ='"' +(v2[0] + v1[0]).replace('"',"")+'"'
+                    name = "@.str"+(str(self.llvmGenerator.reg-1))
+                    # LLVMGenerator.load_str(self.llvmGenerator, name, concrete_string[:-1])
+                    self.stack.put((concrete_string,name, "STR"))
+        elif(str(ctx.SUB()) == '-'):
+                if(v1[1]=="INT"):
+                    LLVMGenerator.sub_i32(self.llvmGenerator, v1[0], v2[0])
+                    self.stack.put(("%"+str(self.llvmGenerator.reg-1), "INT"))
+                if(v1[1]=="REAL"):
+                    LLVMGenerator.sub_real(self.llvmGenerator, v1[0], v2[0])
+                    self.stack.put(("%"+str(self.llvmGenerator.reg-1), "REAL"))
         else:
             self.error(ctx.getStart().getLine(), "add type mismatch")
 
-    # Exit a parse tree produced by HelloParser#expr1.
-    def exitSub(self, ctx:HelloParser.Expr1Context):          #SUB
-        if(not self.stack.empty()):
-            v1 = self.stack.get_nowait()
-        else:
-            self.error("EMPTY STACK with ID = " + "ODEJMOWANIE 1")
-        if(not self.stack.empty()):
-            v2 = self.stack.get_nowait()
-        else:
-            self.error("EMPTY STACK with ID = " + "ODEJMOWANIE 2")
-        
-        if(v1[1]==(v2[1])):
-            if(v1[1]=="INT"):
-                LLVMGenerator.sub_i32(self.llvmGenerator, v1[0], v2[0])
-                self.stack.put(("%"+str(self.llvmGenerator.reg-1), "INT"))
-            if(v1[1]=="REAL"):
-                LLVMGenerator.sub_real(self.llvmGenerator, v1[0], v2[0])
-                self.stack.put(("%"+str(self.llvmGenerator.reg-1), "REAL"))
-        else:
-            self.error(ctx.getStart().getLine(), "add type mismatch")
 
-    # Exit a parse tree produced by HelloParser#expr2.
-    def exitMul(self, ctx:HelloParser.Expr2Context):          #MUL
+    # Exit a parse tree produced by HelloParser#multiplicationExpr.
+    def exitMultiplicationExpr(self, ctx:HelloParser.MultiplicationExprContext):
         if(not self.stack.empty()):
             v1 = self.stack.get_nowait()
         else:
-            self.error("EMPTY STACK with ID = " + "MNOŻENIE 1")
+            self.error("EMPTY STACK with ID = " + "multiplicationExpr 1")
         if(not self.stack.empty()):
             v2 = self.stack.get_nowait()
         else:
-            self.error("EMPTY STACK with ID = " + "MNOŻENIE 2")
-        
-        if(v1[1]==(v2[1])):
-            if(v1[1]=="INT"):
-                LLVMGenerator.mul_i32(self.llvmGenerator, v1[0], v2[0])
-                self.stack.put(("%"+str(self.llvmGenerator.reg-1), "INT"))
-            if(v1[1]=="REAL"):
-                LLVMGenerator.mul_real(self.llvmGenerator, v1[0], v2[0])
-                self.stack.put(("%"+str(self.llvmGenerator.reg-1), "REAL"))
-        else:
-            self.error(ctx.getStart().getLine(), "add type mismatch")
+            self.error("EMPTY STACK with ID = " + "multiplicationExpr 2")
 
-    # Exit a parse tree produced by HelloParser#expr3.
-    def exitDiv(self, ctx:HelloParser.Expr3Context):          #DIV
-        if(not self.stack.empty()):
-            v1 = self.stack.get_nowait()
+        if(str(ctx.MUL()) == '*'):
+            if(v1[1]==(v2[1])):
+                if(v1[1]=="INT"):
+                    LLVMGenerator.mul_i32(self.llvmGenerator, v1[0], v2[0])
+                    self.stack.put(("%"+str(self.llvmGenerator.reg-1), "INT"))
+                if(v1[1]=="REAL"):
+                    LLVMGenerator.mul_real(self.llvmGenerator, v1[0], v2[0])
+                    self.stack.put(("%"+str(self.llvmGenerator.reg-1), "REAL"))
+        elif(str(ctx.DIV()) == '/'):
+            if(v1[1]==(v2[1])):
+                if(v1[1]=="INT"):
+                    LLVMGenerator.div_i32(self.llvmGenerator, v1[0], v2[0])
+                    self.stack.put(("%"+str(self.llvmGenerator.reg-1), "INT"))
+                if(v1[1]=="REAL"):
+                    LLVMGenerator.div_real(self.llvmGenerator, v1[0], v2[0])
+                    self.stack.put(("%"+str(self.llvmGenerator.reg-1), "REAL"))
         else:
-            self.error("EMPTY STACK with ID = " + "DZIELENIE 1")
-        if(not self.stack.empty()):
-            v2 = self.stack.get_nowait()
-        else:
-            self.error("EMPTY STACK with ID = " + "DZIELENIE 2")
+            self.error(str(self.line) + " type mismatch")
+
+    # # Exit a parse tree produced by HelloParser#expr3.
+    # def exitDiv(self, ctx:HelloParser.Expr3Context):          #DIV
+    #     if(not self.stack.empty()):
+    #         v1 = self.stack.get_nowait()
+    #     else:
+    #         self.error("EMPTY STACK with ID = " + "DZIELENIE 1")
+    #     if(not self.stack.empty()):
+    #         v2 = self.stack.get_nowait()
+    #     else:
+    #         self.error("EMPTY STACK with ID = " + "DZIELENIE 2")
         
-        if(v1[1]==(v2[1])):
-            if(v1[1]=="INT"):
-                LLVMGenerator.div_i32(self.llvmGenerator, v1[0], v2[0])
-                self.stack.put(("%"+str(self.llvmGenerator.reg-1), "INT"))
-            if(v1[1]=="REAL"):
-                LLVMGenerator.div_real(self.llvmGenerator, v1[0], v2[0])
-                self.stack.put(("%"+str(self.llvmGenerator.reg-1), "REAL"))
-        else:
-            self.error(ctx.getStart().getLine(), "add type mismatch")
+    #     if(v1[1]==(v2[1])):
+    #         if(v1[1]=="INT"):
+    #             LLVMGenerator.div_i32(self.llvmGenerator, v1[0], v2[0])
+    #             self.stack.put(("%"+str(self.llvmGenerator.reg-1), "INT"))
+    #         if(v1[1]=="REAL"):
+    #             LLVMGenerator.div_real(self.llvmGenerator, v1[0], v2[0])
+    #             self.stack.put(("%"+str(self.llvmGenerator.reg-1), "REAL"))
+    #     else:
+    #         self.error(ctx.getStart().getLine(), "add type mismatch")
 
     # Exit a parse tree produced by HelloParser#int.
     def exitInt(self, ctx:HelloParser.IntContext):
@@ -182,15 +229,15 @@ class RewriteHelloListener(HelloListener):
     def exitReal(self, ctx:HelloParser.RealContext):
         self.stack.put((ctx.REAL().getText(), "REAL"))
     
-    # Exit a parse tree produced by HelloParser#id_number.
-    def exitId_number(self, ctx:HelloParser.Id_numberContext):
-        ID = ctx.ID().getText()
-        species =  self.variables.get(ID) #"ID"
-        if species=="INT":
-            LLVMGenerator.load_i32(self.llvmGenerator, (ID))
-        if species=="REAL":
-            LLVMGenerator.load_real(self.llvmGenerator, (ID))
-        self.stack.put(("%"+(str(self.llvmGenerator.reg-1)), species))
+    # # Exit a parse tree produced by HelloParser#id_number.
+    # def exitId_number(self, ctx:HelloParser.Id_numberContext):
+    #     ID = ctx.ID().getText()
+    #     species =  self.variables.get(ID) #"ID"
+    #     if species=="INT":
+    #         LLVMGenerator.load_i32(self.llvmGenerator, (ID))
+    #     if species=="REAL":
+    #         LLVMGenerator.load_real(self.llvmGenerator, (ID))
+    #     self.stack.put(("%"+(str(self.llvmGenerator.reg-1)), species))
         
     # Exit a parse tree produced by HelloParser#toint.
     def exitToint(self, ctx:HelloParser.TointContext):
@@ -221,6 +268,8 @@ class RewriteHelloListener(HelloListener):
     def exitId(self, ctx:HelloParser.IdContext):
         ID = ctx.ID().getText()
         species =  self.variables.get(ID) #"ID"
+        print(species)
+        print(ID)
         if species=="INT":
             LLVMGenerator.load_i32(self.llvmGenerator, (ID))
         if species=="REAL":
