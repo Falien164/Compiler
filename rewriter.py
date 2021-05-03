@@ -30,7 +30,7 @@ class RewriteHelloListener(HelloListener):
     # Exit a parse tree produced by HelloParser#start.
     def exitStart(self, ctx:HelloParser.StartContext):
         print(LLVMGenerator.generate(self.llvmGenerator))
-        print(self.variables)
+        # print(self.variables)
 
     # Exit a parse tree produced by HelloParser#stat.
     def exitStat(self, ctx:HelloParser.StatContext):
@@ -68,18 +68,18 @@ class RewriteHelloListener(HelloListener):
             v = self.stack.get_nowait()
         else:
             self.error("EMPTY STACK with ID = " + ID)
-        print(v[0] , v[1])
+        # print(v[0] , v[1])
         if(ID not in self.variables):                   #for int and real not for string
             if(v[1]=="INT"):
                 LLVMGenerator.declare_i32(self.llvmGenerator, ID)
-            if(v[1]=="REAL"):       
+            elif(v[1]=="REAL"):       
                 LLVMGenerator.declare_real(self.llvmGenerator, ID)
         self.variables[ID] = v[1]
         if(v[1]=="INT"):
             LLVMGenerator.assign_i32(self.llvmGenerator, ID, v[0])
-        if(v[1]=="REAL"):
+        elif(v[1]=="REAL"):
             LLVMGenerator.assign_real(self.llvmGenerator, ID, v[0])
-        if(v[1]=="STR"):
+        elif(v[1]=="STR"):
             LLVMGenerator.assign_str(self.llvmGenerator, ID)
         
 
