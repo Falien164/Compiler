@@ -1,4 +1,4 @@
-# Generated from Hello.g4 by ANTLR 4.9.2
+# Generated from ./antlr_lib/Hello.g4 by ANTLR 4.9.2
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -11,7 +11,7 @@ else:
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\26")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\27")
         buf.write("o\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b")
         buf.write("\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\3\2\5\2")
         buf.write("\34\n\2\3\2\7\2\37\n\2\f\2\16\2\"\13\2\3\2\3\2\3\3\3\3")
@@ -25,7 +25,7 @@ def serializedATN():
         buf.write("\2\2\6)\3\2\2\2\b,\3\2\2\2\n\65\3\2\2\2\f<\3\2\2\2\16")
         buf.write("C\3\2\2\2\20J\3\2\2\2\22W\3\2\2\2\24Y\3\2\2\2\26h\3\2")
         buf.write("\2\2\30l\3\2\2\2\32\34\5\4\3\2\33\32\3\2\2\2\33\34\3\2")
-        buf.write("\2\2\34\35\3\2\2\2\35\37\7\23\2\2\36\33\3\2\2\2\37\"\3")
+        buf.write("\2\2\34\35\3\2\2\2\35\37\7\24\2\2\36\33\3\2\2\2\37\"\3")
         buf.write("\2\2\2 \36\3\2\2\2 !\3\2\2\2!#\3\2\2\2\" \3\2\2\2#$\7")
         buf.write("\2\2\3$\3\3\2\2\2%(\5\6\4\2&(\5\b\5\2\'%\3\2\2\2\'&\3")
         buf.write("\2\2\2(\5\3\2\2\2)*\7\b\2\2*+\5\26\f\2+\7\3\2\2\2,-\7")
@@ -36,7 +36,7 @@ def serializedATN():
         buf.write("\2<8\3\2\2\2=\r\3\2\2\2>D\5\20\t\2?@\5\20\t\2@A\7\f\2")
         buf.write("\2AB\5\20\t\2BD\3\2\2\2C>\3\2\2\2C?\3\2\2\2D\17\3\2\2")
         buf.write("\2EK\5\22\n\2FG\5\22\n\2GH\7\16\2\2HI\5\22\n\2IK\3\2\2")
-        buf.write("\2JE\3\2\2\2JF\3\2\2\2K\21\3\2\2\2LX\7\21\2\2MX\7\22\2")
+        buf.write("\2JE\3\2\2\2JF\3\2\2\2K\21\3\2\2\2LX\7\22\2\2MX\7\23\2")
         buf.write("\2NO\7\17\2\2OX\5\22\n\2PQ\7\20\2\2QX\5\22\n\2RS\7\3\2")
         buf.write("\2ST\5\n\6\2TU\7\4\2\2UX\3\2\2\2VX\7\n\2\2WL\3\2\2\2W")
         buf.write("M\3\2\2\2WN\3\2\2\2WP\3\2\2\2WR\3\2\2\2WV\3\2\2\2X\23")
@@ -44,7 +44,7 @@ def serializedATN():
         buf.write("[\3\2\2\2^a\3\2\2\2_]\3\2\2\2_`\3\2\2\2`b\3\2\2\2a_\3")
         buf.write("\2\2\2bc\7\7\2\2c\25\3\2\2\2di\5\30\r\2ei\5\24\13\2fi")
         buf.write("\5\n\6\2gi\5\22\n\2hd\3\2\2\2he\3\2\2\2hf\3\2\2\2hg\3")
-        buf.write("\2\2\2i\27\3\2\2\2jm\7\n\2\2km\7\24\2\2lj\3\2\2\2lk\3")
+        buf.write("\2\2\2i\27\3\2\2\2jm\7\n\2\2km\7\25\2\2lj\3\2\2\2lk\3")
         buf.write("\2\2\2m\31\3\2\2\2\r\33 \'\65<CJW_hl")
         return buf.getvalue()
 
@@ -65,8 +65,8 @@ class HelloParser ( Parser ):
 
     symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "STD_OUT", "ASSIGN", "ID", 
-                      "ADD", "MUL", "SUB", "DIV", "TOINT", "TOREAL", "INT", 
-                      "REAL", "NEWLINE", "STRING", "WS", "LINE_COMMENT" ]
+                      "ADD", "MUL", "SUB", "DIV", "TOINT", "TOREAL", "UINT", 
+                      "INT", "REAL", "NEWLINE", "STRING", "WS", "LINE_COMMENT" ]
 
     RULE_start = 0
     RULE_stat = 1
@@ -99,12 +99,13 @@ class HelloParser ( Parser ):
     DIV=12
     TOINT=13
     TOREAL=14
-    INT=15
-    REAL=16
-    NEWLINE=17
-    STRING=18
-    WS=19
-    LINE_COMMENT=20
+    UINT=15
+    INT=16
+    REAL=17
+    NEWLINE=18
+    STRING=19
+    WS=20
+    LINE_COMMENT=21
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
