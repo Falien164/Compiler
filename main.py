@@ -1,9 +1,11 @@
 import sys
 import FileStream
 from antlr4 import *
-from HelloLexer import HelloLexer
-from HelloParser import HelloParser
+from antlr_lib.HelloLexer import HelloLexer
+from antlr_lib.HelloParser import HelloParser
 from rewriter import RewriteHelloListener
+
+
 def main(argv):
     input_stream = FileStream("tekst.py")
     lexer = HelloLexer(input_stream)
@@ -11,7 +13,8 @@ def main(argv):
     parser = HelloParser(stream)
     tree = parser.start()
 
-    print(tree.toStringTree(recog=parser))
+    # print(tree.toStringTree(recog=parser))
+    # print(";")
 
     listener = RewriteHelloListener() 
     walker = ParseTreeWalker()

@@ -1,10 +1,8 @@
 # Generated from Hello.g4 by ANTLR 4.9.2
 from antlr4 import *
-if __name__ is not None and "." in __name__:
-    from .HelloParser import HelloParser
-else:
-    from HelloParser import HelloParser
-from HelloListener import HelloListener
+from antlr_lib.HelloLexer import HelloLexer
+from antlr_lib.HelloParser import HelloParser
+from antlr_lib.HelloListener import HelloListener
 from generate import LLVMGenerator
 # This class defines a complete listener for a parse tree produced by HelloParser.
 import sys
