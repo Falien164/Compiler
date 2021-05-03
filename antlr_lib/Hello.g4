@@ -5,6 +5,10 @@
 //
 // 
 //
+// 
+//
+// 
+//
 
 grammar Hello;
 
@@ -63,8 +67,9 @@ TOINT: '(int)';
 TOREAL: '(real)';
 
 // data types
-INT: '-'? [0-9]+;
-REAL: '-'? INT .INT;
+UINT: [0-9]+;
+INT: '-'? UINT;
+REAL: INT '.' UINT;
 NEWLINE: '\r'? '\n';
 STRING: '"' ( ~('\\' | '"'))* '"';
 
