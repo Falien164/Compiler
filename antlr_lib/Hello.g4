@@ -31,10 +31,8 @@ expression:
 	| expression ADD expression	# add;
 //expr4: '-'? number | number ;
 
-unaryExpression:
-	TOINT value		# toint
-	| TOREAL value	# toreal
-	| '&' value		# address;
+//unaryExpression:
+// TOINT value # toint | TOREAL value # toreal | '&' value # address;
 
 value:
 	TOINT value		# toint
