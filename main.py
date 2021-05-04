@@ -13,14 +13,15 @@ def main(argv):
     parser = HelloParser(stream)
     tree = parser.start()
 
-    # print(tree.toStringTree(recog=parser))
+    print(tree.toStringTree(recog=parser))
     # print(";")
 
-    listener = RewriteHelloListener() 
+    listener = RewriteHelloListener()
     walker = ParseTreeWalker()
     walker.walk(listener, tree)
 
     # print(listener.getResult())
- 
-if __name__ == '__main__':
+
+
+if __name__ == "__main__":
     main(sys.argv)
