@@ -44,6 +44,15 @@ class HelloListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by HelloParser#scanf.
+    def enterScanf(self, ctx:HelloParser.ScanfContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#scanf.
+    def exitScanf(self, ctx:HelloParser.ScanfContext):
+        pass
+
+
     # Enter a parse tree produced by HelloParser#assign.
     def enterAssign(self, ctx:HelloParser.AssignContext):
         pass

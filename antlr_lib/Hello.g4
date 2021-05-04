@@ -7,19 +7,16 @@ grammar Hello;
 start: block EOF;
 block: (stat? NEWLINE)*;
 // Statement list
-stat:
-	printf
-	//	| scanf	
-	| assign;
+stat: printf | scanf | assign;
 
 // Statements
 printf: STD_OUT value;
-//scanf : STD_IN ID;
+scanf: STD_IN ID;
 assign: ID ASSIGN value;
 
 // Key words
 STD_OUT: 'print';
-//STD_IN : 'read' ;
+STD_IN: 'read';
 ASSIGN: '=';
 
 expr:

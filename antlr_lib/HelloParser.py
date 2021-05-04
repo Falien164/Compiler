@@ -11,31 +11,32 @@ else:
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\24")
-        buf.write("H\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b")
-        buf.write("\t\b\4\t\t\t\3\2\3\2\3\2\3\3\5\3\27\n\3\3\3\7\3\32\n\3")
-        buf.write("\f\3\16\3\35\13\3\3\4\3\4\5\4!\n\4\3\5\3\5\3\5\3\6\3\6")
-        buf.write("\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\7\7\63\n")
-        buf.write("\7\f\7\16\7\66\13\7\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3")
-        buf.write("\b\3\b\3\b\3\b\5\bD\n\b\3\t\3\t\3\t\2\3\f\n\2\4\6\b\n")
-        buf.write("\f\16\20\2\4\4\2\t\t\13\13\4\2\b\b\n\n\2J\2\22\3\2\2\2")
-        buf.write("\4\33\3\2\2\2\6 \3\2\2\2\b\"\3\2\2\2\n%\3\2\2\2\f)\3\2")
-        buf.write("\2\2\16C\3\2\2\2\20E\3\2\2\2\22\23\5\4\3\2\23\24\7\2\2")
-        buf.write("\3\24\3\3\2\2\2\25\27\5\6\4\2\26\25\3\2\2\2\26\27\3\2")
-        buf.write("\2\2\27\30\3\2\2\2\30\32\7\21\2\2\31\26\3\2\2\2\32\35")
-        buf.write("\3\2\2\2\33\31\3\2\2\2\33\34\3\2\2\2\34\5\3\2\2\2\35\33")
-        buf.write("\3\2\2\2\36!\5\b\5\2\37!\5\n\6\2 \36\3\2\2\2 \37\3\2\2")
-        buf.write("\2!\7\3\2\2\2\"#\7\5\2\2#$\5\20\t\2$\t\3\2\2\2%&\7\7\2")
-        buf.write("\2&\'\7\6\2\2\'(\5\20\t\2(\13\3\2\2\2)*\b\7\1\2*+\5\16")
-        buf.write("\b\2+\64\3\2\2\2,-\f\5\2\2-.\t\2\2\2.\63\5\f\7\6/\60\f")
-        buf.write("\4\2\2\60\61\t\3\2\2\61\63\5\f\7\5\62,\3\2\2\2\62/\3\2")
-        buf.write("\2\2\63\66\3\2\2\2\64\62\3\2\2\2\64\65\3\2\2\2\65\r\3")
-        buf.write("\2\2\2\66\64\3\2\2\2\67D\7\16\2\28D\7\20\2\29:\7\f\2\2")
-        buf.write(":D\5\16\b\2;<\7\r\2\2<D\5\16\b\2=>\7\3\2\2>?\5\f\7\2?")
-        buf.write("@\7\4\2\2@D\3\2\2\2AD\7\7\2\2BD\7\22\2\2C\67\3\2\2\2C")
-        buf.write("8\3\2\2\2C9\3\2\2\2C;\3\2\2\2C=\3\2\2\2CA\3\2\2\2CB\3")
-        buf.write("\2\2\2D\17\3\2\2\2EF\5\f\7\2F\21\3\2\2\2\b\26\33 \62\64")
-        buf.write("C")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\25")
+        buf.write("N\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b")
+        buf.write("\t\b\4\t\t\t\4\n\t\n\3\2\3\2\3\2\3\3\5\3\31\n\3\3\3\7")
+        buf.write("\3\34\n\3\f\3\16\3\37\13\3\3\4\3\4\3\4\5\4$\n\4\3\5\3")
+        buf.write("\5\3\5\3\6\3\6\3\6\3\7\3\7\3\7\3\7\3\b\3\b\3\b\3\b\3\b")
+        buf.write("\3\b\3\b\3\b\3\b\7\b9\n\b\f\b\16\b<\13\b\3\t\3\t\3\t\3")
+        buf.write("\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\5\tJ\n\t\3\n\3\n\3")
+        buf.write("\n\2\3\16\13\2\4\6\b\n\f\16\20\22\2\4\4\2\n\n\f\f\4\2")
+        buf.write("\t\t\13\13\2P\2\24\3\2\2\2\4\35\3\2\2\2\6#\3\2\2\2\b%")
+        buf.write("\3\2\2\2\n(\3\2\2\2\f+\3\2\2\2\16/\3\2\2\2\20I\3\2\2\2")
+        buf.write("\22K\3\2\2\2\24\25\5\4\3\2\25\26\7\2\2\3\26\3\3\2\2\2")
+        buf.write("\27\31\5\6\4\2\30\27\3\2\2\2\30\31\3\2\2\2\31\32\3\2\2")
+        buf.write("\2\32\34\7\22\2\2\33\30\3\2\2\2\34\37\3\2\2\2\35\33\3")
+        buf.write("\2\2\2\35\36\3\2\2\2\36\5\3\2\2\2\37\35\3\2\2\2 $\5\b")
+        buf.write("\5\2!$\5\n\6\2\"$\5\f\7\2# \3\2\2\2#!\3\2\2\2#\"\3\2\2")
+        buf.write("\2$\7\3\2\2\2%&\7\5\2\2&\'\5\22\n\2\'\t\3\2\2\2()\7\6")
+        buf.write("\2\2)*\7\b\2\2*\13\3\2\2\2+,\7\b\2\2,-\7\7\2\2-.\5\22")
+        buf.write("\n\2.\r\3\2\2\2/\60\b\b\1\2\60\61\5\20\t\2\61:\3\2\2\2")
+        buf.write("\62\63\f\5\2\2\63\64\t\2\2\2\649\5\16\b\6\65\66\f\4\2")
+        buf.write("\2\66\67\t\3\2\2\679\5\16\b\58\62\3\2\2\28\65\3\2\2\2")
+        buf.write("9<\3\2\2\2:8\3\2\2\2:;\3\2\2\2;\17\3\2\2\2<:\3\2\2\2=")
+        buf.write("J\7\17\2\2>J\7\21\2\2?@\7\r\2\2@J\5\20\t\2AB\7\16\2\2")
+        buf.write("BJ\5\20\t\2CD\7\3\2\2DE\5\16\b\2EF\7\4\2\2FJ\3\2\2\2G")
+        buf.write("J\7\b\2\2HJ\7\23\2\2I=\3\2\2\2I>\3\2\2\2I?\3\2\2\2IA\3")
+        buf.write("\2\2\2IC\3\2\2\2IG\3\2\2\2IH\3\2\2\2J\21\3\2\2\2KL\5\16")
+        buf.write("\b\2L\23\3\2\2\2\b\30\35#8:I")
         return buf.getvalue()
 
 
@@ -49,45 +50,48 @@ class HelloParser ( Parser ):
 
     sharedContextCache = PredictionContextCache()
 
-    literalNames = [ "<INVALID>", "'('", "')'", "'print'", "'='", "<INVALID>", 
-                     "'+'", "'*'", "'-'", "'/'", "'(int)'", "'(real)'" ]
+    literalNames = [ "<INVALID>", "'('", "')'", "'print'", "'read'", "'='", 
+                     "<INVALID>", "'+'", "'*'", "'-'", "'/'", "'(int)'", 
+                     "'(real)'" ]
 
     symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "STD_OUT", 
-                      "ASSIGN", "ID", "ADD", "MUL", "SUB", "DIV", "TOINT", 
-                      "TOREAL", "INT", "UINT", "REAL", "NEWLINE", "STRING", 
-                      "WS", "LINE_COMMENT" ]
+                      "STD_IN", "ASSIGN", "ID", "ADD", "MUL", "SUB", "DIV", 
+                      "TOINT", "TOREAL", "INT", "UINT", "REAL", "NEWLINE", 
+                      "STRING", "WS", "LINE_COMMENT" ]
 
     RULE_start = 0
     RULE_block = 1
     RULE_stat = 2
     RULE_printf = 3
-    RULE_assign = 4
-    RULE_expr = 5
-    RULE_atom = 6
-    RULE_value = 7
+    RULE_scanf = 4
+    RULE_assign = 5
+    RULE_expr = 6
+    RULE_atom = 7
+    RULE_value = 8
 
-    ruleNames =  [ "start", "block", "stat", "printf", "assign", "expr", 
-                   "atom", "value" ]
+    ruleNames =  [ "start", "block", "stat", "printf", "scanf", "assign", 
+                   "expr", "atom", "value" ]
 
     EOF = Token.EOF
     T__0=1
     T__1=2
     STD_OUT=3
-    ASSIGN=4
-    ID=5
-    ADD=6
-    MUL=7
-    SUB=8
-    DIV=9
-    TOINT=10
-    TOREAL=11
-    INT=12
-    UINT=13
-    REAL=14
-    NEWLINE=15
-    STRING=16
-    WS=17
-    LINE_COMMENT=18
+    STD_IN=4
+    ASSIGN=5
+    ID=6
+    ADD=7
+    MUL=8
+    SUB=9
+    DIV=10
+    TOINT=11
+    TOREAL=12
+    INT=13
+    UINT=14
+    REAL=15
+    NEWLINE=16
+    STRING=17
+    WS=18
+    LINE_COMMENT=19
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -132,9 +136,9 @@ class HelloParser ( Parser ):
         self.enterRule(localctx, 0, self.RULE_start)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 16
+            self.state = 18
             self.block()
-            self.state = 17
+            self.state = 19
             self.match(HelloParser.EOF)
         except RecognitionException as re:
             localctx.exception = re
@@ -186,21 +190,21 @@ class HelloParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 25
+            self.state = 27
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << HelloParser.STD_OUT) | (1 << HelloParser.ID) | (1 << HelloParser.NEWLINE))) != 0):
-                self.state = 20
+            while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << HelloParser.STD_OUT) | (1 << HelloParser.STD_IN) | (1 << HelloParser.ID) | (1 << HelloParser.NEWLINE))) != 0):
+                self.state = 22
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if _la==HelloParser.STD_OUT or _la==HelloParser.ID:
-                    self.state = 19
+                if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << HelloParser.STD_OUT) | (1 << HelloParser.STD_IN) | (1 << HelloParser.ID))) != 0):
+                    self.state = 21
                     self.stat()
 
 
-                self.state = 22
+                self.state = 24
                 self.match(HelloParser.NEWLINE)
-                self.state = 27
+                self.state = 29
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
 
@@ -222,6 +226,10 @@ class HelloParser ( Parser ):
 
         def printf(self):
             return self.getTypedRuleContext(HelloParser.PrintfContext,0)
+
+
+        def scanf(self):
+            return self.getTypedRuleContext(HelloParser.ScanfContext,0)
 
 
         def assign(self):
@@ -247,17 +255,22 @@ class HelloParser ( Parser ):
         localctx = HelloParser.StatContext(self, self._ctx, self.state)
         self.enterRule(localctx, 4, self.RULE_stat)
         try:
-            self.state = 30
+            self.state = 33
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [HelloParser.STD_OUT]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 28
+                self.state = 30
                 self.printf()
                 pass
-            elif token in [HelloParser.ID]:
+            elif token in [HelloParser.STD_IN]:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 29
+                self.state = 31
+                self.scanf()
+                pass
+            elif token in [HelloParser.ID]:
+                self.enterOuterAlt(localctx, 3)
+                self.state = 32
                 self.assign()
                 pass
             else:
@@ -306,10 +319,56 @@ class HelloParser ( Parser ):
         self.enterRule(localctx, 6, self.RULE_printf)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 32
+            self.state = 35
             self.match(HelloParser.STD_OUT)
-            self.state = 33
+            self.state = 36
             self.value()
+        except RecognitionException as re:
+            localctx.exception = re
+            self._errHandler.reportError(self, re)
+            self._errHandler.recover(self, re)
+        finally:
+            self.exitRule()
+        return localctx
+
+
+    class ScanfContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+            super().__init__(parent, invokingState)
+            self.parser = parser
+
+        def STD_IN(self):
+            return self.getToken(HelloParser.STD_IN, 0)
+
+        def ID(self):
+            return self.getToken(HelloParser.ID, 0)
+
+        def getRuleIndex(self):
+            return HelloParser.RULE_scanf
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterScanf" ):
+                listener.enterScanf(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitScanf" ):
+                listener.exitScanf(self)
+
+
+
+
+    def scanf(self):
+
+        localctx = HelloParser.ScanfContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 8, self.RULE_scanf)
+        try:
+            self.enterOuterAlt(localctx, 1)
+            self.state = 38
+            self.match(HelloParser.STD_IN)
+            self.state = 39
+            self.match(HelloParser.ID)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -353,14 +412,14 @@ class HelloParser ( Parser ):
     def assign(self):
 
         localctx = HelloParser.AssignContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 8, self.RULE_assign)
+        self.enterRule(localctx, 10, self.RULE_assign)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 35
+            self.state = 41
             self.match(HelloParser.ID)
-            self.state = 36
+            self.state = 42
             self.match(HelloParser.ASSIGN)
-            self.state = 37
+            self.state = 43
             self.value()
         except RecognitionException as re:
             localctx.exception = re
@@ -466,8 +525,8 @@ class HelloParser ( Parser ):
         _parentState = self.state
         localctx = HelloParser.ExprContext(self, self._ctx, _parentState)
         _prevctx = localctx
-        _startState = 10
-        self.enterRecursionRule(localctx, 10, self.RULE_expr, _p)
+        _startState = 12
+        self.enterRecursionRule(localctx, 12, self.RULE_expr, _p)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
@@ -475,10 +534,10 @@ class HelloParser ( Parser ):
             self._ctx = localctx
             _prevctx = localctx
 
-            self.state = 40
+            self.state = 46
             self.atom()
             self._ctx.stop = self._input.LT(-1)
-            self.state = 50
+            self.state = 56
             self._errHandler.sync(self)
             _alt = self._interp.adaptivePredict(self._input,4,self._ctx)
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
@@ -486,17 +545,17 @@ class HelloParser ( Parser ):
                     if self._parseListeners is not None:
                         self.triggerExitRuleEvent()
                     _prevctx = localctx
-                    self.state = 48
+                    self.state = 54
                     self._errHandler.sync(self)
                     la_ = self._interp.adaptivePredict(self._input,3,self._ctx)
                     if la_ == 1:
                         localctx = HelloParser.MultiplicationExprContext(self, HelloParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 42
+                        self.state = 48
                         if not self.precpred(self._ctx, 3):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 3)")
-                        self.state = 43
+                        self.state = 49
                         localctx.op = self._input.LT(1)
                         _la = self._input.LA(1)
                         if not(_la==HelloParser.MUL or _la==HelloParser.DIV):
@@ -504,18 +563,18 @@ class HelloParser ( Parser ):
                         else:
                             self._errHandler.reportMatch(self)
                             self.consume()
-                        self.state = 44
+                        self.state = 50
                         self.expr(4)
                         pass
 
                     elif la_ == 2:
                         localctx = HelloParser.AdditiveExprContext(self, HelloParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 45
+                        self.state = 51
                         if not self.precpred(self._ctx, 2):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 2)")
-                        self.state = 46
+                        self.state = 52
                         localctx.op = self._input.LT(1)
                         _la = self._input.LA(1)
                         if not(_la==HelloParser.ADD or _la==HelloParser.SUB):
@@ -523,12 +582,12 @@ class HelloParser ( Parser ):
                         else:
                             self._errHandler.reportMatch(self)
                             self.consume()
-                        self.state = 47
+                        self.state = 53
                         self.expr(3)
                         pass
 
              
-                self.state = 52
+                self.state = 58
                 self._errHandler.sync(self)
                 _alt = self._interp.adaptivePredict(self._input,4,self._ctx)
 
@@ -695,59 +754,59 @@ class HelloParser ( Parser ):
     def atom(self):
 
         localctx = HelloParser.AtomContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 12, self.RULE_atom)
+        self.enterRule(localctx, 14, self.RULE_atom)
         try:
-            self.state = 65
+            self.state = 71
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [HelloParser.INT]:
                 localctx = HelloParser.IntContext(self, localctx)
                 self.enterOuterAlt(localctx, 1)
-                self.state = 53
+                self.state = 59
                 self.match(HelloParser.INT)
                 pass
             elif token in [HelloParser.REAL]:
                 localctx = HelloParser.RealContext(self, localctx)
                 self.enterOuterAlt(localctx, 2)
-                self.state = 54
+                self.state = 60
                 self.match(HelloParser.REAL)
                 pass
             elif token in [HelloParser.TOINT]:
                 localctx = HelloParser.TointContext(self, localctx)
                 self.enterOuterAlt(localctx, 3)
-                self.state = 55
+                self.state = 61
                 self.match(HelloParser.TOINT)
-                self.state = 56
+                self.state = 62
                 self.atom()
                 pass
             elif token in [HelloParser.TOREAL]:
                 localctx = HelloParser.TorealContext(self, localctx)
                 self.enterOuterAlt(localctx, 4)
-                self.state = 57
+                self.state = 63
                 self.match(HelloParser.TOREAL)
-                self.state = 58
+                self.state = 64
                 self.atom()
                 pass
             elif token in [HelloParser.T__0]:
                 localctx = HelloParser.ParContext(self, localctx)
                 self.enterOuterAlt(localctx, 5)
-                self.state = 59
+                self.state = 65
                 self.match(HelloParser.T__0)
-                self.state = 60
+                self.state = 66
                 self.expr(0)
-                self.state = 61
+                self.state = 67
                 self.match(HelloParser.T__1)
                 pass
             elif token in [HelloParser.ID]:
                 localctx = HelloParser.IdContext(self, localctx)
                 self.enterOuterAlt(localctx, 6)
-                self.state = 63
+                self.state = 69
                 self.match(HelloParser.ID)
                 pass
             elif token in [HelloParser.STRING]:
                 localctx = HelloParser.StringContext(self, localctx)
                 self.enterOuterAlt(localctx, 7)
-                self.state = 64
+                self.state = 70
                 self.match(HelloParser.STRING)
                 pass
             else:
@@ -790,10 +849,10 @@ class HelloParser ( Parser ):
     def value(self):
 
         localctx = HelloParser.ValueContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 14, self.RULE_value)
+        self.enterRule(localctx, 16, self.RULE_value)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 67
+            self.state = 73
             self.expr(0)
         except RecognitionException as re:
             localctx.exception = re
@@ -808,7 +867,7 @@ class HelloParser ( Parser ):
     def sempred(self, localctx:RuleContext, ruleIndex:int, predIndex:int):
         if self._predicates == None:
             self._predicates = dict()
-        self._predicates[5] = self.expr_sempred
+        self._predicates[6] = self.expr_sempred
         pred = self._predicates.get(ruleIndex, None)
         if pred is None:
             raise Exception("No predicate with index:" + str(ruleIndex))
