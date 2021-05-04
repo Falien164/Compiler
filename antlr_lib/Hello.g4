@@ -22,20 +22,25 @@ STD_OUT: 'print';
 //STD_IN : 'read' ;
 ASSIGN: '=';
 
-expression: value # primary_expression | expr1 ADD expr1 # add;
-
-expr1: expr2 # single1 | expr2 SUB expr2 # sub;
-
-expr2: expr3 # single2 | expr3 MUL expr3 # mul;
-
-expr3: value # single3 | value DIV value # div;
+expression:
+	value						# primary_expression
+	| '(' expression ')'		# par
+	| expression DIV expression	# div
+	| expression MUL expression	# mul
+	| expression SUB expression	# sub
+	| expression ADD expression	# add;
 //expr4: '-'? number | number ;
 
-value:
-	INT				# int //negative expressions
-	| REAL			# real
-	| TOINT value	# toint
+unaryExpression:
+	TOINT value		# toint
 	| TOREAL value	# toreal
+	| '&' value		# address;
+
+value:
+	TOINT value		# toint
+	| TOREAL value	# toreal
+	| INT			# int //negative expressions
+	| REAL			# real
 	| ID			# id_number;
 
 // array: '<' value (',' value)* '>';
