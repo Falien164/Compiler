@@ -38,3 +38,6 @@ print e             #15.0
 d = 10.0 / 2.0      
 print d             #5.0
 print e * d         #75
+
+read x # should load a as int
+print x
