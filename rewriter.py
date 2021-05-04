@@ -270,12 +270,12 @@ class RewriteHelloListener(HelloListener):
             LLVMGenerator.load_real(self.llvmGenerator, (ID))
         self.stack.put(("%" + (str(self.llvmGenerator.reg - 1)), species))
 
+    # # Enter a parse tree produced by HelloParser#scanf.
+    def enterScanf(self, ctx: HelloParser.ScanfContext):
 
-del HelloParser
+        eprint(ctx)
 
 
-# # Enter a parse tree produced by HelloParser#scanf.
-# def enterScanf(self, ctx:HelloParser.ScanfContext):
 #     pass
 
 # # Exit a parse tree produced by HelloParser#scanf.
@@ -285,3 +285,5 @@ del HelloParser
 #         self.variables[ID] = 0
 #         LLVMGenerator.declare_i32(self.llvmGenerator, ID)
 #     LLVMGenerator.scanf(self.llvmGenerator, ID)
+
+del HelloParser
