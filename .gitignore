@@ -1,4 +1,7 @@
 __pycache__
 .antlr
 venv
+.vscode
+*.svg
+*.css
 *.ll
