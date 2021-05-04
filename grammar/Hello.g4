@@ -1,77 +1,64 @@
-// Define a grammar called Hello
-
-// dodawanie, odejmowanie, mnożenie, dzielenie 	- działa
-// dodawanie stringów							-
-// tworzenie tablic z int albo REAL				-
-// printowanie poszczególnych elementów tablicy	-
-// zmiana poszczególnych elementów tablicy		-
-// 
-
-
+// dodawanie, odejmowanie, mnożenie, dzielenie - działa dodawanie stringów - tworzenie tablic z int
+// albo REAL - printowanie poszczególnych elementów tablicy - zmiana poszczególnych elementów
+// tablicy -
 
 grammar Hello;
 
-start  :  block EOF ;
+start: block EOF;
 block: (stat? NEWLINE)*;
 // Statement list
-stat : printf	
-//	| scanf	
-	| assign 	
-	;
-	
+stat:
+	printf
+	//	| scanf	
+	| assign;
+
 // Statements
-printf : STD_OUT value;
+printf: STD_OUT value;
 //scanf : STD_IN ID;
-assign : ID ASSIGN value ;
+assign: ID ASSIGN value;
 
 // Key words
-STD_OUT : 'print' ;
+STD_OUT: 'print';
 //STD_IN : 'read' ;
-ASSIGN : '=' ;
+ASSIGN: '=';
 
-expr
-	: expr op=(MUL | DIV) expr		#multiplicationExpr
-	| expr op=(ADD | SUB) expr    #additiveExpr
-	| atom							#atomExpr
-	;
+expr:
+	expr op = (MUL | DIV) expr		# multiplicationExpr
+	| expr op = (ADD | SUB) expr	# additiveExpr
+	| atom							# atomExpr;
 
-atom:   INT					#int
-		| REAL				#real
-		| TOINT atom		#toint
-		| TOREAL atom		#toreal
-		| '(' expr ')'		#par
-		| ID				#id
-		| STRING			#string
-;
+atom:
+	INT				# int
+	| REAL			# real
+	| TOINT atom	# toint
+	| TOREAL atom	# toreal
+	| '(' expr ')'	# par
+	| ID			# id
+	| STRING		# string;
 
 //array: '<' value (',' value)* '>' ;
-	
+
 value: expr;
 
 // variable name
-ID : [a-zA-Z][_0-9a-zA-Z]* ;
+ID: [a-zA-Z][_0-9a-zA-Z]*;
 
 // Math operations
-ADD: '+' 
-;
+ADD: '+';
 
-MUL: '*' 
-;
-SUB: '-' 
-;
-DIV: '/'
-;
+MUL: '*';
+SUB: '-';
+DIV: '/';
 TOINT: '(int)';
 TOREAL: '(real)';
 
 // data types
-INT :  '-'?[0-9]+ ;
-REAL :  '-'?INT.INT ;
-NEWLINE : '\r'? '\n' ;	
-STRING : '"' ( ~('\\'|'"') )* '"' ;
+INT: '-'? UINT;
+UINT: [0-9]+;
+REAL: INT '.' UINT;
+NEWLINE: '\r'? '\n';
+STRING: '"' ( ~('\\' | '"'))* '"';
 
 // other
-WS : [ \t]+ -> skip ; // skip white chars
-LINE_COMMENT
-    : '#' ~[\r\n]* -> skip
-;
+WS: [ \t]+ -> skip; // skip white chars
+LINE_COMMENT: '#' ~[\r\n]* -> skip;
