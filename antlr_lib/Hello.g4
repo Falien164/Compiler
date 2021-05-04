@@ -1,60 +1,53 @@
 // dodawanie, odejmowanie, mnożenie, dzielenie - działa dodawanie stringów - tworzenie tablic z int
 // albo REAL - printowanie poszczególnych elementów tablicy - zmiana poszczególnych elementów
 // tablicy -
-// 
-//
-// 
-//
-// 
-//
-// 
-//
 
 grammar Hello;
 
-start: (stat? NEWLINE)* EOF;
+start: (statement? NEWLINE)* EOF;
 
 // Statement list
-stat:
-	printf
-	//	| scanf	
-	| assign;
+statement:
+	printf # stat
+	//	| scanf	 # stat
+	| assign # stat;
 
 // Statements
-printf: STD_OUT value;
+printf: STD_OUT expression;
 //scanf : STD_IN ID;
-assign: ID ASSIGN value;
+assign: ID ASSIGN expression;
 
 // Key words
 STD_OUT: 'print';
 //STD_IN : 'read' ;
 ASSIGN: '=';
 
-expr0: expr1 # single0 | expr1 ADD expr1 # add;
+expression: value # primary_expression | expr1 ADD expr1 # add;
 
 expr1: expr2 # single1 | expr2 SUB expr2 # sub;
 
 expr2: expr3 # single2 | expr3 MUL expr3 # mul;
 
-expr3: number # single3 | number DIV number # div;
+expr3: value # single3 | value DIV value # div;
 //expr4: '-'? number | number ;
 
-number:
+value:
 	INT				# int //negative expressions
 	| REAL			# real
-	| TOINT number	# toint
-	| TOREAL number	# toreal
-	| '(' expr0 ')'	# par
+	| TOINT value	# toint
+	| TOREAL value	# toreal
 	| ID			# id_number;
 
-array: '<' value (',' value)* '>';
+// array: '<' value (',' value)* '>';
 
-value: word | array | expr0 | number;
+// value: expression | word | array | number;
 
 // Possible values
 word: ID # id | STRING # string;
 
-// variable name
+// address: '&' existingID;
+
+// existingID: ID; variable name
 ID: [a-zA-Z][_0-9a-zA-Z]*;
 
 // Math operations
@@ -67,8 +60,8 @@ TOINT: '(int)';
 TOREAL: '(real)';
 
 // data types
-UINT: [0-9]+;
 INT: '-'? UINT;
+UINT: [0-9]+;
 REAL: INT '.' UINT;
 NEWLINE: '\r'? '\n';
 STRING: '"' ( ~('\\' | '"'))* '"';

@@ -44,12 +44,12 @@ class HelloListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by HelloParser#single0.
-    def enterSingle0(self, ctx:HelloParser.Single0Context):
+    # Enter a parse tree produced by HelloParser#primary_expression.
+    def enterPrimary_expression(self, ctx:HelloParser.Primary_expressionContext):
         pass
 
-    # Exit a parse tree produced by HelloParser#single0.
-    def exitSingle0(self, ctx:HelloParser.Single0Context):
+    # Exit a parse tree produced by HelloParser#primary_expression.
+    def exitPrimary_expression(self, ctx:HelloParser.Primary_expressionContext):
         pass
 
 
@@ -152,39 +152,12 @@ class HelloListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by HelloParser#par.
-    def enterPar(self, ctx:HelloParser.ParContext):
-        pass
-
-    # Exit a parse tree produced by HelloParser#par.
-    def exitPar(self, ctx:HelloParser.ParContext):
-        pass
-
-
     # Enter a parse tree produced by HelloParser#id_number.
     def enterId_number(self, ctx:HelloParser.Id_numberContext):
         pass
 
     # Exit a parse tree produced by HelloParser#id_number.
     def exitId_number(self, ctx:HelloParser.Id_numberContext):
-        pass
-
-
-    # Enter a parse tree produced by HelloParser#array.
-    def enterArray(self, ctx:HelloParser.ArrayContext):
-        pass
-
-    # Exit a parse tree produced by HelloParser#array.
-    def exitArray(self, ctx:HelloParser.ArrayContext):
-        pass
-
-
-    # Enter a parse tree produced by HelloParser#value.
-    def enterValue(self, ctx:HelloParser.ValueContext):
-        pass
-
-    # Exit a parse tree produced by HelloParser#value.
-    def exitValue(self, ctx:HelloParser.ValueContext):
         pass
 
 
