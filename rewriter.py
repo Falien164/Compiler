@@ -278,8 +278,10 @@ class RewriteHelloListener(HelloListener):
             self.error(f"VARIABLE : {ID} not declared but used")
         else:
             variable = self.variables[ID]
-            typeName = variable[1]
-            variableId = variable[0]
+            typeName = variable
+            variableId = ID
+            eprint(ID)
+            eprint(variableId)
             if typeName == "INT":
                 LLVMGenerator.scanf_i32(self.llvmGenerator, variableId)
             elif typeName == "REAL":

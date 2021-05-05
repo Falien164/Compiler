@@ -93,12 +93,12 @@ class LLVMGenerator:
 
     @staticmethod
     def scanf_i32(self, id):
-        self.main_text += f"%{self.req} = call i32 (i8*, ...) @__isoc99_scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpi, i32 0, i32 0), i32* %{id})\n"
-        self.req += 1
+        self.main_text += f"%{self.reg} = call i32 (i8*, ...) @__isoc99_scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpi, i32 0, i32 0), i32* %{id})\n"
+        self.reg += 1
 
     def scanf_double(self, id):
-        self.main_text += f"%{self.req} = call i32 (i8*, ...) @__isoc99_scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpd, i32 0, i32 0), double* %{id})\n"
-        self.req += 1
+        self.main_text += f"%{self.reg} = call i32 (i8*, ...) @__isoc99_scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpd, i32 0, i32 0), double* %{id})\n"
+        self.reg += 1
 
     @staticmethod
     def declare_i32(self, id):
