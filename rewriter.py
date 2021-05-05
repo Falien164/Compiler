@@ -4,6 +4,7 @@ from antlr_lib.HelloParser import HelloParser
 from antlr_lib.HelloListener import HelloListener
 from generate import LLVMGenerator
 from util import eprint
+from typing import Tuple, Dict
 
 # This class defines a complete listener for a parse tree produced by HelloParser.
 import sys
@@ -270,13 +271,23 @@ class RewriteHelloListener(HelloListener):
             LLVMGenerator.load_real(self.llvmGenerator, (ID))
         self.stack.put(("%" + (str(self.llvmGenerator.reg - 1)), species))
 
-    # # Enter a parse tree produced by HelloParser#scanf.
-    def enterScanf(self, ctx: HelloParser.ScanfContext):
+    # # Exit a parse tree produced by HelloParser#scanf.
+    def exitScanf(self, ctx: HelloParser.ScanfContext):
+        ID = ctx.ID().getText()
+        if ID not in self.variables:
+            self.error(f"VARIABLE : {ID} not declared but used")
+        else:
+            variable = self.variables[ID]
+            typeName = variable[1]
+            variableId = variable[0]
+            if typeName == "INT":
+                LLVMGenerator.scanf_i32(self.llvmGenerator, variableId)
+            elif typeName == "REAL":
+                LLVMGenerator.scanf_double(self.llvmGenerator, variableId)
+            else:
+                self.error(f"variable {variable}")
+                raise NotImplementedError
 
-        eprint(ctx)
-
-
-#     pass
 
 # # Exit a parse tree produced by HelloParser#scanf.
 # def exitScanf(self, ctx:HelloParser.ScanfContext):
