@@ -1,0 +1,17 @@
+print "Bazinga"
+# print 1
+# print 4.0
+# e= -3.0+1.0
+# print e
+# e= (real)5 * 3.0
+# print e
+# c = 3 * 3
+# print c
+# d = 10 / 2
+# print d
+# b= -3 - 2
+# print b
+# a= 1 + 2
+# print a
+# a= 3 + 2
+# print a
