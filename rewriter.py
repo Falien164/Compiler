@@ -51,8 +51,8 @@ class RewriteHelloListener(HelloListener):
                 LLVMGenerator.printf_i32(self.llvmGenerator, ID)
             elif species == "REAL":
                 LLVMGenerator.printf_real(self.llvmGenerator, ID)
-            elif species[1] == "STR":
-                LLVMGenerator.printf_str(self.llvmGenerator, ID, species[0])
+            elif species[-1] == "STR":
+                LLVMGenerator.printf_str(self.llvmGenerator)
 
         elif not self.stack.empty():
             v = self.stack.get_nowait()
@@ -64,6 +64,7 @@ class RewriteHelloListener(HelloListener):
                 value = v[0]
                 value = value[:-1]
                 value = value[1:]
+                value = "%s" + value  
                 LLVMGenerator.printf_undefined_str(self.llvmGenerator, value)
         else:
             eprint(ctx.getRuleIndex())
@@ -82,6 +83,8 @@ class RewriteHelloListener(HelloListener):
                 LLVMGenerator.declare_i32(self.llvmGenerator, ID)
             if v[-1] == "REAL":
                 LLVMGenerator.declare_real(self.llvmGenerator, ID)
+            if v[-1] == "STR":
+                LLVMGenerator.declare_str(self.llvmGenerator, ID,v[0])
         
         if v[-1] == "INT":
             self.variables[ID] = v[-1]
@@ -107,7 +110,6 @@ class RewriteHelloListener(HelloListener):
             v2 = self.stack.get_nowait()
         else:
             self.error(f"EMPTY STACK - brak dodawania")
-
         if str(ctx.ADD()) == "+":
             if v1[-1] == (v2[-1]):
                 if v1[-1] == "INT":
@@ -117,10 +119,12 @@ class RewriteHelloListener(HelloListener):
                     LLVMGenerator.add_real(self.llvmGenerator, v1[0], v2[0])
                     self.stack.put(("%" + str(self.llvmGenerator.reg - 1), "REAL"))
                 if v1[-1] == "STR":
-                    concrete_string = '"' + (v2[0] + v1[0]).replace('"', "") + '"'
-                    name = "@.str" + (str(self.llvmGenerator.reg - 1))
-                    # LLVMGenerator.load_str(self.llvmGenerator, name, concrete_string[:-1])
-                    self.stack.put((concrete_string, name, "STR"))
+                    LLVMGenerator.add_str(self.llvmGenerator, v1[0], v2[0],v1[0], v2[0])
+                    self.stack.put(("%" + str(self.llvmGenerator.reg - 1), "STR"))
+            elif v1[1][-1] == (v2[1][-1]):
+                if v1[1][-1] == "STR":
+                    LLVMGenerator.add_str(self.llvmGenerator,v1[0], v2[0])
+                    self.stack.put(("%" + str(self.llvmGenerator.reg - 1), "STR"))
         elif str(ctx.SUB()) == "-":
             if v1[-1] == "INT":
                 LLVMGenerator.sub_i32(self.llvmGenerator, v1[0], v2[0])
@@ -169,6 +173,10 @@ class RewriteHelloListener(HelloListener):
     def exitReal(self, ctx: HelloParser.RealContext):
         self.stack.put((ctx.REAL().getText(), "REAL"))
 
+    # Exit a parse tree produced by HelloParser#string.
+    def exitString(self, ctx: HelloParser.StringContext):
+        self.stack.put((ctx.STRING().getText(), "STR"))
+    
     # Exit a parse tree produced by HelloParser#toint.
     def exitToint(self, ctx: HelloParser.TointContext):
         if not self.stack.empty():
@@ -187,10 +195,6 @@ class RewriteHelloListener(HelloListener):
         LLVMGenerator.sitofp(self.llvmGenerator, v[0])
         self.stack.put(("%" + str(self.llvmGenerator.reg - 1), "REAL"))
 
-    # Exit a parse tree produced by HelloParser#string.
-    def exitString(self, ctx: HelloParser.StringContext):
-        self.stack.put((ctx.STRING().getText(), "STR"))
-
     # Exit a parse tree produced by HelloParser#tostr.
     def exitTostr(self, ctx:HelloParser.TostrContext):
         if not self.stack.empty():
@@ -201,9 +205,10 @@ class RewriteHelloListener(HelloListener):
         if(ctx.atom().getText() in self.variables):
             LLVMGenerator.itostr(self.llvmGenerator, ctx.atom().getText())
             print(v)
-            self.stack.put(("%" + str(self.llvmGenerator.reg - 1), "STR"))
-        else:
             self.stack.put((ctx.atom().getText(), "STR"))
+        else:
+            text = '"' +  ctx.atom().getText() + '"'
+            self.stack.put((text, "STR"))
 
     # Exit a parse tree produced by HelloParser#id.
     def exitId(self, ctx: HelloParser.IdContext):
@@ -215,8 +220,9 @@ class RewriteHelloListener(HelloListener):
         elif species == "REAL":
             LLVMGenerator.load_real(self.llvmGenerator, (ID))
             self.stack.put(("%" + (str(self.llvmGenerator.reg - 1)), species))
-        elif species[1] == "STR":
+        elif species[-1] == "STR":
             # self.stack.put(("%" + (str(self.llvmGenerator.reg - 1)), species))    #stare
+            LLVMGenerator.load_str(self.llvmGenerator, ID, species[0])
             self.stack.put((ID, species))
         else:
             self.error(f"variable {ID}")
