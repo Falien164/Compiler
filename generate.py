@@ -51,20 +51,11 @@ class LLVMGenerator:
         self.reg += 1
 
     @staticmethod
-    def printf_str(self, id):
+    def printf_str(self, id, text):
         # matched_lines = [line for line in self.main_text.split('\n') if "@"+id in line]
         # print(matched_lines)
-        self.main_text += (
-            "%"
-            + str(self.reg)
-            + " = call i32 (i8*, ...) @printf(i8* getelementptr inbounds (["
-            + str(len(id))
-            + " x i8], ["
-            + str(len(id))
-            + " x i8]* @"
-            + id
-            + ", i32 0, i32 0))\n"
-        )
+        self.main_text += ("%"+ str(self.reg)+ " = call i32 (i8*, ...) @printf(i8* getelementptr inbounds (["
+            + str(len(text))+ " x i8], ["+ str(len(text))+ " x i8]* @"+ id+ ", i32 0, i32 0))\n")
         self.reg += 1
 
     @staticmethod
@@ -91,6 +82,8 @@ class LLVMGenerator:
         )
         self.reg += 1
 
+
+
     @staticmethod
     def scanf_i32(self, id):
         self.main_text += f"%{self.reg} = call i32 (i8*, ...) @__isoc99_scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpi, i32 0, i32 0), i32* %{id})\n"
@@ -116,11 +109,11 @@ class LLVMGenerator:
     def assign_real(self, id, value):
         self.main_text += f"store double {value}, double* %{id}\n"
 
-    # @staticmethod
-    # def assign_str(self, id, value):
-    #     self.header_text += "@"+id+" = private unnamed_addr constant ["+str(len(value)+1)+" x i8] c"+value+"\\0A\\00\"\n"
-    #     self.main_text += "%" +str(self.reg)+"= bitcast ["+str(len(value)+1)+"x i8]* @"+id+" to i8*\n"
-    #     self.reg+=1
+    @staticmethod
+    def assign_str(self, id, value):
+        self.header_text += "@"+id+" = private unnamed_addr constant ["+str(len(value)+1)+" x i8] c"+value+"\\0A\\00\"\n"
+        self.main_text += "%" +str(self.reg)+"= bitcast ["+str(len(value)+1)+"x i8]* @"+id+" to i8*\n"
+        self.reg+=1
 
     @staticmethod
     def load_i32(self, id):
@@ -189,6 +182,21 @@ class LLVMGenerator:
         self.reg += 1
 
     @staticmethod
+    def itostr(self, id):
+        self.main_text += f"%{self.reg} = alloca [20 x i8]\n"
+        self.reg +=1
+        self.main_text += f"%{self.reg} = getelementptr inbounds [20 x i8], [20 x i8]* %{self.reg-1}, i32 0, i32 0\n"
+        self.reg +=1
+        self.main_text += f"%{self.reg} = load i32, i32* %{id}\n"
+        self.reg +=1
+        self.main_text += f"%{self.reg} = load i32, i32* %{id}\n"
+        self.reg +=1
+        self.main_text += f"%{self.reg} = call i32 (i8*,i8*, ...) @sprintf( i8* %{self.reg-3}, i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpi, i32 0, i32 0), i32 %{self.reg-1})\n"
+        self.reg +=1
+        self.main_text += f"%{self.reg} = load i32, i32* %{id}\n"
+        self.reg +=1
+
+    @staticmethod
     def sitofp(self, id):
         self.main_text += f"%{self.reg} = sitofp i32 {id} to double\n"
         self.reg += 1
@@ -201,6 +209,7 @@ class LLVMGenerator:
     @staticmethod
     def generate(self):
         text = ""
+        text += "declare i32 @sprintf(i8*, i8*, ...)\n"
         text += "declare i32 @printf(i8*, ...)\n"
         text += "declare i32 @__isoc99_scanf(i8*, ...)\n"
         text += '@strpi = constant [4 x i8] c"%d\\0A\\00"\n'

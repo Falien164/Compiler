@@ -29,6 +29,7 @@ atom:
 	| REAL			# real
 	| TOINT atom	# toint
 	| TOREAL atom	# toreal
+	| TOSTR atom 	# tostr
 	| '(' expr ')'	# par
 	| ID			# id
 	| STRING		# string;
@@ -48,6 +49,7 @@ SUB: '-';
 DIV: '/';
 TOINT: '(int)';
 TOREAL: '(real)';
+TOSTR: '(str)';
 
 // data types
 INT: '-'? UINT;

@@ -1,4 +1,4 @@
-# Generated from ./antlr_lib/Hello.g4 by ANTLR 4.9.2
+# Generated from Hello.g4 by ANTLR 4.9.2
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -11,32 +11,33 @@ else:
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\25")
-        buf.write("N\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\26")
+        buf.write("P\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b")
         buf.write("\t\b\4\t\t\t\4\n\t\n\3\2\3\2\3\2\3\3\5\3\31\n\3\3\3\7")
         buf.write("\3\34\n\3\f\3\16\3\37\13\3\3\4\3\4\3\4\5\4$\n\4\3\5\3")
         buf.write("\5\3\5\3\6\3\6\3\6\3\7\3\7\3\7\3\7\3\b\3\b\3\b\3\b\3\b")
         buf.write("\3\b\3\b\3\b\3\b\7\b9\n\b\f\b\16\b<\13\b\3\t\3\t\3\t\3")
-        buf.write("\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\5\tJ\n\t\3\n\3\n\3")
-        buf.write("\n\2\3\16\13\2\4\6\b\n\f\16\20\22\2\4\4\2\n\n\f\f\4\2")
-        buf.write("\t\t\13\13\2P\2\24\3\2\2\2\4\35\3\2\2\2\6#\3\2\2\2\b%")
-        buf.write("\3\2\2\2\n(\3\2\2\2\f+\3\2\2\2\16/\3\2\2\2\20I\3\2\2\2")
-        buf.write("\22K\3\2\2\2\24\25\5\4\3\2\25\26\7\2\2\3\26\3\3\2\2\2")
-        buf.write("\27\31\5\6\4\2\30\27\3\2\2\2\30\31\3\2\2\2\31\32\3\2\2")
-        buf.write("\2\32\34\7\22\2\2\33\30\3\2\2\2\34\37\3\2\2\2\35\33\3")
-        buf.write("\2\2\2\35\36\3\2\2\2\36\5\3\2\2\2\37\35\3\2\2\2 $\5\b")
-        buf.write("\5\2!$\5\n\6\2\"$\5\f\7\2# \3\2\2\2#!\3\2\2\2#\"\3\2\2")
-        buf.write("\2$\7\3\2\2\2%&\7\5\2\2&\'\5\22\n\2\'\t\3\2\2\2()\7\6")
-        buf.write("\2\2)*\7\b\2\2*\13\3\2\2\2+,\7\b\2\2,-\7\7\2\2-.\5\22")
-        buf.write("\n\2.\r\3\2\2\2/\60\b\b\1\2\60\61\5\20\t\2\61:\3\2\2\2")
-        buf.write("\62\63\f\5\2\2\63\64\t\2\2\2\649\5\16\b\6\65\66\f\4\2")
-        buf.write("\2\66\67\t\3\2\2\679\5\16\b\58\62\3\2\2\28\65\3\2\2\2")
-        buf.write("9<\3\2\2\2:8\3\2\2\2:;\3\2\2\2;\17\3\2\2\2<:\3\2\2\2=")
-        buf.write("J\7\17\2\2>J\7\21\2\2?@\7\r\2\2@J\5\20\t\2AB\7\16\2\2")
-        buf.write("BJ\5\20\t\2CD\7\3\2\2DE\5\16\b\2EF\7\4\2\2FJ\3\2\2\2G")
-        buf.write("J\7\b\2\2HJ\7\23\2\2I=\3\2\2\2I>\3\2\2\2I?\3\2\2\2IA\3")
-        buf.write("\2\2\2IC\3\2\2\2IG\3\2\2\2IH\3\2\2\2J\21\3\2\2\2KL\5\16")
-        buf.write("\b\2L\23\3\2\2\2\b\30\35#8:I")
+        buf.write("\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\5\tL\n\t\3")
+        buf.write("\n\3\n\3\n\2\3\16\13\2\4\6\b\n\f\16\20\22\2\4\4\2\n\n")
+        buf.write("\f\f\4\2\t\t\13\13\2S\2\24\3\2\2\2\4\35\3\2\2\2\6#\3\2")
+        buf.write("\2\2\b%\3\2\2\2\n(\3\2\2\2\f+\3\2\2\2\16/\3\2\2\2\20K")
+        buf.write("\3\2\2\2\22M\3\2\2\2\24\25\5\4\3\2\25\26\7\2\2\3\26\3")
+        buf.write("\3\2\2\2\27\31\5\6\4\2\30\27\3\2\2\2\30\31\3\2\2\2\31")
+        buf.write("\32\3\2\2\2\32\34\7\23\2\2\33\30\3\2\2\2\34\37\3\2\2\2")
+        buf.write("\35\33\3\2\2\2\35\36\3\2\2\2\36\5\3\2\2\2\37\35\3\2\2")
+        buf.write("\2 $\5\b\5\2!$\5\n\6\2\"$\5\f\7\2# \3\2\2\2#!\3\2\2\2")
+        buf.write("#\"\3\2\2\2$\7\3\2\2\2%&\7\5\2\2&\'\5\22\n\2\'\t\3\2\2")
+        buf.write("\2()\7\6\2\2)*\7\b\2\2*\13\3\2\2\2+,\7\b\2\2,-\7\7\2\2")
+        buf.write("-.\5\22\n\2.\r\3\2\2\2/\60\b\b\1\2\60\61\5\20\t\2\61:")
+        buf.write("\3\2\2\2\62\63\f\5\2\2\63\64\t\2\2\2\649\5\16\b\6\65\66")
+        buf.write("\f\4\2\2\66\67\t\3\2\2\679\5\16\b\58\62\3\2\2\28\65\3")
+        buf.write("\2\2\29<\3\2\2\2:8\3\2\2\2:;\3\2\2\2;\17\3\2\2\2<:\3\2")
+        buf.write("\2\2=L\7\20\2\2>L\7\22\2\2?@\7\r\2\2@L\5\20\t\2AB\7\16")
+        buf.write("\2\2BL\5\20\t\2CD\7\17\2\2DL\5\20\t\2EF\7\3\2\2FG\5\16")
+        buf.write("\b\2GH\7\4\2\2HL\3\2\2\2IL\7\b\2\2JL\7\24\2\2K=\3\2\2")
+        buf.write("\2K>\3\2\2\2K?\3\2\2\2KA\3\2\2\2KC\3\2\2\2KE\3\2\2\2K")
+        buf.write("I\3\2\2\2KJ\3\2\2\2L\21\3\2\2\2MN\5\16\b\2N\23\3\2\2\2")
+        buf.write("\b\30\35#8:K")
         return buf.getvalue()
 
 
@@ -52,12 +53,12 @@ class HelloParser ( Parser ):
 
     literalNames = [ "<INVALID>", "'('", "')'", "'print'", "'read'", "'='", 
                      "<INVALID>", "'+'", "'*'", "'-'", "'/'", "'(int)'", 
-                     "'(real)'" ]
+                     "'(real)'", "'(str)'" ]
 
     symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "STD_OUT", 
                       "STD_IN", "ASSIGN", "ID", "ADD", "MUL", "SUB", "DIV", 
-                      "TOINT", "TOREAL", "INT", "UINT", "REAL", "NEWLINE", 
-                      "STRING", "WS", "LINE_COMMENT" ]
+                      "TOINT", "TOREAL", "TOSTR", "INT", "UINT", "REAL", 
+                      "NEWLINE", "STRING", "WS", "LINE_COMMENT" ]
 
     RULE_start = 0
     RULE_block = 1
@@ -85,13 +86,14 @@ class HelloParser ( Parser ):
     DIV=10
     TOINT=11
     TOREAL=12
-    INT=13
-    UINT=14
-    REAL=15
-    NEWLINE=16
-    STRING=17
-    WS=18
-    LINE_COMMENT=19
+    TOSTR=13
+    INT=14
+    UINT=15
+    REAL=16
+    NEWLINE=17
+    STRING=18
+    WS=19
+    LINE_COMMENT=20
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -617,6 +619,27 @@ class HelloParser ( Parser ):
 
 
 
+    class TostrContext(AtomContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a HelloParser.AtomContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def TOSTR(self):
+            return self.getToken(HelloParser.TOSTR, 0)
+        def atom(self):
+            return self.getTypedRuleContext(HelloParser.AtomContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterTostr" ):
+                listener.enterTostr(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitTostr" ):
+                listener.exitTostr(self)
+
+
     class ParContext(AtomContext):
 
         def __init__(self, parser, ctx:ParserRuleContext): # actually a HelloParser.AtomContext
@@ -756,7 +779,7 @@ class HelloParser ( Parser ):
         localctx = HelloParser.AtomContext(self, self._ctx, self.state)
         self.enterRule(localctx, 14, self.RULE_atom)
         try:
-            self.state = 71
+            self.state = 73
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [HelloParser.INT]:
@@ -787,26 +810,34 @@ class HelloParser ( Parser ):
                 self.state = 64
                 self.atom()
                 pass
-            elif token in [HelloParser.T__0]:
-                localctx = HelloParser.ParContext(self, localctx)
+            elif token in [HelloParser.TOSTR]:
+                localctx = HelloParser.TostrContext(self, localctx)
                 self.enterOuterAlt(localctx, 5)
                 self.state = 65
-                self.match(HelloParser.T__0)
+                self.match(HelloParser.TOSTR)
                 self.state = 66
-                self.expr(0)
+                self.atom()
+                pass
+            elif token in [HelloParser.T__0]:
+                localctx = HelloParser.ParContext(self, localctx)
+                self.enterOuterAlt(localctx, 6)
                 self.state = 67
+                self.match(HelloParser.T__0)
+                self.state = 68
+                self.expr(0)
+                self.state = 69
                 self.match(HelloParser.T__1)
                 pass
             elif token in [HelloParser.ID]:
                 localctx = HelloParser.IdContext(self, localctx)
-                self.enterOuterAlt(localctx, 6)
-                self.state = 69
+                self.enterOuterAlt(localctx, 7)
+                self.state = 71
                 self.match(HelloParser.ID)
                 pass
             elif token in [HelloParser.STRING]:
                 localctx = HelloParser.StringContext(self, localctx)
-                self.enterOuterAlt(localctx, 7)
-                self.state = 70
+                self.enterOuterAlt(localctx, 8)
+                self.state = 72
                 self.match(HelloParser.STRING)
                 pass
             else:
@@ -852,7 +883,7 @@ class HelloParser ( Parser ):
         self.enterRule(localctx, 16, self.RULE_value)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 73
+            self.state = 75
             self.expr(0)
         except RecognitionException as re:
             localctx.exception = re

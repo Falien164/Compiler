@@ -1,4 +1,4 @@
-# Generated from ./antlr_lib/Hello.g4 by ANTLR 4.9.2
+# Generated from Hello.g4 by ANTLR 4.9.2
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .HelloParser import HelloParser
@@ -122,6 +122,15 @@ class HelloListener(ParseTreeListener):
 
     # Exit a parse tree produced by HelloParser#toreal.
     def exitToreal(self, ctx:HelloParser.TorealContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#tostr.
+    def enterTostr(self, ctx:HelloParser.TostrContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#tostr.
+    def exitTostr(self, ctx:HelloParser.TostrContext):
         pass
 
 
