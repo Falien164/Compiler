@@ -73,18 +73,57 @@ class RewriteHelloListener(HelloListener):
         ID = ctx.ID().getText()
         if not self.stack.empty():
             v = self.stack.get_nowait()
+            if ID not in self.variables:  # for int and real not for string
+                if v[1] == "INT":
+                    LLVMGenerator.declare_i32(self.llvmGenerator, ID)
+                    LLVMGenerator.assign_i32(self.llvmGenerator, ID, v[0])
+                elif v[1] == "REAL":
+                    LLVMGenerator.declare_real(self.llvmGenerator, ID)
+                    LLVMGenerator.assign_real(self.llvmGenerator, ID, v[0])
+                elif v[1] == "ARRAY":
+                    size = self.stack.qsize()
+                    last = self.stack.get_nowait()
+                    ty = last[1]
+                    if ty == "INT":
+                        # assign bo źle nazwałem metodę
+                        LLVMGenerator.assign_array_i32(self.llvmGenerator, ID, size)
+                        LLVMGenerator.store_array_i32(
+                            self.llvmGenerator, ID, size - 1, last[0], size
+                        )
+                    elif ty == "REAL":
+                        LLVMGenerator.assign_array_double(self.llvmGenerator, ID, size)
+                        LLVMGenerator.store_array_double(
+                            self.llvmGenerator, ID, size - 1, last[0], size
+                        )
+                    else:
+                        raise NotImplemented
+                    # reverse queue
+                    for i in range(size - 2, -1, -1):
+                        t = self.stack.get_nowait()
+                        if t[1] != ty:
+                            self.error("Array types are inconsistent")
+                        if ty == "INT":
+                            # assign bo źle nazwałem metodę
+                            LLVMGenerator.store_array_i32(
+                                self.llvmGenerator, ID, i, t[0], size
+                            )
+                        elif ty == "REAL":
+                            LLVMGenerator.store_array_double(
+                                self.llvmGenerator, ID, i, t[0], size
+                            )
+                        else:
+                            raise NotImplemented
+
+                else:
+                    raise NotImplemented
+            self.variables[ID] = v[1]
         else:
             self.error("EMPTY STACK with ID = " + ID)
-        if ID not in self.variables:  # for int and real not for string
-            if v[1] == "INT":
-                LLVMGenerator.declare_i32(self.llvmGenerator, ID)
-            if v[1] == "REAL":
-                LLVMGenerator.declare_real(self.llvmGenerator, ID)
-        self.variables[ID] = v[1]
-        if v[1] == "INT":
-            LLVMGenerator.assign_i32(self.llvmGenerator, ID, v[0])
-        if v[1] == "REAL":
-            LLVMGenerator.assign_real(self.llvmGenerator, ID, v[0])
+            # pop one element
+            # check it's type
+            # save it as T
+            # allocate qsize elements of type T
+            # put it on stack
         # if(v[1]=="STR"):
         #     value = v[0][:-1]
         #     LLVMGenerator.assign_str(self.llvmGenerator,ID, value)
@@ -217,13 +256,7 @@ class RewriteHelloListener(HelloListener):
                 raise NotImplementedError
 
     def exitArray(self, ctx: HelloParser.ArrayContext):
-        # pop one element
-        # check it's type
-        # save it as type
-        # allocate qsize elements of type
-        #
-        for i in range(0, self.stack.qsize()):
-            eprint(self.stack.get())
+        self.stack.put(("", f"ARRAY"))
 
 
 del HelloParser
