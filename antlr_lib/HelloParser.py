@@ -11,32 +11,37 @@ else:
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\25")
-        buf.write("N\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\32")
+        buf.write("^\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b")
         buf.write("\t\b\4\t\t\t\4\n\t\n\3\2\3\2\3\2\3\3\5\3\31\n\3\3\3\7")
         buf.write("\3\34\n\3\f\3\16\3\37\13\3\3\4\3\4\3\4\5\4$\n\4\3\5\3")
         buf.write("\5\3\5\3\6\3\6\3\6\3\7\3\7\3\7\3\7\3\b\3\b\3\b\3\b\3\b")
         buf.write("\3\b\3\b\3\b\3\b\7\b9\n\b\f\b\16\b<\13\b\3\t\3\t\3\t\3")
-        buf.write("\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\5\tJ\n\t\3\n\3\n\3")
-        buf.write("\n\2\3\16\13\2\4\6\b\n\f\16\20\22\2\4\4\2\n\n\f\f\4\2")
-        buf.write("\t\t\13\13\2P\2\24\3\2\2\2\4\35\3\2\2\2\6#\3\2\2\2\b%")
-        buf.write("\3\2\2\2\n(\3\2\2\2\f+\3\2\2\2\16/\3\2\2\2\20I\3\2\2\2")
-        buf.write("\22K\3\2\2\2\24\25\5\4\3\2\25\26\7\2\2\3\26\3\3\2\2\2")
-        buf.write("\27\31\5\6\4\2\30\27\3\2\2\2\30\31\3\2\2\2\31\32\3\2\2")
-        buf.write("\2\32\34\7\22\2\2\33\30\3\2\2\2\34\37\3\2\2\2\35\33\3")
-        buf.write("\2\2\2\35\36\3\2\2\2\36\5\3\2\2\2\37\35\3\2\2\2 $\5\b")
-        buf.write("\5\2!$\5\n\6\2\"$\5\f\7\2# \3\2\2\2#!\3\2\2\2#\"\3\2\2")
-        buf.write("\2$\7\3\2\2\2%&\7\5\2\2&\'\5\22\n\2\'\t\3\2\2\2()\7\6")
-        buf.write("\2\2)*\7\b\2\2*\13\3\2\2\2+,\7\b\2\2,-\7\7\2\2-.\5\22")
-        buf.write("\n\2.\r\3\2\2\2/\60\b\b\1\2\60\61\5\20\t\2\61:\3\2\2\2")
-        buf.write("\62\63\f\5\2\2\63\64\t\2\2\2\649\5\16\b\6\65\66\f\4\2")
-        buf.write("\2\66\67\t\3\2\2\679\5\16\b\58\62\3\2\2\28\65\3\2\2\2")
-        buf.write("9<\3\2\2\2:8\3\2\2\2:;\3\2\2\2;\17\3\2\2\2<:\3\2\2\2=")
-        buf.write("J\7\17\2\2>J\7\21\2\2?@\7\r\2\2@J\5\20\t\2AB\7\16\2\2")
-        buf.write("BJ\5\20\t\2CD\7\3\2\2DE\5\16\b\2EF\7\4\2\2FJ\3\2\2\2G")
-        buf.write("J\7\b\2\2HJ\7\23\2\2I=\3\2\2\2I>\3\2\2\2I?\3\2\2\2IA\3")
-        buf.write("\2\2\2IC\3\2\2\2IG\3\2\2\2IH\3\2\2\2J\21\3\2\2\2KL\5\16")
-        buf.write("\b\2L\23\3\2\2\2\b\30\35#8:I")
+        buf.write("\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t")
+        buf.write("\3\t\3\t\5\tQ\n\t\7\tS\n\t\f\t\16\tV\13\t\3\t\3\t\5\t")
+        buf.write("Z\n\t\3\n\3\n\3\n\2\3\16\13\2\4\6\b\n\f\16\20\22\2\4\4")
+        buf.write("\2\17\17\21\21\4\2\16\16\20\20\2d\2\24\3\2\2\2\4\35\3")
+        buf.write("\2\2\2\6#\3\2\2\2\b%\3\2\2\2\n(\3\2\2\2\f+\3\2\2\2\16")
+        buf.write("/\3\2\2\2\20Y\3\2\2\2\22[\3\2\2\2\24\25\5\4\3\2\25\26")
+        buf.write("\7\2\2\3\26\3\3\2\2\2\27\31\5\6\4\2\30\27\3\2\2\2\30\31")
+        buf.write("\3\2\2\2\31\32\3\2\2\2\32\34\7\27\2\2\33\30\3\2\2\2\34")
+        buf.write("\37\3\2\2\2\35\33\3\2\2\2\35\36\3\2\2\2\36\5\3\2\2\2\37")
+        buf.write("\35\3\2\2\2 $\5\b\5\2!$\5\n\6\2\"$\5\f\7\2# \3\2\2\2#")
+        buf.write("!\3\2\2\2#\"\3\2\2\2$\7\3\2\2\2%&\7\n\2\2&\'\5\22\n\2")
+        buf.write("\'\t\3\2\2\2()\7\13\2\2)*\7\r\2\2*\13\3\2\2\2+,\7\r\2")
+        buf.write("\2,-\7\f\2\2-.\5\22\n\2.\r\3\2\2\2/\60\b\b\1\2\60\61\5")
+        buf.write("\20\t\2\61:\3\2\2\2\62\63\f\5\2\2\63\64\t\2\2\2\649\5")
+        buf.write("\16\b\6\65\66\f\4\2\2\66\67\t\3\2\2\679\5\16\b\58\62\3")
+        buf.write("\2\2\28\65\3\2\2\29<\3\2\2\2:8\3\2\2\2:;\3\2\2\2;\17\3")
+        buf.write("\2\2\2<:\3\2\2\2=Z\7\24\2\2>Z\7\26\2\2?@\7\22\2\2@Z\5")
+        buf.write("\20\t\2AB\7\23\2\2BZ\5\20\t\2CD\7\3\2\2DE\5\16\b\2EF\7")
+        buf.write("\4\2\2FZ\3\2\2\2GZ\7\r\2\2HI\7\r\2\2IJ\7\5\2\2JK\5\16")
+        buf.write("\b\2KL\7\6\2\2LZ\3\2\2\2MT\7\7\2\2NP\5\22\n\2OQ\7\b\2")
+        buf.write("\2PO\3\2\2\2PQ\3\2\2\2QS\3\2\2\2RN\3\2\2\2SV\3\2\2\2T")
+        buf.write("R\3\2\2\2TU\3\2\2\2UW\3\2\2\2VT\3\2\2\2WZ\7\t\2\2XZ\7")
+        buf.write("\30\2\2Y=\3\2\2\2Y>\3\2\2\2Y?\3\2\2\2YA\3\2\2\2YC\3\2")
+        buf.write("\2\2YG\3\2\2\2YH\3\2\2\2YM\3\2\2\2YX\3\2\2\2Z\21\3\2\2")
+        buf.write("\2[\\\5\16\b\2\\\23\3\2\2\2\n\30\35#8:PTY")
         return buf.getvalue()
 
 
@@ -50,14 +55,15 @@ class HelloParser ( Parser ):
 
     sharedContextCache = PredictionContextCache()
 
-    literalNames = [ "<INVALID>", "'('", "')'", "'print'", "'read'", "'='", 
-                     "<INVALID>", "'+'", "'*'", "'-'", "'/'", "'(int)'", 
-                     "'(real)'" ]
+    literalNames = [ "<INVALID>", "'('", "')'", "'['", "']'", "'{'", "','", 
+                     "'}'", "'print'", "'read'", "'='", "<INVALID>", "'+'", 
+                     "'*'", "'-'", "'/'", "'(int)'", "'(real)'" ]
 
-    symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "STD_OUT", 
-                      "STD_IN", "ASSIGN", "ID", "ADD", "MUL", "SUB", "DIV", 
-                      "TOINT", "TOREAL", "INT", "UINT", "REAL", "NEWLINE", 
-                      "STRING", "WS", "LINE_COMMENT" ]
+    symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                      "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                      "STD_OUT", "STD_IN", "ASSIGN", "ID", "ADD", "MUL", 
+                      "SUB", "DIV", "TOINT", "TOREAL", "INT", "UINT", "REAL", 
+                      "NEWLINE", "STRING", "WS", "LINE_COMMENT" ]
 
     RULE_start = 0
     RULE_block = 1
@@ -75,23 +81,28 @@ class HelloParser ( Parser ):
     EOF = Token.EOF
     T__0=1
     T__1=2
-    STD_OUT=3
-    STD_IN=4
-    ASSIGN=5
-    ID=6
-    ADD=7
-    MUL=8
-    SUB=9
-    DIV=10
-    TOINT=11
-    TOREAL=12
-    INT=13
-    UINT=14
-    REAL=15
-    NEWLINE=16
-    STRING=17
-    WS=18
-    LINE_COMMENT=19
+    T__2=3
+    T__3=4
+    T__4=5
+    T__5=6
+    T__6=7
+    STD_OUT=8
+    STD_IN=9
+    ASSIGN=10
+    ID=11
+    ADD=12
+    MUL=13
+    SUB=14
+    DIV=15
+    TOINT=16
+    TOREAL=17
+    INT=18
+    UINT=19
+    REAL=20
+    NEWLINE=21
+    STRING=22
+    WS=23
+    LINE_COMMENT=24
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -675,6 +686,28 @@ class HelloParser ( Parser ):
                 listener.exitString(self)
 
 
+    class ArrayContext(AtomContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a HelloParser.AtomContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def value(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(HelloParser.ValueContext)
+            else:
+                return self.getTypedRuleContext(HelloParser.ValueContext,i)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterArray" ):
+                listener.enterArray(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitArray" ):
+                listener.exitArray(self)
+
+
     class TorealContext(AtomContext):
 
         def __init__(self, parser, ctx:ParserRuleContext): # actually a HelloParser.AtomContext
@@ -732,6 +765,27 @@ class HelloParser ( Parser ):
                 listener.exitId(self)
 
 
+    class Id_dereferenceContext(AtomContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a HelloParser.AtomContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def ID(self):
+            return self.getToken(HelloParser.ID, 0)
+        def expr(self):
+            return self.getTypedRuleContext(HelloParser.ExprContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterId_dereference" ):
+                listener.enterId_dereference(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitId_dereference" ):
+                listener.exitId_dereference(self)
+
+
     class IntContext(AtomContext):
 
         def __init__(self, parser, ctx:ParserRuleContext): # actually a HelloParser.AtomContext
@@ -755,23 +809,26 @@ class HelloParser ( Parser ):
 
         localctx = HelloParser.AtomContext(self, self._ctx, self.state)
         self.enterRule(localctx, 14, self.RULE_atom)
+        self._la = 0 # Token type
         try:
-            self.state = 71
+            self.state = 87
             self._errHandler.sync(self)
-            token = self._input.LA(1)
-            if token in [HelloParser.INT]:
+            la_ = self._interp.adaptivePredict(self._input,7,self._ctx)
+            if la_ == 1:
                 localctx = HelloParser.IntContext(self, localctx)
                 self.enterOuterAlt(localctx, 1)
                 self.state = 59
                 self.match(HelloParser.INT)
                 pass
-            elif token in [HelloParser.REAL]:
+
+            elif la_ == 2:
                 localctx = HelloParser.RealContext(self, localctx)
                 self.enterOuterAlt(localctx, 2)
                 self.state = 60
                 self.match(HelloParser.REAL)
                 pass
-            elif token in [HelloParser.TOINT]:
+
+            elif la_ == 3:
                 localctx = HelloParser.TointContext(self, localctx)
                 self.enterOuterAlt(localctx, 3)
                 self.state = 61
@@ -779,7 +836,8 @@ class HelloParser ( Parser ):
                 self.state = 62
                 self.atom()
                 pass
-            elif token in [HelloParser.TOREAL]:
+
+            elif la_ == 4:
                 localctx = HelloParser.TorealContext(self, localctx)
                 self.enterOuterAlt(localctx, 4)
                 self.state = 63
@@ -787,7 +845,8 @@ class HelloParser ( Parser ):
                 self.state = 64
                 self.atom()
                 pass
-            elif token in [HelloParser.T__0]:
+
+            elif la_ == 5:
                 localctx = HelloParser.ParContext(self, localctx)
                 self.enterOuterAlt(localctx, 5)
                 self.state = 65
@@ -797,20 +856,61 @@ class HelloParser ( Parser ):
                 self.state = 67
                 self.match(HelloParser.T__1)
                 pass
-            elif token in [HelloParser.ID]:
+
+            elif la_ == 6:
                 localctx = HelloParser.IdContext(self, localctx)
                 self.enterOuterAlt(localctx, 6)
                 self.state = 69
                 self.match(HelloParser.ID)
                 pass
-            elif token in [HelloParser.STRING]:
-                localctx = HelloParser.StringContext(self, localctx)
+
+            elif la_ == 7:
+                localctx = HelloParser.Id_dereferenceContext(self, localctx)
                 self.enterOuterAlt(localctx, 7)
                 self.state = 70
+                self.match(HelloParser.ID)
+                self.state = 71
+                self.match(HelloParser.T__2)
+                self.state = 72
+                self.expr(0)
+                self.state = 73
+                self.match(HelloParser.T__3)
+                pass
+
+            elif la_ == 8:
+                localctx = HelloParser.ArrayContext(self, localctx)
+                self.enterOuterAlt(localctx, 8)
+                self.state = 75
+                self.match(HelloParser.T__4)
+                self.state = 82
+                self._errHandler.sync(self)
+                _la = self._input.LA(1)
+                while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << HelloParser.T__0) | (1 << HelloParser.T__4) | (1 << HelloParser.ID) | (1 << HelloParser.TOINT) | (1 << HelloParser.TOREAL) | (1 << HelloParser.INT) | (1 << HelloParser.REAL) | (1 << HelloParser.STRING))) != 0):
+                    self.state = 76
+                    self.value()
+                    self.state = 78
+                    self._errHandler.sync(self)
+                    _la = self._input.LA(1)
+                    if _la==HelloParser.T__5:
+                        self.state = 77
+                        self.match(HelloParser.T__5)
+
+
+                    self.state = 84
+                    self._errHandler.sync(self)
+                    _la = self._input.LA(1)
+
+                self.state = 85
+                self.match(HelloParser.T__6)
+                pass
+
+            elif la_ == 9:
+                localctx = HelloParser.StringContext(self, localctx)
+                self.enterOuterAlt(localctx, 9)
+                self.state = 86
                 self.match(HelloParser.STRING)
                 pass
-            else:
-                raise NoViableAltException(self)
+
 
         except RecognitionException as re:
             localctx.exception = re
@@ -852,7 +952,7 @@ class HelloParser ( Parser ):
         self.enterRule(localctx, 16, self.RULE_value)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 73
+            self.state = 89
             self.expr(0)
         except RecognitionException as re:
             localctx.exception = re

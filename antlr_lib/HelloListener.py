@@ -143,6 +143,24 @@ class HelloListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by HelloParser#id_dereference.
+    def enterId_dereference(self, ctx:HelloParser.Id_dereferenceContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#id_dereference.
+    def exitId_dereference(self, ctx:HelloParser.Id_dereferenceContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#array.
+    def enterArray(self, ctx:HelloParser.ArrayContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#array.
+    def exitArray(self, ctx:HelloParser.ArrayContext):
+        pass
+
+
     # Enter a parse tree produced by HelloParser#string.
     def enterString(self, ctx:HelloParser.StringContext):
         pass
