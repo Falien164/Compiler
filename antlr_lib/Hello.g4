@@ -25,14 +25,18 @@ expr:
 	| atom							# atomExpr;
 
 atom:
-	INT				# int
-	| REAL			# real
-	| TOINT atom	# toint
-	| TOREAL atom	# toreal
-	| '(' expr ')'	# par
-	| ID			# id
-	| STRING		# string;
-
+	INT						# int
+	| REAL					# real
+	| TOINT atom			# toint
+	| TOREAL atom			# toreal
+	| '(' expr ')'			# par
+	| ID					# id
+	| ID '[' expr ']'		# id_dereference
+	| '{' (value ','?)* '}'	# array
+	| STRING				# string;
+/*
+ a[0] <- expression a = {1,2,3,4,5} {expr}
+ */
 //array: '<' value (',' value)* '>' ;
 
 value: expr;
@@ -57,5 +61,6 @@ NEWLINE: '\r'? '\n';
 STRING: '"' ( ~('\\' | '"'))* '"';
 
 // other
-WS: [ \t]+ -> skip; // skip white chars
+WS: [ \t]+ -> skip;
+// skip white chars
 LINE_COMMENT: '#' ~[\r\n]* -> skip;

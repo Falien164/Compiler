@@ -1,9 +1,5 @@
-x_i = 0
-print x_i
-read x_i
-print x_i
-
-x_d = 0.0
-print x_d
-read x_d
-print x_d
+x = q[0]
+y = q[0 + 2]
+z = q[w]
+a = {{}, {}}
+a = {x, x}
