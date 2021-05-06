@@ -7,11 +7,12 @@ grammar Hello;
 start: block EOF;
 block: (stat? NEWLINE)*;
 // Statement list
-stat: printf | scanf | assign;
+stat: printf | scanf | array_assign | assign;
 
 // Statements
 printf: STD_OUT value;
 scanf: STD_IN ID;
+array_assign: ID '[' expr ']' ASSIGN value;
 assign: ID ASSIGN value;
 
 // Key words
