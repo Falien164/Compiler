@@ -4,7 +4,6 @@ from antlr_lib.HelloParser import HelloParser
 from antlr_lib.HelloListener import HelloListener
 from generate import LLVMGenerator
 from util import eprint
-from typing import Tuple, Dict
 
 # This class defines a complete listener for a parse tree produced by HelloParser.
 import sys
