@@ -91,7 +91,7 @@ class LLVMGenerator:
     
     @staticmethod
     def declare_str(self, id,text):
-        self.main_text += f"%{id} = alloca [{len(text)} x i8]\n"
+        self.main_text += f"%{id} = alloca [{len(text)-1} x i8]\n"
 
     @staticmethod
     def assign_i32(self, id, value):
@@ -103,9 +103,9 @@ class LLVMGenerator:
 
     @staticmethod
     def assign_str(self, id, value):
-        self.header_text += f"""@{id} = private unnamed_addr constant [{len(value)+1} x i8] c{value}\\0A\\00"\n"""
-        self.main_text += "%" +str(self.reg)+"= bitcast ["+str(len(value)+1)+" x i8]* %"+id+" to i8*\n"
-        self.main_text += f"call void @llvm.memcpy.p0i8.p0i8.i64(i8* %{self.reg}, i8* getelementptr inbounds ([{len(value)+1} x i8], [{len(value)+1} x i8]* @{id}, i32 0, i32 0), i64 {len(value)+1}, i32 1, i1 false)\n"
+        self.header_text += f"""@{id} = private unnamed_addr constant [{len(value)} x i8] c{value}\\00"\n"""
+        self.main_text += "%" +str(self.reg)+"= bitcast ["+str(len(value))+" x i8]* %"+id+" to i8*\n"
+        self.main_text += f"call void @llvm.memcpy.p0i8.p0i8.i64(i8* %{self.reg}, i8* getelementptr inbounds ([{len(value)} x i8], [{len(value)} x i8]* @{id}, i32 0, i32 0), i64 {len(value)}, i32 1, i1 false)\n"
         self.reg+=1
 
     @staticmethod
@@ -120,7 +120,7 @@ class LLVMGenerator:
 
     @staticmethod
     def load_str(self, id, text1):
-        self.main_text += (f"%{self.reg} = getelementptr inbounds [{len(text1)} x i8], [{len(text1)} x i8]* %{id}, i32 0, i32 0\n")
+        self.main_text += (f"%{self.reg} = getelementptr inbounds [{len(text1)-1} x i8], [{len(text1)-1} x i8]* %{id}, i32 0, i32 0\n")
         self.reg +=1
 
     @staticmethod

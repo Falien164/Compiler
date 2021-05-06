@@ -26,7 +26,7 @@ print z
 # print "Bazinga"
 
 q1 = (str)2000
-q2 = "world"
+q2 = "world "
 print q2 + q1
 
 # # x = "napis"     # error podczas kompilacji - redefinicja
