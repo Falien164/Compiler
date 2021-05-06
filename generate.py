@@ -116,6 +116,46 @@ class LLVMGenerator:
     def assign_real(self, id, value):
         self.main_text += f"store double {value}, double* %{id}\n"
 
+    @staticmethod
+    def assign_array_i32(self, id, size):
+        ty = "i32"
+        self.main_text = f"%{id} = alloca [{size} x {ty}]"
+
+    @staticmethod
+    def assign_array_double(self, id, size):
+        ty = "double"
+        self.main_text = f"%{id} = alloca [{size} x {ty}]"
+
+    @staticmethod
+    def load_array_i32(self, id, offset, size):
+        ty = "i32"
+        self.main_text += f"%{self.reg} = getelementptr inbounds [{size} x {ty}], [{size} x {ty}]* %{id}, i64 0, i64 {offset}"
+        self.req += 1
+        self.main_text += f"%{self.req} = load {ty}, {ty}* %{self.reg-1}"
+        self.req += 1
+
+    @staticmethod
+    def load_array_double(self, id, offset, size):
+        ty = "double"
+        self.main_text += f"%{self.reg} = getelementptr inbounds [{size} x {ty}], [{size} x {ty}]* %{id}, i64 0, i64 {offset}"
+        self.req += 1
+        self.main_text += f"%{self.req} = load {ty}, {ty}* %{self.reg-1}"
+        self.req += 1
+
+    @staticmethod
+    def store_array_i32(self, id, offset, value, size):
+        ty = "i32"
+        self.main_text += f"%{self.reg} = getelementptr inbounds [{size} x {ty}], [{size} x {ty}]* %{id}, i64 0, i64 {offset}"
+        self.main_text += f"store {ty} {value}, {ty}* %{self.reg}"
+        self.req += 1
+
+    @staticmethod
+    def store_array_double(self, id, offset, value, size):
+        ty = "double"
+        self.main_text += f"%{self.reg} = getelementptr inbounds [{size} x {ty}], [{size} x {ty}]* %{id}, i64 0, i64 {offset}"
+        self.main_text += f"store {ty} {value}, {ty}* %{self.reg}"
+        self.req += 1
+
     # @staticmethod
     # def assign_str(self, id, value):
     #     self.header_text += "@"+id+" = private unnamed_addr constant ["+str(len(value)+1)+" x i8] c"+value+"\\0A\\00\"\n"
