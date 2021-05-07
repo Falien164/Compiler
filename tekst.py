@@ -16,6 +16,8 @@ print x_d
 read x_d
 print x_d
 
+x = "str"
+
 str2 = "Liczby calkowite:"
 print str2
 print 5 + 1         #6

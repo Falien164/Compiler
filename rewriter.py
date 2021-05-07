@@ -67,8 +67,9 @@ class RewriteHelloListener(HelloListener):
                 value = "%s" + value  
                 LLVMGenerator.printf_undefined_str(self.llvmGenerator, value)
         else:
-            eprint(ctx.getRuleIndex())
-            self.error("unknown variable " + ID)
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"unknown variable {ID} at line:{l}, column:{c}")     
 
     # Exit a parse tree produced by HelloParser#assign.
     def exitAssign(self, ctx: HelloParser.AssignContext):
@@ -136,9 +137,13 @@ class RewriteHelloListener(HelloListener):
                     LLVMGenerator.assign_real(self.llvmGenerator, ID, v[0])
                     self.variables[ID] = v[1]
                 elif v[1] == "ARRAY":
-                    self.error(f"re definition of array {ID}")        
+                    l = ctx.start.line
+                    c = ctx.start.column
+                    self.error(f"Re definition of array {ID} at line:{l}, column:{c}")     
                 elif(v[-1]=="STR"):
-                    self.error(f"re definition of string {ID}")
+                    l = ctx.start.line
+                    c = ctx.start.column
+                    self.error(f"Re definition of array {ID} at line:{l}, column:{c}")
 
         else:
             self.error("EMPTY STACK with ID = " + ID)
@@ -256,27 +261,47 @@ class RewriteHelloListener(HelloListener):
             LLVMGenerator.load_str(self.llvmGenerator, ID, species[0])
             self.stack.put((ID, species))
         else:
-            self.error(f"Unknown variable:  {ID}")
-            raise NotImplementedError
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"Unexpected type at line:{l}, column:{c}")
 
     def exitId_dereference(self, ctx: HelloParser.Id_dereferenceContext):
         ID = ctx.ID().getText()
-        ty, size, elem_type = self.variables.get(ID)  # "ID"
-        offSet, offSetType = self.stack.get_nowait()
-        if ty != "ARRAY":
-            raise RuntimeError("THIS SHOULD HAVE NOT HAPPENED")
+        variable = self.variables.get(ID)  # "ID"
+        if variable:
+            ty, size, elem_type = variable
+            if not self.stack.empty():
+                offSet, offSetType = self.stack.get_nowait()
+                if ty != "ARRAY":
+                    raise RuntimeError("THIS SHOULD HAVE NOT HAPPENED")
+                else:
+                    if elem_type == "INT":
+                        LLVMGenerator.load_array_i32(
+                            self.llvmGenerator, ID, offSet, size
+                        )
+                    elif elem_type == "REAL":
+                        LLVMGenerator.load_array_double(
+                            self.llvmGenerator, ID, offSet, size
+                        )
+                self.stack.put(("%" + (str(self.llvmGenerator.reg - 1)), elem_type))
+            else:
+                l = ctx.start.line
+                c = ctx.getChild(1).getPayload().column
+                self.error(f"Missing array index at line:{l}, column:{c}")
         else:
-            if elem_type == "INT":
-                LLVMGenerator.load_array_i32(self.llvmGenerator, ID, offSet, size)
-            elif elem_type == "REAL":
-                LLVMGenerator.load_array_double(self.llvmGenerator, ID, offSet, size)
-        self.stack.put(("%" + (str(self.llvmGenerator.reg - 1)), elem_type))
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"Access to undeclared array line:{l}, column:{c}")
 
 
     def exitScanf(self, ctx: HelloParser.ScanfContext):
         ID = ctx.ID().getText()
         if ID not in self.variables:
-            self.error(f"VARIABLE : {ID} not declared but used")
+            l = ctx.getChild(1).getPayload().line
+            c = ctx.getChild(1).getPayload().column
+            self.error(
+                f"VARIABLE : {ID} was not declared but is used at line:{l}, column "
+            )
         else:
             variable = self.variables[ID]
             typeName = variable
@@ -293,27 +318,39 @@ class RewriteHelloListener(HelloListener):
         self.stack.put(("", f"ARRAY"))
 
     def exitArray_assign(self, ctx: HelloParser.Array_assignContext):
-        newValue, newType = self.stack.get_nowait()
-        offSet, offSetType = self.stack.get_nowait()
-        ID = ctx.ID().getText()
-        elem = self.variables[ID]
-        if type(elem) is tuple and elem[0] == "ARRAY":
-            _, size, elem_type = elem
-            if elem_type != newType:
-                self.error(
-                    f"Variables types is different than collection element's type\nTrying to assign {newType} element to array of {elem_type}"
-                )
-            if elem_type == "INT":
-                self.llvmGenerator.store_array_i32(
-                    self.llvmGenerator, ID, offSet, newValue, size
-                )
-            elif elem_type == "REAL":
-                self.llvmGenerator.store_array_i32(
-                    self.llvmGenerator, ID, offSet, newValue, size
-                )
+        if not self.stack.empty():
+            newValue, newType = self.stack.get_nowait()
+            if not self.stack.empty():
+                offSet, offSetType = self.stack.get_nowait()
+                if offSetType != "INT":
+                    self.error(f"Only integer idexes are allowed")
+                ID = ctx.ID().getText()
+                elem = self.variables[ID]
+                if type(elem) is tuple and elem[0] == "ARRAY":
+                    _, size, elem_type = elem
+                    if elem_type != newType:
+                        self.error(
+                            f"Variables types is different than collection element's type\nTrying to assign {newType} element to array of {elem_type}"
+                        )
+                    if elem_type == "INT":
+                        self.llvmGenerator.store_array_i32(
+                            self.llvmGenerator, ID, offSet, newValue, size
+                        )
+                    elif elem_type == "REAL":
+                        self.llvmGenerator.store_array_i32(
+                            self.llvmGenerator, ID, offSet, newValue, size
+                        )
+                    else:
+                        raise NotImplemented
+                else:
+                    self.error("Type miss match trying to assign ")
             else:
-                raise NotImplemented
+                l = ctx.getChild(2).getPayload().start.line
+                c = ctx.getChild(2).getPayload().start.column
+                self.error(f"Index is missing is missig at line:{l}, column:{c}")
         else:
-            self.error("Type miss match trying to assign {}")
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"Value to be assigned is missig at line:{l}, column:{c}")
 
 del HelloParser
