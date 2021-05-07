@@ -119,41 +119,41 @@ class LLVMGenerator:
     @staticmethod
     def assign_array_i32(self, id, size):
         ty = "i32"
-        self.main_text = f"%{id} = alloca [{size} x {ty}]"
+        self.main_text = f"%{id} = alloca [{size} x {ty}]\n"
 
     @staticmethod
     def assign_array_double(self, id, size):
         ty = "double"
-        self.main_text = f"%{id} = alloca [{size} x {ty}]"
+        self.main_text = f"%{id} = alloca [{size} x {ty}]\n"
 
     @staticmethod
     def load_array_i32(self, id, offset, size):
         ty = "i32"
-        self.main_text += f"%{self.reg} = getelementptr inbounds [{size} x {ty}], [{size} x {ty}]* %{id}, i64 0, i64 {offset}"
+        self.main_text += f"%{self.reg} = getelementptr inbounds [{size} x {ty}], [{size} x {ty}]* %{id}, i32 0, i32 {offset}\n"
         self.reg += 1
-        self.main_text += f"%{self.reg} = load {ty}, {ty}* %{self.reg-1}"
+        self.main_text += f"%{self.reg} = load {ty}, {ty}* %{self.reg-1}\n"
         self.reg += 1
 
     @staticmethod
     def load_array_double(self, id, offset, size):
         ty = "double"
-        self.main_text += f"%{self.reg} = getelementptr inbounds [{size} x {ty}], [{size} x {ty}]* %{id}, i64 0, i64 {offset}"
+        self.main_text += f"%{self.reg} = getelementptr inbounds [{size} x {ty}], [{size} x {ty}]* %{id}, i32 0, i32 {offset}\n"
         self.reg += 1
-        self.main_text += f"%{self.reg} = load {ty}, {ty}* %{self.reg-1}"
+        self.main_text += f"%{self.reg} = load {ty}, {ty}* %{self.reg-1}\n"
         self.reg += 1
 
     @staticmethod
     def store_array_i32(self, id, offset, value, size):
         ty = "i32"
-        self.main_text += f"%{self.reg} = getelementptr inbounds [{size} x {ty}], [{size} x {ty}]* %{id}, i64 0, i64 {offset}"
-        self.main_text += f"store {ty} {value}, {ty}* %{self.reg}"
+        self.main_text += f"%{self.reg} = getelementptr inbounds [{size} x {ty}], [{size} x {ty}]* %{id}, i32 0, i32 {offset}\n"
+        self.main_text += f"store {ty} {value}, {ty}* %{self.reg}\n"
         self.reg += 1
 
     @staticmethod
     def store_array_double(self, id, offset, value, size):
         ty = "double"
-        self.main_text += f"%{self.reg} = getelementptr inbounds [{size} x {ty}], [{size} x {ty}]* %{id}, i64 0, i64 {offset}"
-        self.main_text += f"store {ty} {value}, {ty}* %{self.reg}"
+        self.main_text += f"%{self.reg} = getelementptr inbounds [{size} x {ty}], [{size} x {ty}]* %{id}, i32 0, i32 {offset}\n"
+        self.main_text += f"store {ty} {value}, {ty}* %{self.reg}\n"
         self.reg += 1
 
     # @staticmethod
