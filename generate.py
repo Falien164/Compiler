@@ -109,6 +109,30 @@ class LLVMGenerator:
         self.reg+=1
 
     @staticmethod
+    def assign_array_i32(self, id, size):
+        ty = "i32"
+        self.main_text += f"%{id} = alloca [{size} x {ty}]\n"
+
+    @staticmethod
+    def assign_array_double(self, id, size):
+        ty = "double"
+        self.main_text += f"%{id} = alloca [{size} x {ty}]\n"
+
+    @staticmethod
+    def store_array_i32(self, id, offset, value, size):
+        ty = "i32"
+        self.main_text += f"%{self.reg} = getelementptr inbounds [{size} x {ty}], [{size} x {ty}]* %{id}, i32 0, i32 {offset}\n"
+        self.main_text += f"store {ty} {value}, {ty}* %{self.reg}\n"
+        self.reg += 1
+
+    @staticmethod
+    def store_array_double(self, id, offset, value, size):
+        ty = "double"
+        self.main_text += f"%{self.reg} = getelementptr inbounds [{size} x {ty}], [{size} x {ty}]* %{id}, i32 0, i32 {offset}\n"
+        self.main_text += f"store {ty} {value}, {ty}* %{self.reg}\n"
+        self.reg += 1
+
+    @staticmethod
     def load_i32(self, id):
         self.main_text += "%" + str(self.reg) + " = load i32, i32* %" + id + "\n"
         self.reg += 1
@@ -122,7 +146,21 @@ class LLVMGenerator:
     def load_str(self, id, text1):
         self.main_text += (f"%{self.reg} = getelementptr inbounds [{len(text1)-1} x i8], [{len(text1)-1} x i8]* %{id}, i32 0, i32 0\n")
         self.reg +=1
+    @staticmethod
+    def load_array_i32(self, id, offset, size):
+        ty = "i32"
+        self.main_text += f"%{self.reg} = getelementptr inbounds [{size} x {ty}], [{size} x {ty}]* %{id}, i32 0, i32 {offset}\n"
+        self.reg += 1
+        self.main_text += f"%{self.reg} = load {ty}, {ty}* %{self.reg-1}\n"
+        self.reg += 1
 
+    @staticmethod
+    def load_array_double(self, id, offset, size):
+        ty = "double"
+        self.main_text += f"%{self.reg} = getelementptr inbounds [{size} x {ty}], [{size} x {ty}]* %{id}, i32 0, i32 {offset}\n"
+        self.reg += 1
+        self.main_text += f"%{self.reg} = load {ty}, {ty}* %{self.reg-1}\n"
+        self.reg += 1
     @staticmethod
     def add_i32(self, val1, val2):
         self.main_text += (
@@ -188,19 +226,6 @@ class LLVMGenerator:
     @staticmethod
     def itostr(self, id):
         pass
-
-        # self.main_text += f"%{self.reg} = alloca [20 x i8]\n"
-        # self.reg +=1
-        # self.main_text += f"%{self.reg} = getelementptr inbounds [20 x i8], [20 x i8]* %{self.reg-1}, i32 0, i32 0\n"
-        # self.reg +=1
-        # self.main_text += f"%{self.reg} = load i32, i32* %{id}\n"
-        # self.reg +=1
-        # self.main_text += f"%{self.reg} = load i32, i32* %{id}\n"
-        # self.reg +=1
-        # self.main_text += f"%{self.reg} = call i32 (i8*,i8*, ...) @sprintf( i8* %{self.reg-3}, i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpi, i32 0, i32 0), i32 %{self.reg-1})\n"
-        # self.reg +=1
-        # self.main_text += f"%{self.reg} = load i32, i32* %{id}\n"
-        # self.reg +=1
 
     @staticmethod
     def sitofp(self, id):

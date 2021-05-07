@@ -7,11 +7,12 @@ grammar Hello;
 start: block EOF;
 block: (stat? NEWLINE)*;
 // Statement list
-stat: printf | scanf | assign;
+stat: printf | scanf | array_assign | assign;
 
 // Statements
 printf: STD_OUT value;
 scanf: STD_IN ID;
+array_assign: ID '[' expr ']' ASSIGN value;
 assign: ID ASSIGN value;
 
 // Key words
@@ -25,16 +26,16 @@ expr:
 	| atom							# atomExpr;
 
 atom:
-	INT				# int
-	| REAL			# real
-	| TOINT atom	# toint
-	| TOREAL atom	# toreal
-	| TOSTR atom 	# tostr
-	| '(' expr ')'	# par
-	| ID			# id
-	| STRING		# string;
-
-//array: '<' value (',' value)* '>' ;
+	INT						# int
+	| REAL					# real
+	| TOINT atom			# toint
+	| TOREAL atom			# toreal
+	| TOSTR atom 			# tostr
+	| ID '[' expr ']'		# id_dereference
+	| '(' expr ')'			# par
+	| ID					# id
+	| '{' (value ','?)* '}'	# array
+	| STRING				# string;
 
 value: expr;
 

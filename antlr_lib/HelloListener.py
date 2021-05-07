@@ -53,6 +53,15 @@ class HelloListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by HelloParser#array_assign.
+    def enterArray_assign(self, ctx:HelloParser.Array_assignContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#array_assign.
+    def exitArray_assign(self, ctx:HelloParser.Array_assignContext):
+        pass
+
+
     # Enter a parse tree produced by HelloParser#assign.
     def enterAssign(self, ctx:HelloParser.AssignContext):
         pass
@@ -134,6 +143,15 @@ class HelloListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by HelloParser#id_dereference.
+    def enterId_dereference(self, ctx:HelloParser.Id_dereferenceContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#id_dereference.
+    def exitId_dereference(self, ctx:HelloParser.Id_dereferenceContext):
+        pass
+
+
     # Enter a parse tree produced by HelloParser#par.
     def enterPar(self, ctx:HelloParser.ParContext):
         pass
@@ -149,6 +167,15 @@ class HelloListener(ParseTreeListener):
 
     # Exit a parse tree produced by HelloParser#id.
     def exitId(self, ctx:HelloParser.IdContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#array.
+    def enterArray(self, ctx:HelloParser.ArrayContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#array.
+    def exitArray(self, ctx:HelloParser.ArrayContext):
         pass
 
 
