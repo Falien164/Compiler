@@ -24,7 +24,7 @@ class RewriteHelloListener(HelloListener):
         self.line = 0
 
     def error(self, msg, ctx=None):
-        eprint("Error: " + msg)
+        eprint(f"Error: line {self.line} {msg}")
         sys.exit(0)
 
     # Exit a parse tree produced by HelloParser#start.
