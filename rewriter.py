@@ -295,7 +295,9 @@ class RewriteHelloListener(HelloListener):
             if not self.stack.empty():
                 offSet, offSetType = self.stack.get_nowait()
                 if ty != "ARRAY":
-                    raise RuntimeError("THIS SHOULD HAVE NOT HAPPENED")
+                    l = ctx.start.line
+                    c = ctx.getChild(1).getPayload().column
+                    self.error(f"variable {ID} was defined as array at line:{l}, column:{c}")
                 else:
                     if elem_type == "INT":
                         LLVMGenerator.load_array_i32(

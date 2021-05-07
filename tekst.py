@@ -4,6 +4,8 @@ q2 = "world "
 print q2
 print q2 + q1
 
+# b = 2
+# print b[2.0]
 
 str1 = "wczytywanie zmiennych:"
 print str1
@@ -53,6 +55,9 @@ print x2            #4
 print x2 * x1       #16 
 x3 = x1 * x2
 print x3            #16
+print (real)x3      #16.0
+x4 = 4.0
+print (int)x4       #4
 z = "Bazinga"
 print z 
 print z 
