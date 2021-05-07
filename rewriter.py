@@ -22,7 +22,7 @@ class RewriteHelloListener(HelloListener):
         self.line = 1
 
     def error(self, msg):
-        eprint("Error in line " + str(self.line) + ": " + msg)
+        eprint("Error: " + msg)
         sys.exit(0)
 
     # Exit a parse tree produced by HelloParser#start.
@@ -110,8 +110,10 @@ class RewriteHelloListener(HelloListener):
                     # reverse queue
                     for i in range(size - 2, -1, -1):
                         t = self.stack.get_nowait()
-                        if t[1] != ty:
-                            self.error("Array types are inconsistent")
+                        if t[1] != ty:            
+                            l = ctx.start.line
+                            c = ctx.start.column
+                            self.error("Array types are inconsistent at line:{l}, column:{c}") 
                         if ty == "INT":
                             # assign bo źle nazwałem metodę
                             LLVMGenerator.store_array_i32(
@@ -146,18 +148,24 @@ class RewriteHelloListener(HelloListener):
                     self.error(f"Re definition of array {ID} at line:{l}, column:{c}")
 
         else:
-            self.error("EMPTY STACK with ID = " + ID)
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"EMPTY STACK with ID = {ID} at line:{l}, column:{c}")
 
     # Exit a parse tree produced by HelloParser#additiveExpr.
     def exitAdditiveExpr(self, ctx: HelloParser.AdditiveExprContext):
         if not self.stack.empty():
             v1 = self.stack.get_nowait()
         else:
-            self.error(f"EMPTY STACK with ID =  {ctx.expr()}")
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"EMPTY STACK with ID =  {ctx.expr()} at line:{l}, column:{c}")
         if not self.stack.empty():
             v2 = self.stack.get_nowait()
         else:
-            self.error(f"EMPTY STACK with ID =  {ctx.expr()}")
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"EMPTY STACK with ID =  {ctx.expr()} at line:{l}, column:{c}")
         if str(ctx.ADD()) == "+":
             if v1[-1] == (v2[-1]):
                 if v1[-1] == "INT":
@@ -178,17 +186,23 @@ class RewriteHelloListener(HelloListener):
                 LLVMGenerator.sub_real(self.llvmGenerator, v1[0], v2[0])
                 self.stack.put(("%" + str(self.llvmGenerator.reg - 1), "REAL"))
         else:
-            self.error(ctx.getStart().getLine(), "add type mismatch")
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"type mismatch ID  =  {ctx.expr()} at line:{l}, column:{c}")
 
     def exitMultiplicationExpr(self, ctx: HelloParser.MultiplicationExprContext):
         if not self.stack.empty():
             v1 = self.stack.get_nowait()
         else:
-            self.error("EMPTY STACK - cannot do mult or div")
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"EMPTY STACK with ID =  {ctx.expr()} at line:{l}, column:{c}")
         if not self.stack.empty():
             v2 = self.stack.get_nowait()
         else:
-            self.error("EMPTY STACK  - cannot do mult or div")
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"EMPTY STACK with ID =  {ctx.expr()} at line:{l}, column:{c}")
 
         if str(ctx.MUL()) == "*":
             if v1[-1] == (v2[-1]):
@@ -207,7 +221,9 @@ class RewriteHelloListener(HelloListener):
                     LLVMGenerator.div_real(self.llvmGenerator, v1[0], v2[0])
                     self.stack.put(("%" + str(self.llvmGenerator.reg - 1), "REAL"))
         else:
-            self.error("Cannot do math operation - type mismatch")
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"type mismatch ID  =  {ctx.expr()} at line:{l}, column:{c}")
 
     def exitInt(self, ctx: HelloParser.IntContext):
         self.stack.put((ctx.INT().getText(), "INT"))
@@ -222,7 +238,9 @@ class RewriteHelloListener(HelloListener):
         if not self.stack.empty():
             v = self.stack.get_nowait()
         else:
-            self.error("EMPTY STACK during (int) command ")
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"EMPTY STACK during (int) command at line:{l}, column:{c}")
         LLVMGenerator.fptosi(self.llvmGenerator, v[0])
         self.stack.put(("%" + str(self.llvmGenerator.reg - 1), "INT"))
 
@@ -230,7 +248,9 @@ class RewriteHelloListener(HelloListener):
         if not self.stack.empty():
             v = self.stack.get_nowait()
         else:
-            self.error("EMPTY STACK during (real) command ")
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"EMPTY STACK during (real) command at line:{l}, column:{c}")
         LLVMGenerator.sitofp(self.llvmGenerator, v[0])
         self.stack.put(("%" + str(self.llvmGenerator.reg - 1), "REAL"))
 
@@ -238,7 +258,9 @@ class RewriteHelloListener(HelloListener):
         if not self.stack.empty():
             v = self.stack.get_nowait()
         else:
-            self.error("EMPTY STACK during (str) command ")
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"EMPTY STACK during (str) command at line:{l}, column:{c}")
 
         if(ctx.atom().getText() in self.variables):
             LLVMGenerator.itostr(self.llvmGenerator, ctx.atom().getText())
@@ -300,7 +322,7 @@ class RewriteHelloListener(HelloListener):
             l = ctx.getChild(1).getPayload().line
             c = ctx.getChild(1).getPayload().column
             self.error(
-                f"VARIABLE : {ID} was not declared but is used at line:{l}, column "
+                f"VARIABLE : {ID} was not declared but is used at line:{l}, column {c}"
             )
         else:
             variable = self.variables[ID]
@@ -311,7 +333,9 @@ class RewriteHelloListener(HelloListener):
             elif typeName == "REAL":
                 LLVMGenerator.scanf_double(self.llvmGenerator, variableId)
             else:
-                self.error(f"cannot read variable: {variable}")
+                l = ctx.start.line
+                c = ctx.start.column
+                self.error(f"cannot read variable: {variable} at line:{l}, column:{c}")
                 raise NotImplementedError
 
     def exitArray(self, ctx: HelloParser.ArrayContext):
@@ -323,14 +347,18 @@ class RewriteHelloListener(HelloListener):
             if not self.stack.empty():
                 offSet, offSetType = self.stack.get_nowait()
                 if offSetType != "INT":
-                    self.error(f"Only integer idexes are allowed")
+                    l = ctx.start.line
+                    c = ctx.start.column
+                    self.error(f"Only integer idexes are allowed at line:{l}, column:{c}")
                 ID = ctx.ID().getText()
                 elem = self.variables[ID]
                 if type(elem) is tuple and elem[0] == "ARRAY":
                     _, size, elem_type = elem
                     if elem_type != newType:
+                        l = ctx.start.line
+                        c = ctx.start.column
                         self.error(
-                            f"Variables types is different than collection element's type\nTrying to assign {newType} element to array of {elem_type}"
+                            f"Variables types is different than collection element's type\nTrying to assign {newType} element to array of {elem_type} at line:{l}, column:{c}"
                         )
                     if elem_type == "INT":
                         self.llvmGenerator.store_array_i32(
