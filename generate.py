@@ -240,7 +240,6 @@ class LLVMGenerator:
     @staticmethod
     def generate(self):
         text = ""
-        text += "declare i32 @sprintf(i8*, i8*, ...)\n"
         text += "declare i32 @printf(i8*, ...)\n"
         text += "declare i32 @__isoc99_scanf(i8*, ...)\n"
         text += "declare i8* @strcat(i8*, i8*)\n"
@@ -251,5 +250,5 @@ class LLVMGenerator:
         text += self.header_text
         text += "define i32 @main() nounwind{\n"
         text += self.main_text
-        text += "ret i32 1 }\n"
+        text += "ret i32 0 }\n"
         return text
