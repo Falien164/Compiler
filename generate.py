@@ -2,25 +2,23 @@ from functools import wraps
 
 
 class LLVMGenerator:
-    @__dec
     def __init__(self):
         self.header_text = ""
         self.main_text = ""
         self.reg = 1
 
-    @__dec
     def __dec(foo):
         @wraps(foo)
         def inner(*args, **kwargs):
             val = foo(*args, **kwargs)
-            self.reg += 1
+            args[0].reg += 1
             return val
 
         return inner
 
     @__dec
     def printf_i32(self, id):
-        self.load_i32(self, id)
+        self.load_i32(id)
         self.main_text += (
             "%"
             + str(self.reg)
@@ -41,7 +39,7 @@ class LLVMGenerator:
 
     @__dec
     def printf_real(self, id):
-        self.load_real(self, id)
+        self.load_real(id)
         self.main_text += (
             "%"
             + str(self.reg)
