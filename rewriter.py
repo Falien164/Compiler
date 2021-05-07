@@ -298,6 +298,10 @@ class RewriteHelloListener(HelloListener):
                     l = ctx.start.line
                     c = ctx.getChild(1).getPayload().column
                     self.error(f"variable {ID} was defined as array at line:{l}, column:{c}")
+                if offSetType != "INT":
+                    l = ctx.start.line
+                    c = ctx.start.column
+                    self.error(f"Only integer idexes are allowed at line:{l}, column:{c}")
                 else:
                     if elem_type == "INT":
                         LLVMGenerator.load_array_i32(
