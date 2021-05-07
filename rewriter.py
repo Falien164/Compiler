@@ -77,9 +77,11 @@ class RewriteHelloListener(HelloListener):
                 if v[1] == "INT":
                     LLVMGenerator.declare_i32(self.llvmGenerator, ID)
                     LLVMGenerator.assign_i32(self.llvmGenerator, ID, v[0])
+                    self.variables[ID] = v[1]
                 elif v[1] == "REAL":
                     LLVMGenerator.declare_real(self.llvmGenerator, ID)
                     LLVMGenerator.assign_real(self.llvmGenerator, ID, v[0])
+                    self.variables[ID] = v[1]
                 elif v[1] == "ARRAY":
                     size = self.stack.qsize()
                     last = self.stack.get_nowait()
@@ -114,16 +116,23 @@ class RewriteHelloListener(HelloListener):
                         else:
                             raise NotImplemented
 
+                    self.variables[ID] = (v[1], size, ty)
+
                 else:
                     raise NotImplemented
-            self.variables[ID] = v[1]
+            else:
+                # it re assignment
+                if v[1] == "INT":
+                    LLVMGenerator.assign_i32(self.llvmGenerator, ID, v[0])
+                    self.variables[ID] = v[1]
+                elif v[1] == "REAL":
+                    LLVMGenerator.assign_real(self.llvmGenerator, ID, v[0])
+                    self.variables[ID] = v[1]
+                elif v[1] == "ARRAY":
+                    self.error(f"re definition of array {ID}")
+
         else:
             self.error("EMPTY STACK with ID = " + ID)
-            # pop one element
-            # check it's type
-            # save it as T
-            # allocate qsize elements of type T
-            # put it on stack
         # if(v[1]=="STR"):
         #     value = v[0][:-1]
         #     LLVMGenerator.assign_str(self.llvmGenerator,ID, value)
@@ -236,6 +245,20 @@ class RewriteHelloListener(HelloListener):
             LLVMGenerator.load_real(self.llvmGenerator, (ID))
         self.stack.put(("%" + (str(self.llvmGenerator.reg - 1)), species))
 
+    def exitId_dereference(self, ctx: HelloParser.Id_dereferenceContext):
+        ID = ctx.ID().getText()
+        ty, size, elem_type = self.variables.get(ID)  # "ID"
+        offSet, offSetType = self.stack.get_nowait()
+        eprint(ID)
+        if ty != "ARRAY":
+            raise RuntimeError("THIS SHOULD HAVE NOT HAPPENED")
+        else:
+            if elem_type == "INT":
+                LLVMGenerator.load_array_i32(self.llvmGenerator, ID, offSet, size)
+            elif elem_type == "REAL":
+                LLVMGenerator.load_array_double(self.llvmGenerator, ID, offSet, size)
+        self.stack.put(("%" + (str(self.llvmGenerator.reg - 1)), elem_type))
+
     # # Exit a parse tree produced by HelloParser#scanf.
     def exitScanf(self, ctx: HelloParser.ScanfContext):
         ID = ctx.ID().getText()
@@ -257,6 +280,30 @@ class RewriteHelloListener(HelloListener):
 
     def exitArray(self, ctx: HelloParser.ArrayContext):
         self.stack.put(("", f"ARRAY"))
+
+    def exitArray_assign(self, ctx: HelloParser.Array_assignContext):
+        newValue, newType = self.stack.get_nowait()
+        offSet, offSetType = self.stack.get_nowait()
+        ID = ctx.ID().getText()
+        elem = self.variables[ID]
+        if type(elem) is tuple and elem[0] == "ARRAY":
+            _, size, elem_type = elem
+            if elem_type != newType:
+                self.error(
+                    f"Variables types is different than collection element's type\nTrying to assign {newType} element to array of {elem_type}"
+                )
+            if elem_type == "INT":
+                self.llvmGenerator.store_array_i32(
+                    self.llvmGenerator, ID, offSet, newValue, size
+                )
+            elif elem_type == "REAL":
+                self.llvmGenerator.store_array_i32(
+                    self.llvmGenerator, ID, offSet, newValue, size
+                )
+            else:
+                raise NotImplemented
+        else:
+            self.error("Type miss match trying to assign {}")
 
 
 del HelloParser

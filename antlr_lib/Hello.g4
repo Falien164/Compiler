@@ -31,8 +31,8 @@ atom:
 	| TOINT atom			# toint
 	| TOREAL atom			# toreal
 	| '(' expr ')'			# par
-	| ID					# id
 	| ID '[' expr ']'		# id_dereference
+	| ID					# id
 	| '{' (value ','?)* '}'	# array
 	| STRING				# string;
 /*
