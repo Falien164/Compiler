@@ -20,7 +20,7 @@ STD_OUT: 'print';
 STD_IN: 'read';
 ASSIGN: '=';
 
-if_statement: IF condition_block (ELSE IF condition_block)* (ELSE stat_block)? ;
+if_statement: IF condition_block  (ELSE IF condition_block)* (ELSE stat_block)? ;
 
 condition_block
 	: expr jump_block;

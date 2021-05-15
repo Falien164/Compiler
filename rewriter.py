@@ -16,9 +16,11 @@ import queue
 class RewriteHelloListener(HelloListener):
     def __init__(self):
         self.stack = queue.LifoQueue()  # (value, type)
+        self.labels = queue.LifoQueue()  # if context
         self.variables = {}  # dict    [variable, type]
         self.llvmGenerator = LLVMGenerator()
         self.line = 1
+        self.end_if_label= None         # if context
 
     def error(self, msg):
         eprint("Error: " + msg)
@@ -33,8 +35,8 @@ class RewriteHelloListener(HelloListener):
             eprint(self.stack.get())        
             
         eprint("Na stosie generatora zostalo:")
-        for i in range(0, self.llvmGenerator.brstack.qsize()):
-            eprint(self.llvmGenerator.brstack.get())
+        for i in range(0, self.labels.qsize()):
+            eprint(self.labels.get())
 
 
     
@@ -373,29 +375,56 @@ class RewriteHelloListener(HelloListener):
             l = ctx.start.line
             c = ctx.start.column
             self.error(f"Value to be assigned is missig at line:{l}, column:{c}")
+        ### if
     
+    def enterIf_statement(self, ctx:HelloParser.If_statementContext):
+        self.llvmGenerator.comment("wszedlem")
+        self.end_if_label = self.llvmGenerator.getLabel()
+        pass
 
 
-    ### if
     def exitIf_statement(self, ctx:HelloParser.If_statementContext):
-        self.llvmGenerator.ifend()
-        for i in range(1, ctx.getChildCount(), 2):
-            print(i)
-    
+        self.llvmGenerator.emitLabel(self.end_if_label)
+        self.llvmGenerator.comment("exitIf_statement")
+        pass
+
+    # def enterStat_block(self, ctx:HelloParser.Stat_blockContext):        
+    #     if not self.labels.empty():
+    #         label = self.labels.get_nowait()
+    #     else: 
+    #         l = ctx.start.line
+    #         c = ctx.start.column
+    #         # self.error(f"empty stack in generate at line:{l}, column:{c}")
+    #         label = "dupa"
+    #     print(f"{label} in enterStat_block")
+    #     self.llvmGenerator.emitLabel(label)
+    #     self.llvmGenerator.comment("enterStat_block")
+        
+
+
     def exitStat_block(self, ctx:HelloParser.Stat_blockContext):
-        # self.llvmGenerator.compare_and_jump()
-        pass
-
-    def enterStat_block(self, ctx:HelloParser.Stat_blockContext):
-        self.llvmGenerator.jumped()
-        pass
-
+        self.llvmGenerator.goToLabel(self.end_if_label)
+        
     def enterJump_block(self, ctx:HelloParser.Jump_blockContext):
-        self.llvmGenerator.compare_and_jump()
+        l_ifthen = self.llvmGenerator.getLabel()
+        l_ifelse = self.llvmGenerator.getLabel()
+
+        self.labels.put(l_ifelse)
+        self.llvmGenerator.conditional_branch(l_ifthen, l_ifelse)
+        self.llvmGenerator.emitLabel(l_ifthen)
+
+    def exitCondition_block(self, ctx:HelloParser.Condition_blockContext):
+        if not self.labels.empty():
+            label = self.labels.get_nowait()
+        else:
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"empty stack in generate at line:{l}, column:{c}")
+        print(f"{label} in exitJump")
+        self.llvmGenerator.emitLabel(label) 
 
     def exitEqualityExpr(self, ctx:HelloParser.EqualityExprContext):
         v1, v2 = self.getTwoValueFromStack()
-
         if(v1[-1] != v2[-1]):
             l = ctx.start.line
             c = ctx.start.column

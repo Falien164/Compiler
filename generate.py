@@ -6,8 +6,9 @@ class LLVMGenerator:
         self.header_text = ""
         self.main_text = ""
         self.reg = 1
+        self.label = 0
         self.br = 0
-        self.brstack = queue.LifoQueue()
+        self.brstack = []
 
     def __dec(foo):
         @wraps(foo)
@@ -17,6 +18,17 @@ class LLVMGenerator:
             return val
 
         return inner
+
+    def getLabel(self):
+        self.label += 1
+        return f"label{self.label}"
+
+    def emitLabel(self, label):
+        self.main_text+= f"{label}:\n"
+
+    def goToLabel(self, label):
+        self.main_text+= f"br label %{label}\n"
+        
 
     @__dec
     def printf_i32(self, id):
@@ -210,22 +222,12 @@ class LLVMGenerator:
     def fptosi(self, id):
         self.main_text += f"%{self.reg} = fptosi double {id} to i32\n"
 
+    def comment(self, text):
+        self.main_text += f"    ; {text} \n"
 
-    def compare_and_jump(self):
-        self.br+=1
-        self.main_text += f"br i1 %{self.reg-1}, label %if.then{self.br}, label %if.end{self.br}\n"
-        self.main_text += f"if.then{self.br}:\n"
-        self.brstack.put(self.br)
-    
-    def jumped(self):
-        pass
-
-
-    def ifend(self):
-        if not self.brstack.empty():
-            b = self.brstack.get_nowait()
-        self.main_text += f"br label %if.end{b}\n"
-        self.main_text += f"if.end{b}:\n"
+    def conditional_branch(self, l_if_then, l_if_else):
+        self.main_text += f"br i1 %{self.reg-1}, label %{l_if_then}, label %{l_if_else}\n"
+        # self.brstack.put(self.br)
 
     @__dec
     def eq(self, id, value):

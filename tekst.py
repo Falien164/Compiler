@@ -6,14 +6,22 @@ x = 1
 y = 2
 read x
 read y
-if ( x != y ) {     
-    print x       
-    if ( x != y ) {     
-        print x       
-} 
-} 
+if ( x != y ) {
+    print x    
+    if ( x == 3){
+        print 123
+    }
+} else if (x >= 2) {
+    print 1519
+} else if (y >= 2){
+    print y
+} else {
+    print 0
+}
 
-
+# else if (x == y) {
+#     print y}
+# } 
 
 
 # x = 1
@@ -30,11 +38,12 @@ if ( x != y ) {
 #   print x
 # }
 
-# q1 = (str)2000
+# q1 = (str)2
 # print q1
-# q2 = "world "
-# print q2
+# q2 = "dupa " + 2
+# print q2 
 # print q2 + q1
+# print "dupa" + 2 
 
 # # b = 2
 # # print b[2]
