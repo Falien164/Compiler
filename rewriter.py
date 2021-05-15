@@ -178,6 +178,11 @@ class RewriteHelloListener(HelloListener):
                 if v1[1][-1] == "STR":
                     LLVMGenerator.add_str(self.llvmGenerator,v1[0], v2[0])
                     self.stack.put(("%" + str(self.llvmGenerator.reg - 1), "STR"))
+            else:
+                l = ctx.start.line
+                c = ctx.start.column
+                self.error(f"type mismatch ID  =  {ctx.expr()} at line:{l}, column:{c}")
+
         elif str(ctx.SUB()) == "-":
             if v1[-1] == "INT":
                 LLVMGenerator.sub_i32(self.llvmGenerator, v1[0], v2[0])

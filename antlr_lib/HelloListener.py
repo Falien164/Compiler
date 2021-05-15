@@ -71,6 +71,42 @@ class HelloListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by HelloParser#if_stat.
+    def enterIf_stat(self, ctx:HelloParser.If_statContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#if_stat.
+    def exitIf_stat(self, ctx:HelloParser.If_statContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#condition_block.
+    def enterCondition_block(self, ctx:HelloParser.Condition_blockContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#condition_block.
+    def exitCondition_block(self, ctx:HelloParser.Condition_blockContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#stat_block.
+    def enterStat_block(self, ctx:HelloParser.Stat_blockContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#stat_block.
+    def exitStat_block(self, ctx:HelloParser.Stat_blockContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#while_stat.
+    def enterWhile_stat(self, ctx:HelloParser.While_statContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#while_stat.
+    def exitWhile_stat(self, ctx:HelloParser.While_statContext):
+        pass
+
+
     # Enter a parse tree produced by HelloParser#multiplicationExpr.
     def enterMultiplicationExpr(self, ctx:HelloParser.MultiplicationExprContext):
         pass
@@ -89,12 +125,48 @@ class HelloListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by HelloParser#orExpr.
+    def enterOrExpr(self, ctx:HelloParser.OrExprContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#orExpr.
+    def exitOrExpr(self, ctx:HelloParser.OrExprContext):
+        pass
+
+
     # Enter a parse tree produced by HelloParser#additiveExpr.
     def enterAdditiveExpr(self, ctx:HelloParser.AdditiveExprContext):
         pass
 
     # Exit a parse tree produced by HelloParser#additiveExpr.
     def exitAdditiveExpr(self, ctx:HelloParser.AdditiveExprContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#relationalExpr.
+    def enterRelationalExpr(self, ctx:HelloParser.RelationalExprContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#relationalExpr.
+    def exitRelationalExpr(self, ctx:HelloParser.RelationalExprContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#equalityExpr.
+    def enterEqualityExpr(self, ctx:HelloParser.EqualityExprContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#equalityExpr.
+    def exitEqualityExpr(self, ctx:HelloParser.EqualityExprContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#andExpr.
+    def enterAndExpr(self, ctx:HelloParser.AndExprContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#andExpr.
+    def exitAndExpr(self, ctx:HelloParser.AndExprContext):
         pass
 
 
@@ -140,6 +212,15 @@ class HelloListener(ParseTreeListener):
 
     # Exit a parse tree produced by HelloParser#tostr.
     def exitTostr(self, ctx:HelloParser.TostrContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#booleanAtom.
+    def enterBooleanAtom(self, ctx:HelloParser.BooleanAtomContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#booleanAtom.
+    def exitBooleanAtom(self, ctx:HelloParser.BooleanAtomContext):
         pass
 
 

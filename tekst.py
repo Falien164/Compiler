@@ -5,9 +5,9 @@ print q2
 print q2 + q1
 
 # b = 2
-# print b[2.0]
+# print b[2]
 
-str1 = "wczytywanie zmiennych:"
+str1 = "Wczytywanie zmiennych:"
 print str1
 x_i = 0
 print x_i
@@ -35,7 +35,7 @@ print a / b         #-2
 str3 = "Liczby rzeczywiste:"
 print str3 
 print 3.0 * 3.0     #9.0
-print (int)10.0 / 2 #5
+print (int)7.0 / 2 #5
 e= -3.0+1.0
 print e             #-2.0
 e= (real)5 * 3.0    

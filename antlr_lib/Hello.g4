@@ -7,7 +7,7 @@ grammar Hello;
 start: block EOF;
 block: (stat? NEWLINE)*;
 // Statement list
-stat: printf | scanf | array_assign | assign;
+stat: printf | scanf | array_assign | assign | if_stat | while_stat;
 
 // Statements
 printf: STD_OUT value;
@@ -20,9 +20,28 @@ STD_OUT: 'print';
 STD_IN: 'read';
 ASSIGN: '=';
 
-expr:
-	expr op = (MUL | DIV) expr		# multiplicationExpr
+if_stat: IF condition_block (ELSE IF condition_block)* (ELSE stat_block)? ;
+
+condition_block
+	: expr stat_block
+	;
+
+stat_block:
+	'{' block '}'
+	| stat
+	;
+
+while_stat
+	: WHILE expr stat_block
+	;
+
+expr
+	: expr op = (MUL | DIV) expr		# multiplicationExpr
 	| expr op = (ADD | SUB) expr	# additiveExpr
+ 	| expr op=(LTEQ | GTEQ | LT | GT) expr #relationalExpr
+ 	| expr op=(EQ | NEQ) expr              #equalityExpr
+ 	| expr AND expr                        #andExpr
+ 	| expr OR expr                         #orExpr
 	| atom							# atomExpr;
 
 atom:
@@ -31,6 +50,7 @@ atom:
 	| TOINT atom			# toint
 	| TOREAL atom			# toreal
 	| TOSTR atom 			# tostr
+	| (TRUE | FALSE)		# booleanAtom
 	| ID '[' expr ']'		# id_dereference
 	| '(' expr ')'			# par
 	| ID					# id
@@ -58,6 +78,23 @@ UINT: [0-9]+;
 REAL: INT '.' UINT;
 NEWLINE: '\r'? '\n';
 STRING: '"' ( ~('\\' | '"'))* '"';
+
+
+IF: 'if';
+ELSE: 'else';
+WHILE: 'while';
+TRUE: 'true';
+FALSE: 'false';
+
+OR: 'or';
+AND: 'and';
+EQ: '==';
+NEQ: '!=';
+GT: '>';
+LT: '<';
+GTEQ: '>=';
+LTEQ: '<=';
+NOT: '!';
 
 // other
 WS: [ \t]+ -> skip; // skip white chars
