@@ -71,12 +71,12 @@ class HelloListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by HelloParser#if_stat.
-    def enterIf_stat(self, ctx:HelloParser.If_statContext):
+    # Enter a parse tree produced by HelloParser#if_statement.
+    def enterIf_statement(self, ctx:HelloParser.If_statementContext):
         pass
 
-    # Exit a parse tree produced by HelloParser#if_stat.
-    def exitIf_stat(self, ctx:HelloParser.If_statContext):
+    # Exit a parse tree produced by HelloParser#if_statement.
+    def exitIf_statement(self, ctx:HelloParser.If_statementContext):
         pass
 
 
@@ -86,6 +86,15 @@ class HelloListener(ParseTreeListener):
 
     # Exit a parse tree produced by HelloParser#condition_block.
     def exitCondition_block(self, ctx:HelloParser.Condition_blockContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#jump_block.
+    def enterJump_block(self, ctx:HelloParser.Jump_blockContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#jump_block.
+    def exitJump_block(self, ctx:HelloParser.Jump_blockContext):
         pass
 
 

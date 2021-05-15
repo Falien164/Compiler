@@ -54,13 +54,13 @@ LINE_COMMENT=39
 '(int)'=16
 '(real)'=17
 '(str)'=18
-'if'=24
-'else'=25
-'while'=26
-'true'=27
-'false'=28
-'or'=29
-'and'=30
+'if '=24
+'else '=25
+'while '=26
+'true '=27
+'false '=28
+'or '=29
+'and '=30
 '=='=31
 '!='=32
 '>'=33
