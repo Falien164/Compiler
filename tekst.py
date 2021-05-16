@@ -2,67 +2,33 @@
 x = 1 
 y = 0
 loop = 0
+z = 10
 read loop
 read x
 read y
-while (loop == 2 or y == 2) {
-    print 2
-    if( x != 1){   
-        print 1
+read z
+
+while (loop == 1){
+    while (x == 2){
+        print y
+        y = y + 1
     }
+    print 0
 }
 
-# x = 1
-# y = 2
-# z = 3
-# loop = 1
-# read loop
-# read x
-# read y
-# read z
-# while ( loop == 1 and x == 1) {
-# if ( x == y or x == 1 ) {
-#     print 1    
-#     if ( z == 3){
-#         print 123
-#     } else if ( z == 4) {
-#         print 321
-#     }
-# } else if (y >= 2 and x == 10) {
-#     print 1519
-# } else if (y >= 2){
-#     print 3
-# }  else if (y ==0 ){
-#     print 4
-# } else {
-#     print 0
-# }
-# }
-# y = 2
-# z = 3
-# read x
-# read y
-# read z
-# if ( x == y or x == 1 ) {
-#     print 1    
-#     if ( z == 3){
-#         print 123
-#     } else if ( z == 4) {
-#         print 321
-#     }
-# } else if (y >= 2 and x == 10) {
-#     print 1519
-# } else if (y >= 2){
-#     print 3
-# }  else if (y ==0 ){
-#     print 4
-# } else {
-#     print 0
-# }
 
-# else if (x == y) {
-#     print y}
-# } 
+# while (loop == 2 or y == 2) {
+#     x = x + 1
+#     print x
+#     if ( y != 1 and y > -2){   
+#         print 1
+#     } else if (z < 11 ){
+#         print z
+#     } else {
+#         print 0
+#     }
+
+# }
 
 
 # x = 1
