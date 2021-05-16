@@ -4,13 +4,17 @@
 # print false
 x = 1
 y = 2
+z = 3
 read x
 read y
+read z
 if ( x == y or x == 1 ) {
     print 1    
-    # if ( x == 3){
-    #     print 123
-    # }
+    if ( z == 3){
+        print 123
+    } else if ( z == 4) {
+        print 321
+    }
 } else if (y >= 2 and x == 10) {
     print 1519
 } else if (y >= 2){

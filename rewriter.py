@@ -20,7 +20,7 @@ class RewriteHelloListener(HelloListener):
         self.variables = {}  # dict    [variable, type]
         self.llvmGenerator = LLVMGenerator()
         self.line = 1
-        self.end_if_label= None         # if context
+        self.end_if_label= []         # if context
 
     def error(self, msg):
         eprint("Error: " + msg)
@@ -388,21 +388,18 @@ class RewriteHelloListener(HelloListener):
         ### if
     
     def enterIf_statement(self, ctx:HelloParser.If_statementContext):
-        self.end_if_label = self.llvmGenerator.getLabel()
-        pass
+        self.end_if_label.append(self.llvmGenerator.getLabel())
 
     def exitIf_statement(self, ctx:HelloParser.If_statementContext):
-        self.llvmGenerator.emitLabel(self.end_if_label)
-        pass
+        self.llvmGenerator.goToLabel(self.end_if_label[-1])     # bez tego zagnieżdzone ify beda mialy 2 labele po sobie i to wywali błąd
+        self.llvmGenerator.emitLabel(self.end_if_label[-1])
+        self.end_if_label.pop(-1)
 
     def exitStat_block(self, ctx:HelloParser.Stat_blockContext):
-        self.llvmGenerator.goToLabel(self.end_if_label)
+        self.llvmGenerator.goToLabel(self.end_if_label[-1])
         
     def enterJump_block(self, ctx:HelloParser.Jump_blockContext):
-        if(self.labels.empty()):
-            l_ifelse = self.llvmGenerator.getLabel()
-            l_ifthen = self.llvmGenerator.getLabel()
-        else:
+        if(not self.labels.empty()):
             label = self.labels.get_nowait()
             if("or" in label):
                 l_ifthen = label
@@ -410,6 +407,13 @@ class RewriteHelloListener(HelloListener):
             elif("and" in label):
                 l_ifthen = self.llvmGenerator.getLabel()
                 l_ifelse = label
+            else:
+                self.labels.put(label)
+                l_ifelse = self.llvmGenerator.getLabel()
+                l_ifthen = self.llvmGenerator.getLabel()
+        else:
+            l_ifelse = self.llvmGenerator.getLabel()
+            l_ifthen = self.llvmGenerator.getLabel()
 
         condition = self.getOneValueFromStack(ctx)
         if(condition[-1] == "BOOLEAN"):
