@@ -401,16 +401,21 @@ class RewriteHelloListener(HelloListener):
     def enterJump_block(self, ctx:HelloParser.Jump_blockContext):
         if(self.labels.empty()):
             l_ifelse = self.llvmGenerator.getLabel()
+            l_ifthen = self.llvmGenerator.getLabel()
         else:
-            l_ifelse = self.labels.get_nowait()
-        l_ifthen = self.llvmGenerator.getLabel()
+            label = self.labels.get_nowait()
+            if("or" in label):
+                l_ifthen = label
+                l_ifelse = self.llvmGenerator.getLabel()
+            elif("and" in label):
+                l_ifthen = self.llvmGenerator.getLabel()
+                l_ifelse = label
 
-        self.labels.put(l_ifelse)
-        
         condition = self.getOneValueFromStack(ctx)
         if(condition[-1] == "BOOLEAN"):
             self.llvmGenerator.conditional_branch(condition[0], l_ifthen, l_ifelse)
             self.llvmGenerator.emitLabel(l_ifthen)
+            self.labels.put(l_ifelse)
         else:
             l = ctx.start.line
             c = ctx.start.column
@@ -459,6 +464,7 @@ class RewriteHelloListener(HelloListener):
     def exitAndExpr(self, ctx:HelloParser.AndExprContext):
         v1, v2 = self.getTwoValueFromStack(ctx)
         if_else = self.llvmGenerator.getLabel()
+        if_else = "land_" + if_else
         if_true = self.llvmGenerator.getLabel()
         self.llvmGenerator.conditional_branch(v2[0],if_true, if_else)
         self.llvmGenerator.emitLabel(if_true)
@@ -466,7 +472,14 @@ class RewriteHelloListener(HelloListener):
         self.stack.put(v1)
         
     def exitOrExpr(self, ctx:HelloParser.OrExprContext):
-        pass
+        v1, v2 = self.getTwoValueFromStack(ctx)
+        if_true = self.llvmGenerator.getLabel()
+        if_true = "lor_" + if_true
+        if_false = self.llvmGenerator.getLabel()
+        self.llvmGenerator.conditional_branch(v2[0], if_true, if_false)
+        self.llvmGenerator.emitLabel(if_false)
+        self.labels.put(if_true)
+        self.stack.put(v1)
 
 
 del HelloParser
