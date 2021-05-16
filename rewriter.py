@@ -271,8 +271,6 @@ class RewriteHelloListener(HelloListener):
             self.error(f"EMPTY STACK during (str) command at line:{l}, column:{c}")
 
         if ctx.atom().getText() in self.variables:
-            self.llvmGenerator.itostr(ctx.atom().getText())
-            print(v)
             self.stack.put((ctx.atom().getText(), "STR"))
         else:
             text = '"' + ctx.atom().getText() + '"'
@@ -437,10 +435,10 @@ class RewriteHelloListener(HelloListener):
 
 
     #### WHILE LOOP   
-    def enterWhile_stat(self, ctx:HelloParser.While_statContext):
-        pass
-    def exitWhile_stat(self, ctx:HelloParser.While_statContext):
-        pass
+    # def enterWhile_stat(self, ctx:HelloParser.While_statContext):
+    #     self.end_if_label.append(self.llvmGenerator.getLabel())
+    # def exitWhile_stat(self, ctx:HelloParser.While_statContext):
+    #     self.end_if_label.pop(-1)
     def enterLoop_condition(self, ctx:HelloParser.Loop_conditionContext):
         enter_label = self.llvmGenerator.getLabel()
         self.llvmGenerator.goToLabel(enter_label)
@@ -450,14 +448,27 @@ class RewriteHelloListener(HelloListener):
     # Exit a parse tree produced by HelloParser#loop_condition.
     def exitLoop_condition(self, ctx:HelloParser.Loop_conditionContext):
         v1 = self.getOneValueFromStack(ctx)
-
-        while_body = self.llvmGenerator.getLabel()
-        while_end = self.llvmGenerator.getLabel()
+        if (not self.labels.empty()):
+            label = self.labels.get_nowait()
+            if("and" in label):
+                while_body = self.llvmGenerator.getLabel()
+                while_end = label
+            elif("or" in label):
+                while_body = label
+                while_end = self.llvmGenerator.getLabel()
+            else:
+                self.labels.put(label)
+                while_end = self.llvmGenerator.getLabel()
+                while_body = self.llvmGenerator.getLabel()
+        else:
+            while_body = self.llvmGenerator.getLabel()
+            while_end = self.llvmGenerator.getLabel()
+            
         if(v1[-1] == "BOOLEAN"):
             self.llvmGenerator.conditional_branch(v1[0], while_body, while_end)
             self.llvmGenerator.emitLabel(while_body)
             self.labels.put(while_end)
-        
+            
 
     # Exit a parse tree produced by HelloParser#repetitions.
     def exitRepetitions(self, ctx:HelloParser.RepetitionsContext):

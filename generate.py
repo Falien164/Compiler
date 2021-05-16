@@ -211,9 +211,6 @@ class LLVMGenerator:
     def div_real(self, val1, val2):
         self.main_text += f"%{self.reg} = fdiv double {val2}, {val1}\n"
 
-    def itostr(self, id):
-        pass
-
     @__dec
     def sitofp(self, id):
         self.main_text += f"%{self.reg} = sitofp i32 {id} to double\n"
@@ -227,7 +224,6 @@ class LLVMGenerator:
 
     def conditional_branch(self, condition, l_if_then, l_if_else):
         self.main_text += f"br i1 {condition}, label %{l_if_then}, label %{l_if_else}\n"
-        # self.brstack.put(self.br)
 
     @__dec
     def eq(self, id, value):

@@ -38,7 +38,9 @@ while_stat
 	: WHILE loop_condition repetitions
 	;
 loop_condition:'(' expr ')';
-repetitions: '{' block '}';
+repetitions: 
+	|'{' block '}'
+	| stat;
 // end_while
 expr
 	: expr op = (MUL | DIV) expr		# multiplicationExpr
