@@ -116,6 +116,24 @@ class HelloListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by HelloParser#loop_condition.
+    def enterLoop_condition(self, ctx:HelloParser.Loop_conditionContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#loop_condition.
+    def exitLoop_condition(self, ctx:HelloParser.Loop_conditionContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#repetitions.
+    def enterRepetitions(self, ctx:HelloParser.RepetitionsContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#repetitions.
+    def exitRepetitions(self, ctx:HelloParser.RepetitionsContext):
+        pass
+
+
     # Enter a parse tree produced by HelloParser#multiplicationExpr.
     def enterMultiplicationExpr(self, ctx:HelloParser.MultiplicationExprContext):
         pass

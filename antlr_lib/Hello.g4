@@ -20,6 +20,7 @@ STD_OUT: 'print';
 STD_IN: 'read';
 ASSIGN: '=';
 
+// if
 if_statement: IF condition_block  (ELSE IF condition_block)* (ELSE stat_block)? ;
 
 condition_block
@@ -31,11 +32,14 @@ stat_block:
 	'{' block '}'
 	| stat
 	;
-
+// end_if
+//while
 while_stat
-	: WHILE '(' expr ')' stat_block
+	: WHILE loop_condition repetitions
 	;
-
+loop_condition:'(' expr ')';
+repetitions: '{' block '}';
+// end_while
 expr
 	: expr op = (MUL | DIV) expr		# multiplicationExpr
 	| expr op = (ADD | SUB) expr		# additiveExpr

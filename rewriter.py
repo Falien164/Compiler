@@ -387,6 +387,8 @@ class RewriteHelloListener(HelloListener):
             self.error(f"Value to be assigned is missig at line:{l}, column:{c}")
         ### if
     
+
+    #### IF condition
     def enterIf_statement(self, ctx:HelloParser.If_statementContext):
         self.end_if_label.append(self.llvmGenerator.getLabel())
 
@@ -432,6 +434,51 @@ class RewriteHelloListener(HelloListener):
             self.error(f"empty stack in generate at line:{l}, column:{c}")
         label = self.labels.get_nowait()
         self.llvmGenerator.emitLabel(label) 
+
+
+    #### WHILE LOOP   
+    def enterWhile_stat(self, ctx:HelloParser.While_statContext):
+        pass
+    def exitWhile_stat(self, ctx:HelloParser.While_statContext):
+        pass
+    def enterLoop_condition(self, ctx:HelloParser.Loop_conditionContext):
+        enter_label = self.llvmGenerator.getLabel()
+        self.llvmGenerator.goToLabel(enter_label)
+        self.llvmGenerator.emitLabel(enter_label)
+        self.labels.put(enter_label)
+
+    # Exit a parse tree produced by HelloParser#loop_condition.
+    def exitLoop_condition(self, ctx:HelloParser.Loop_conditionContext):
+        v1 = self.getOneValueFromStack(ctx)
+
+        while_body = self.llvmGenerator.getLabel()
+        while_end = self.llvmGenerator.getLabel()
+        if(v1[-1] == "BOOLEAN"):
+            self.llvmGenerator.conditional_branch(v1[0], while_body, while_end)
+            self.llvmGenerator.emitLabel(while_body)
+            self.labels.put(while_end)
+        
+
+    # Exit a parse tree produced by HelloParser#repetitions.
+    def exitRepetitions(self, ctx:HelloParser.RepetitionsContext):
+        if (not self.labels.empty()):
+            while_end = self.labels.get_nowait()
+        else:
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"empty stack of labels at line:{l}, column:{c}")
+        if (not self.labels.empty()):
+            while_cond= self.labels.get_nowait()
+        else:
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"empty stack of labels at line:{l}, column:{c}")
+        self.llvmGenerator.goToLabel(while_cond)
+        self.llvmGenerator.emitLabel(while_end)
+        
+        
+
+    ### comparison
 
     def exitEqualityExpr(self, ctx:HelloParser.EqualityExprContext):
         v1, v2 = self.getTwoValueFromStack(ctx)
