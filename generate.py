@@ -225,8 +225,8 @@ class LLVMGenerator:
     def comment(self, text):
         self.main_text += f"    ; {text} \n"
 
-    def conditional_branch(self, l_if_then, l_if_else):
-        self.main_text += f"br i1 %{self.reg-1}, label %{l_if_then}, label %{l_if_else}\n"
+    def conditional_branch(self, condition, l_if_then, l_if_else):
+        self.main_text += f"br i1 {condition}, label %{l_if_then}, label %{l_if_else}\n"
         # self.brstack.put(self.br)
 
     @__dec

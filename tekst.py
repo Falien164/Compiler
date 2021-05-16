@@ -6,15 +6,17 @@ x = 1
 y = 2
 read x
 read y
-if ( x != y ) {
-    print x    
-    if ( x == 3){
-        print 123
-    }
+if ( x == y and x == 1 ) {
+    print 1    
+    # if ( x == 3){
+    #     print 123
+    # }
 } else if (x >= 2) {
     print 1519
 } else if (y >= 2){
-    print y
+    print 3
+}  else if (y ==0 ){
+    print 4
 } else {
     print 0
 }

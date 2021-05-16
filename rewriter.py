@@ -40,7 +40,7 @@ class RewriteHelloListener(HelloListener):
 
 
     
-    def getTwoValueFromStack(self):
+    def getTwoValueFromStack(self, ctx):
         if not self.stack.empty():
             v1 = self.stack.get_nowait()
         else:
@@ -54,6 +54,16 @@ class RewriteHelloListener(HelloListener):
             c = ctx.start.column
             self.error(f"EMPTY STACK with ID =  {ctx.expr()} at line:{l}, column:{c}")
         return v1, v2
+
+
+    def getOneValueFromStack(self, ctx):
+        if not self.stack.empty():
+            v1 = self.stack.get_nowait()
+        else:
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"EMPTY STACK at line:{l}, column:{c}")
+        return v1
 
 
     # Exit a parse tree produced by HelloParser#stat.
@@ -173,7 +183,7 @@ class RewriteHelloListener(HelloListener):
 
     # Exit a parse tree produced by HelloParser#additiveExpr.
     def exitAdditiveExpr(self, ctx: HelloParser.AdditiveExprContext):
-        v1, v2 = self.getTwoValueFromStack()
+        v1, v2 = self.getTwoValueFromStack(ctx)
 
         if str(ctx.ADD()) == "+":
             if v1[-1] == (v2[-1]):
@@ -200,7 +210,7 @@ class RewriteHelloListener(HelloListener):
             self.error(f"type mismatch ID  =  {ctx.expr()} at line:{l}, column:{c}")
 
     def exitMultiplicationExpr(self, ctx: HelloParser.MultiplicationExprContext):
-        v1, v2 = self.getTwoValueFromStack()
+        v1, v2 = self.getTwoValueFromStack(ctx)
 
         if str(ctx.MUL()) == "*":
             if v1[-1] == (v2[-1]):
@@ -233,12 +243,12 @@ class RewriteHelloListener(HelloListener):
         self.stack.put((ctx.STRING().getText(), "STR"))
 
     def exitToint(self, ctx: HelloParser.TointContext):
-        if not self.stack.empty():
-            v = self.stack.get_nowait()
-        else:
+        if self.stack.empty():
             l = ctx.start.line
             c = ctx.start.column
             self.error(f"EMPTY STACK during (int) command at line:{l}, column:{c}")
+        
+        v = self.stack.get_nowait()
         self.llvmGenerator.fptosi(v[0])
         self.stack.put(("%" + str(self.llvmGenerator.reg - 1), "INT"))
 
@@ -378,53 +388,44 @@ class RewriteHelloListener(HelloListener):
         ### if
     
     def enterIf_statement(self, ctx:HelloParser.If_statementContext):
-        self.llvmGenerator.comment("wszedlem")
         self.end_if_label = self.llvmGenerator.getLabel()
         pass
 
-
     def exitIf_statement(self, ctx:HelloParser.If_statementContext):
         self.llvmGenerator.emitLabel(self.end_if_label)
-        self.llvmGenerator.comment("exitIf_statement")
         pass
-
-    # def enterStat_block(self, ctx:HelloParser.Stat_blockContext):        
-    #     if not self.labels.empty():
-    #         label = self.labels.get_nowait()
-    #     else: 
-    #         l = ctx.start.line
-    #         c = ctx.start.column
-    #         # self.error(f"empty stack in generate at line:{l}, column:{c}")
-    #         label = "dupa"
-    #     print(f"{label} in enterStat_block")
-    #     self.llvmGenerator.emitLabel(label)
-    #     self.llvmGenerator.comment("enterStat_block")
-        
-
 
     def exitStat_block(self, ctx:HelloParser.Stat_blockContext):
         self.llvmGenerator.goToLabel(self.end_if_label)
         
     def enterJump_block(self, ctx:HelloParser.Jump_blockContext):
+        if(self.labels.empty()):
+            l_ifelse = self.llvmGenerator.getLabel()
+        else:
+            l_ifelse = self.labels.get_nowait()
         l_ifthen = self.llvmGenerator.getLabel()
-        l_ifelse = self.llvmGenerator.getLabel()
 
         self.labels.put(l_ifelse)
-        self.llvmGenerator.conditional_branch(l_ifthen, l_ifelse)
-        self.llvmGenerator.emitLabel(l_ifthen)
-
-    def exitCondition_block(self, ctx:HelloParser.Condition_blockContext):
-        if not self.labels.empty():
-            label = self.labels.get_nowait()
+        
+        condition = self.getOneValueFromStack(ctx)
+        if(condition[-1] == "BOOLEAN"):
+            self.llvmGenerator.conditional_branch(condition[0], l_ifthen, l_ifelse)
+            self.llvmGenerator.emitLabel(l_ifthen)
         else:
             l = ctx.start.line
             c = ctx.start.column
+            self.error(f"expected boolean value at line:{l}, column:{c}")
+
+    def exitCondition_block(self, ctx:HelloParser.Condition_blockContext):
+        if self.labels.empty():
+            l = ctx.start.line
+            c = ctx.start.column
             self.error(f"empty stack in generate at line:{l}, column:{c}")
-        print(f"{label} in exitJump")
+        label = self.labels.get_nowait()
         self.llvmGenerator.emitLabel(label) 
 
     def exitEqualityExpr(self, ctx:HelloParser.EqualityExprContext):
-        v1, v2 = self.getTwoValueFromStack()
+        v1, v2 = self.getTwoValueFromStack(ctx)
         if(v1[-1] != v2[-1]):
             l = ctx.start.line
             c = ctx.start.column
@@ -434,9 +435,10 @@ class RewriteHelloListener(HelloListener):
             self.llvmGenerator.eq(v2[0], v1[0])
         elif str(ctx.NEQ()) == "!=":
             self.llvmGenerator.ne(v2[0], v1[0])
+        self.stack.put((f"%{self.llvmGenerator.reg-1}", "BOOLEAN"))
 
     def exitRelationalExpr(self, ctx:HelloParser.RelationalExprContext):
-        v1, v2 = self.getTwoValueFromStack()
+        v1, v2 = self.getTwoValueFromStack(ctx)
 
         if(v1[-1] != v2[-1]):
             l = ctx.start.line
@@ -451,10 +453,18 @@ class RewriteHelloListener(HelloListener):
             self.llvmGenerator.slt(v2[0], v1[0])
         elif str(ctx.LTEQ()) == "<=":
             self.llvmGenerator.sle(v2[0], v1[0])
+        self.stack.put((f"%{self.llvmGenerator.reg-1}", "BOOLEAN"))
+
 
     def exitAndExpr(self, ctx:HelloParser.AndExprContext):
-        pass
-
+        v1, v2 = self.getTwoValueFromStack(ctx)
+        if_else = self.llvmGenerator.getLabel()
+        if_true = self.llvmGenerator.getLabel()
+        self.llvmGenerator.conditional_branch(v2[0],if_true, if_else)
+        self.llvmGenerator.emitLabel(if_true)
+        self.labels.put(if_else)
+        self.stack.put(v1)
+        
     def exitOrExpr(self, ctx:HelloParser.OrExprContext):
         pass
 
