@@ -25,8 +25,8 @@ array_assign: ID '[' expr ']' ASSIGN value;
 assign: ID ASSIGN value;
 
 function_definiotion:
-	'fn' function_name '(' (our_type ID (',' our_type ID)*)? ')' '->' our_type '{' function_body '}'
-		;
+	'fn' function_name '(' (our_type ID (',' our_type ID)*)? ')' '->' return_type '{' function_body
+		'}';
 
 function_call: function_name '(' parameter_list? ')';
 
@@ -34,6 +34,7 @@ parameter_list: (expr (',' expr)*);
 
 function_body: block;
 return_stat: 'return'+ expr;
+return_type: our_type;
 our_type: builtin_type;
 builtin_type: 'int' | 'real';
 

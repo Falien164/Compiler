@@ -80,6 +80,51 @@ class HelloListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by HelloParser#function_call.
+    def enterFunction_call(self, ctx:HelloParser.Function_callContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#function_call.
+    def exitFunction_call(self, ctx:HelloParser.Function_callContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#parameter_list.
+    def enterParameter_list(self, ctx:HelloParser.Parameter_listContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#parameter_list.
+    def exitParameter_list(self, ctx:HelloParser.Parameter_listContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#function_body.
+    def enterFunction_body(self, ctx:HelloParser.Function_bodyContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#function_body.
+    def exitFunction_body(self, ctx:HelloParser.Function_bodyContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#return_stat.
+    def enterReturn_stat(self, ctx:HelloParser.Return_statContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#return_stat.
+    def exitReturn_stat(self, ctx:HelloParser.Return_statContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#return_type.
+    def enterReturn_type(self, ctx:HelloParser.Return_typeContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#return_type.
+    def exitReturn_type(self, ctx:HelloParser.Return_typeContext):
+        pass
+
+
     # Enter a parse tree produced by HelloParser#our_type.
     def enterOur_type(self, ctx:HelloParser.Our_typeContext):
         pass
@@ -95,6 +140,15 @@ class HelloListener(ParseTreeListener):
 
     # Exit a parse tree produced by HelloParser#builtin_type.
     def exitBuiltin_type(self, ctx:HelloParser.Builtin_typeContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#function_name.
+    def enterFunction_name(self, ctx:HelloParser.Function_nameContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#function_name.
+    def exitFunction_name(self, ctx:HelloParser.Function_nameContext):
         pass
 
 
