@@ -1,4 +1,4 @@
-# Generated from Hello.g4 by ANTLR 4.9.2
+# Generated from ./antlr_lib/Hello.g4 by ANTLR 4.9.2
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .HelloParser import HelloParser
@@ -68,6 +68,33 @@ class HelloListener(ParseTreeListener):
 
     # Exit a parse tree produced by HelloParser#assign.
     def exitAssign(self, ctx:HelloParser.AssignContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#function_definiotion.
+    def enterFunction_definiotion(self, ctx:HelloParser.Function_definiotionContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#function_definiotion.
+    def exitFunction_definiotion(self, ctx:HelloParser.Function_definiotionContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#our_type.
+    def enterOur_type(self, ctx:HelloParser.Our_typeContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#our_type.
+    def exitOur_type(self, ctx:HelloParser.Our_typeContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#builtin_type.
+    def enterBuiltin_type(self, ctx:HelloParser.Builtin_typeContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#builtin_type.
+    def exitBuiltin_type(self, ctx:HelloParser.Builtin_typeContext):
         pass
 
 
