@@ -11,16 +11,20 @@ import queue
 
 # Przerobic assign by LOAD i wczytywac ze zmiennej
 
+TypeTable = {"int": "INT", "real": "REAL"}
+
 # castowanie reala i inta na stringa
 # assing string do zmiennych
 class RewriteHelloListener(HelloListener):
     def __init__(self):
         self.stack = queue.LifoQueue()  # (value, type)
         self.labels = queue.LifoQueue()  # if context
-        self.variables = {}  # dict    [variable, type]
+        self.variables: dict[str, str] = {}  # dict    [variable, type]
+        self.globa_variables: dict[str, str] = {}
         self.llvmGenerator = LLVMGenerator()
         self.line = 1
-        self.end_if_label= []         # if context
+        self.functions = []
+        self.end_if_label = []  # if context
 
     def error(self, msg):
         eprint("Error: " + msg)
@@ -32,14 +36,12 @@ class RewriteHelloListener(HelloListener):
         eprint(self.variables)
         eprint("Na stosie zostalo:")
         for i in range(0, self.stack.qsize()):
-            eprint(self.stack.get())        
-            
+            eprint(self.stack.get())
+
         eprint("Na stosie generatora zostalo:")
         for i in range(0, self.labels.qsize()):
             eprint(self.labels.get())
 
-
-    
     def getTwoValueFromStack(self, ctx):
         if not self.stack.empty():
             v1 = self.stack.get_nowait()
@@ -55,7 +57,6 @@ class RewriteHelloListener(HelloListener):
             self.error(f"EMPTY STACK with ID =  {ctx.expr()} at line:{l}, column:{c}")
         return v1, v2
 
-
     def getOneValueFromStack(self, ctx):
         if not self.stack.empty():
             v1 = self.stack.get_nowait()
@@ -64,7 +65,6 @@ class RewriteHelloListener(HelloListener):
             c = ctx.start.column
             self.error(f"EMPTY STACK at line:{l}, column:{c}")
         return v1
-
 
     # Exit a parse tree produced by HelloParser#stat.
     def exitStat(self, ctx: HelloParser.StatContext):
@@ -247,7 +247,7 @@ class RewriteHelloListener(HelloListener):
             l = ctx.start.line
             c = ctx.start.column
             self.error(f"EMPTY STACK during (int) command at line:{l}, column:{c}")
-        
+
         v = self.stack.get_nowait()
         self.llvmGenerator.fptosi(v[0])
         self.stack.put(("%" + str(self.llvmGenerator.reg - 1), "INT"))
@@ -384,27 +384,28 @@ class RewriteHelloListener(HelloListener):
             c = ctx.start.column
             self.error(f"Value to be assigned is missig at line:{l}, column:{c}")
         ### if
-    
 
     #### IF condition
-    def enterIf_statement(self, ctx:HelloParser.If_statementContext):
+    def enterIf_statement(self, ctx: HelloParser.If_statementContext):
         self.end_if_label.append(self.llvmGenerator.getLabel())
 
-    def exitIf_statement(self, ctx:HelloParser.If_statementContext):
-        self.llvmGenerator.goToLabel(self.end_if_label[-1])     # bez tego zagnieżdzone ify beda mialy 2 labele po sobie i to wywali błąd
+    def exitIf_statement(self, ctx: HelloParser.If_statementContext):
+        self.llvmGenerator.goToLabel(
+            self.end_if_label[-1]
+        )  # bez tego zagnieżdzone ify beda mialy 2 labele po sobie i to wywali błąd
         self.llvmGenerator.emitLabel(self.end_if_label[-1])
         self.end_if_label.pop(-1)
 
-    def exitStat_block(self, ctx:HelloParser.Stat_blockContext):
+    def exitStat_block(self, ctx: HelloParser.Stat_blockContext):
         self.llvmGenerator.goToLabel(self.end_if_label[-1])
-        
-    def enterJump_block(self, ctx:HelloParser.Jump_blockContext):
-        if(not self.labels.empty()):
+
+    def enterJump_block(self, ctx: HelloParser.Jump_blockContext):
+        if not self.labels.empty():
             label = self.labels.get_nowait()
-            if("or" in label):
+            if "or" in label:
                 l_ifthen = label
                 l_ifelse = self.llvmGenerator.getLabel()
-            elif("and" in label):
+            elif "and" in label:
                 l_ifthen = self.llvmGenerator.getLabel()
                 l_ifelse = label
             else:
@@ -416,7 +417,7 @@ class RewriteHelloListener(HelloListener):
             l_ifthen = self.llvmGenerator.getLabel()
 
         condition = self.getOneValueFromStack(ctx)
-        if(condition[-1] == "BOOLEAN"):
+        if condition[-1] == "BOOLEAN":
             self.llvmGenerator.conditional_branch(condition[0], l_ifthen, l_ifelse)
             self.llvmGenerator.emitLabel(l_ifthen)
             self.labels.put(l_ifelse)
@@ -425,35 +426,60 @@ class RewriteHelloListener(HelloListener):
             c = ctx.start.column
             self.error(f"expected boolean value at line:{l}, column:{c}")
 
-    def exitCondition_block(self, ctx:HelloParser.Condition_blockContext):
+    def exitCondition_block(self, ctx: HelloParser.Condition_blockContext):
         if self.labels.empty():
             l = ctx.start.line
             c = ctx.start.column
             self.error(f"empty stack in generate at line:{l}, column:{c}")
         label = self.labels.get_nowait()
-        self.llvmGenerator.emitLabel(label) 
+        self.llvmGenerator.emitLabel(label)
 
+    def enterFunction_definiotion(self, ctx: HelloParser.Function_definiotionContext):
+        self.llvmGenerator.enterFunction()
+        # return super().enterFunction_definiotion(ctx)
 
-    #### WHILE LOOP   
+    def enterFunction_body(self, ctx: HelloParser.Function_bodyContext):
+        # Has to be last because of that we have access to parent content
+        fn_def_ctx = ctx.parentCtx
+        f_name = fn_def_ctx.function_name().ID().getText()
+        self.functions.append(f_name)
+        par = fn_def_ctx.ID()
+        if isinstance(par, list):
+            # pur type is list
+            gt = lambda x: x.getText()
+            types = map(gt, fn_def_ctx.our_type())
+            par_nam = map(gt, par)
+            params = zip(par_nam, types)
+            for name, t in params:
+                my_type = TypeTable[t]
+                self.variables[name] = my_type
+            # register 0..numberOfParameters are occupied by pointers
+            # now alloca the same number of variables
+
+    def exitFunction_definiotion(self, ctx: HelloParser.Function_definiotionContext):
+        self.llvmGenerator.exitFunction()
+        self.variables.clear()  # local bariables are out of scope
+
+    #### WHILE LOOP
     # def enterWhile_stat(self, ctx:HelloParser.While_statContext):
     #     self.end_if_label.append(self.llvmGenerator.getLabel())
     # def exitWhile_stat(self, ctx:HelloParser.While_statContext):
     #     self.end_if_label.pop(-1)
-    def enterLoop_condition(self, ctx:HelloParser.Loop_conditionContext):
+    def enterLoop_condition(self, ctx: HelloParser.Loop_conditionContext):
         enter_label = self.llvmGenerator.getLabel()
         self.llvmGenerator.goToLabel(enter_label)
         self.llvmGenerator.emitLabel(enter_label)
         self.labels.put(enter_label)
 
     # Exit a parse tree produced by HelloParser#loop_condition.
-    def exitLoop_condition(self, ctx:HelloParser.Loop_conditionContext):
+    def exitLoop_condition(self, ctx: HelloParser.Loop_conditionContext):
         v1 = self.getOneValueFromStack(ctx)
-        if (not self.labels.empty()):
+        if not self.labels.empty():
             label = self.labels.get_nowait()
-            if("and" in label):
+            if "and" in label:
                 while_body = self.llvmGenerator.getLabel()
                 while_end = label
-            elif("or" in label):
+            elif "or" in label:
                 while_body = label
                 while_end = self.llvmGenerator.getLabel()
             else:
@@ -463,37 +489,34 @@ class RewriteHelloListener(HelloListener):
         else:
             while_body = self.llvmGenerator.getLabel()
             while_end = self.llvmGenerator.getLabel()
-            
-        if(v1[-1] == "BOOLEAN"):
+
+        if v1[-1] == "BOOLEAN":
             self.llvmGenerator.conditional_branch(v1[0], while_body, while_end)
             self.llvmGenerator.emitLabel(while_body)
             self.labels.put(while_end)
-            
 
     # Exit a parse tree produced by HelloParser#repetitions.
-    def exitRepetitions(self, ctx:HelloParser.RepetitionsContext):
-        if (not self.labels.empty()):
+    def exitRepetitions(self, ctx: HelloParser.RepetitionsContext):
+        if not self.labels.empty():
             while_end = self.labels.get_nowait()
         else:
             l = ctx.start.line
             c = ctx.start.column
             self.error(f"empty stack of labels at line:{l}, column:{c}")
-        if (not self.labels.empty()):
-            while_cond= self.labels.get_nowait()
+        if not self.labels.empty():
+            while_cond = self.labels.get_nowait()
         else:
             l = ctx.start.line
             c = ctx.start.column
             self.error(f"empty stack of labels at line:{l}, column:{c}")
         self.llvmGenerator.goToLabel(while_cond)
         self.llvmGenerator.emitLabel(while_end)
-        
-        
 
     ### comparison
 
-    def exitEqualityExpr(self, ctx:HelloParser.EqualityExprContext):
+    def exitEqualityExpr(self, ctx: HelloParser.EqualityExprContext):
         v1, v2 = self.getTwoValueFromStack(ctx)
-        if(v1[-1] != v2[-1]):
+        if v1[-1] != v2[-1]:
             l = ctx.start.line
             c = ctx.start.column
             self.error(f"Types of expression are not the same at line:{l}, column:{c}")
@@ -504,10 +527,10 @@ class RewriteHelloListener(HelloListener):
             self.llvmGenerator.ne(v2[0], v1[0])
         self.stack.put((f"%{self.llvmGenerator.reg-1}", "BOOLEAN"))
 
-    def exitRelationalExpr(self, ctx:HelloParser.RelationalExprContext):
+    def exitRelationalExpr(self, ctx: HelloParser.RelationalExprContext):
         v1, v2 = self.getTwoValueFromStack(ctx)
 
-        if(v1[-1] != v2[-1]):
+        if v1[-1] != v2[-1]:
             l = ctx.start.line
             c = ctx.start.column
             self.error(f"Types of expression are not the same at line:{l}, column:{c}")
@@ -522,18 +545,17 @@ class RewriteHelloListener(HelloListener):
             self.llvmGenerator.sle(v2[0], v1[0])
         self.stack.put((f"%{self.llvmGenerator.reg-1}", "BOOLEAN"))
 
-
-    def exitAndExpr(self, ctx:HelloParser.AndExprContext):
+    def exitAndExpr(self, ctx: HelloParser.AndExprContext):
         v1, v2 = self.getTwoValueFromStack(ctx)
         if_else = self.llvmGenerator.getLabel()
         if_else = "land_" + if_else
         if_true = self.llvmGenerator.getLabel()
-        self.llvmGenerator.conditional_branch(v2[0],if_true, if_else)
+        self.llvmGenerator.conditional_branch(v2[0], if_true, if_else)
         self.llvmGenerator.emitLabel(if_true)
         self.labels.put(if_else)
         self.stack.put(v1)
-        
-    def exitOrExpr(self, ctx:HelloParser.OrExprContext):
+
+    def exitOrExpr(self, ctx: HelloParser.OrExprContext):
         v1, v2 = self.getTwoValueFromStack(ctx)
         if_true = self.llvmGenerator.getLabel()
         if_true = "lor_" + if_true
