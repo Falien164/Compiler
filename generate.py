@@ -1,14 +1,26 @@
+import enum
 from functools import wraps
+from enum import Enum
 import queue
+from collections.abc import Callable
+
+
+# maper type -> llvm type
+class llvmType(Enum):
+    i32 = "i32"
+    double = "double"
+
 
 class LLVMGenerator:
-    def __init__(self):
+    def __init__(self, mapper: Callable[[str], llvmType]):
         self.header_text = ""
         self.main_text = ""
-        self.reg = 1
-        self.label = 0
+        self.reg: int = 1
+        self.reg_stack: list[int] = []
+        self.label: int = 0
         self.br = 0
         self.brstack = []
+        self.mapper = mapper
 
     def __dec(foo):
         @wraps(foo)
@@ -19,16 +31,40 @@ class LLVMGenerator:
 
         return inner
 
+    def enterFunction(self):
+        """Resets registry number, previous number is put on stack"""
+        self.reg_stack.append(self.reg)
+        self.reg = 0
+
+    def def_function(self, fname: str, ret_type: str, par_type_list: list[str]):
+        r_type = self.mapper(ret_type)
+        self.main_text += f"define {r_type} @{fname}("
+        for i in par_type_list[:1]:
+            ty = self.mapper(i)
+            self.main_text += f"{ty}"
+        for i in par_type_list[1:]:
+            ty = self.mapper(i)
+            self.main_text += f",{ty}"
+        self.main_text += ") {\n"
+
+    def end_def_function(self):
+        self.main_text += "}\n"
+
+    def exitFunction(self):
+        if len(self.reg_stack) > 0:
+            self.reg = self.reg_stack.pop()
+        else:
+            raise RuntimeError(f"Attempted to pop empty reg_stack when reg {self.reg}")
+
     def getLabel(self):
         self.label += 1
         return f"label{self.label}"
 
     def emitLabel(self, label):
-        self.main_text+= f"{label}:\n"
+        self.main_text += f"{label}:\n"
 
     def goToLabel(self, label):
-        self.main_text+= f"br label %{label}\n"
-        
+        self.main_text += f"br label %{label}\n"
 
     @__dec
     def printf_i32(self, id):
