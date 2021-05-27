@@ -51,6 +51,10 @@ class LLVMGenerator:
             self.main_text += f",{ty}"
         self.main_text += ") {\n"
 
+    def ret_function(self, value, value_type: Any):
+        v_t = self.mapper(value_type)
+        self.main_text += f"ret {v_t} {value}\n"
+
     def exitFunction(self):
         if len(self.reg_stack) > 0:
             self.reg = self.reg_stack.pop()
@@ -157,22 +161,22 @@ class LLVMGenerator:
         )
         self.main_text += f"call void @llvm.memcpy.p0i8.p0i8.i64(i8* %{self.reg}, i8* getelementptr inbounds ([{len(value)} x i8], [{len(value)} x i8]* @{id}, i32 0, i32 0), i64 {len(value)}, i32 1, i1 false)\n"
 
-    def assign_array_i32(self, id, size):
+    def assign_array_i32(self, id, size: int):
         ty = "i32"
         self.main_text += f"%{id} = alloca [{size} x {ty}]\n"
 
-    def assign_array_double(self, id, size):
+    def assign_array_double(self, id, size: int):
         ty = "double"
         self.main_text += f"%{id} = alloca [{size} x {ty}]\n"
 
     @__dec
-    def store_array_i32(self, id, offset, value, size):
+    def store_array_i32(self, id, offset: int, value, size: int):
         ty = "i32"
         self.main_text += f"%{self.reg} = getelementptr inbounds [{size} x {ty}], [{size} x {ty}]* %{id}, i32 0, i32 {offset}\n"
         self.main_text += f"store {ty} {value}, {ty}* %{self.reg}\n"
 
     @__dec
-    def store_array_double(self, id, offset, value, size):
+    def store_array_double(self, id, offset: int, value, size: int):
         ty = "double"
         self.main_text += f"%{self.reg} = getelementptr inbounds [{size} x {ty}], [{size} x {ty}]* %{id}, i32 0, i32 {offset}\n"
         self.main_text += f"store {ty} {value}, {ty}* %{self.reg}\n"
@@ -190,14 +194,14 @@ class LLVMGenerator:
         self.main_text += f"%{self.reg} = getelementptr inbounds [{len(text1)-1} x i8], [{len(text1)-1} x i8]* %{id}, i32 0, i32 0\n"
 
     @__dec
-    def load_array_i32(self, id, offset, size):
+    def load_array_i32(self, id, offset: int, size: int):
         ty = "i32"
         self.main_text += f"%{self.reg} = getelementptr inbounds [{size} x {ty}], [{size} x {ty}]* %{id}, i32 0, i32 {offset}\n"
         self.reg += 1
         self.main_text += f"%{self.reg} = load {ty}, {ty}* %{self.reg-1}\n"
 
     @__dec
-    def load_array_double(self, id, offset, size):
+    def load_array_double(self, id, offset: int, size: int):
         ty = "double"
         self.main_text += f"%{self.reg} = getelementptr inbounds [{size} x {ty}], [{size} x {ty}]* %{id}, i32 0, i32 {offset}\n"
         self.reg += 1
@@ -298,7 +302,7 @@ class LLVMGenerator:
         text += '@strpd = constant [5 x i8] c"%lf\\0A\\00"\n'
         text += '@strs = constant [3 x i8] c"%d\\00"\n'
         text += self.header_text
-        text += "define i32 @main() nounwind{\n"
+        # text += "define i32 @main() nounwind{\n"
         text += self.main_text
-        text += "ret i32 0 }\n"
+        # text += "ret i32 0 }\n"
         return text
