@@ -513,7 +513,6 @@ class RewriteHelloListener(HelloListener):
 
     def exitFunction_call(self, ctx: HelloParser.Function_callContext):
         f_name = ctx.function_name().ID().getText()
-        eprint(f_name)
         fn = self.functions.get(f_name)
         if fn:
             r_typ = fn.return_type
@@ -535,7 +534,7 @@ class RewriteHelloListener(HelloListener):
                 params_ref.insert(0, val_reg)
                 params_types.insert(0, ty)
             desire_par_type_list = fn.parameter_types
-            if len(desire_par_type_list) != len(params_types):
+            if len(desire_par_type_list) == len(params_types):
                 for (lw, pw) in zip(desire_par_type_list, params_types):
                     if lw != pw:
                         ctx.parameter_list().expr()
@@ -544,7 +543,7 @@ class RewriteHelloListener(HelloListener):
             else:
                 self.error("too much or to0 few arguments")
 
-            self.llvmGenerator.call_function(f_name, r_typ, params)
+            self.llvmGenerator.call_function(f_name, r_typ, desire_par_type_list)
             self.stack.put((f"%{self.llvmGenerator.reg-1}", r_typ))
         else:
             s = ctx.function_name().start
