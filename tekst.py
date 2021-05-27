@@ -1,11 +1,18 @@
 fn none() -> int { 
-
+    return 2
 }
 fn passing(int a) -> int { 
-
+    return a
 }
-fn diff(int a,int b) -> int {
+fn diff(int a,int b) -> real {
+    return (real)(a + b)
+}
 
+fn main() -> int {
+    x = 1 
+    y = 0
+    print y + x
+    return 0
 }
 # fn main() -> int {
     # x = 1 
