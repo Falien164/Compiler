@@ -28,9 +28,7 @@ function_definiotion:
 	'fn' function_name '(' (our_type ID (',' our_type ID)*)? ')' '->' return_type '{' function_body
 		'}';
 
-function_call: function_name '(' parameter_list? ')';
-
-parameter_list: (expr (',' expr)*);
+function_call: function_name '(' (expr (',' expr)*) ')';
 
 function_body: block;
 return_stat: 'return'+ value;
@@ -62,7 +60,8 @@ loop_condition: '(' expr ')';
 repetitions: | '{' block '}' | stat;
 // end_while
 expr:
-	expr op = (MUL | DIV) expr					# multiplicationExpr
+	function_call								# functionCallExpr
+	| expr op = (MUL | DIV) expr				# multiplicationExpr
 	| expr op = (ADD | SUB) expr				# additiveExpr
 	| expr op = (LTEQ | GTEQ | LT | GT) expr	# relationalExpr
 	| expr op = (EQ | NEQ) expr					# equalityExpr

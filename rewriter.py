@@ -509,7 +509,7 @@ class RewriteHelloListener(HelloListener):
 
     def exitFunction_definiotion(self, ctx: HelloParser.Function_definiotionContext):
         self.llvmGenerator.exitFunction()
-        self.variables.clear()  # local bariables are out of scope
+        self.variables.clear()
 
     def exitFunction_call(self, ctx: HelloParser.Function_callContext):
         f_name = ctx.function_name().ID().getText()

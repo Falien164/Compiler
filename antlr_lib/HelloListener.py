@@ -89,15 +89,6 @@ class HelloListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by HelloParser#parameter_list.
-    def enterParameter_list(self, ctx:HelloParser.Parameter_listContext):
-        pass
-
-    # Exit a parse tree produced by HelloParser#parameter_list.
-    def exitParameter_list(self, ctx:HelloParser.Parameter_listContext):
-        pass
-
-
     # Enter a parse tree produced by HelloParser#function_body.
     def enterFunction_body(self, ctx:HelloParser.Function_bodyContext):
         pass
@@ -212,6 +203,15 @@ class HelloListener(ParseTreeListener):
 
     # Exit a parse tree produced by HelloParser#repetitions.
     def exitRepetitions(self, ctx:HelloParser.RepetitionsContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#functionCallExpr.
+    def enterFunctionCallExpr(self, ctx:HelloParser.FunctionCallExprContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#functionCallExpr.
+    def exitFunctionCallExpr(self, ctx:HelloParser.FunctionCallExprContext):
         pass
 
 
