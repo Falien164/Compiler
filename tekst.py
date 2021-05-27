@@ -1,22 +1,29 @@
+fn none() -> int { 
 
-x = 1 
-y = 0
-loop = 0
-z = 10
-read loop
-read x
-read y
-read z
-
-while (loop == 1){
-    while (x == 2){
-        print y
-        y = y + 1
-    }
-    print 0
 }
+fn passing(int a) -> int { 
 
+}
+fn diff(int a,int b) -> int {
 
+}
+# fn main() -> int {
+    # x = 1 
+    # y = 0
+    # loop = 0
+    # z = 10
+    # read loop
+    # read x
+    # read y
+    # read z
+    # while (loop == 1){
+        # while (x == 2){
+            # print y
+            # y = y + 1
+        # }
+        # print 0
+    # }
+# }
 # while (loop == 2 or y == 2) {
 #     x = x + 1
 #     print x
@@ -126,4 +133,3 @@ while (loop == 1){
 # print b
 # c = {4.0, 3.2}
 # print c[1]
-
