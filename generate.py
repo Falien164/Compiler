@@ -166,7 +166,7 @@ class LLVMGenerator:
         )
         self.main_text += f"call void @llvm.memcpy.p0i8.p0i8.i64(i8* %{self.reg}, i8* getelementptr inbounds ([{len(value)} x i8], [{len(value)} x i8]* @{id}, i32 0, i32 0), i64 {len(value)}, i32 1, i1 false)\n"
 
-    def assign_array_i3(self, id, size: int):
+    def assign_array_i32(self, id, size: int):
         ty = "i32"
         self.main_text += f"%{id} = alloca [{size} x {ty}]\n"
 
