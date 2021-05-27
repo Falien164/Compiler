@@ -470,7 +470,33 @@ class RewriteHelloListener(HelloListener):
             print("end")
 
     def exitReturn_stat(self, ctx: HelloParser.Return_statContext):
-        return super().exitReturn_stat(ctx)
+        ID = ctx.value().getText()
+        species = self.variables.get(ID)
+        if species != None:
+            v = self.stack.get_nowait()
+            if species == "int":
+                self.llvmGenerator.printf_i32(ID)
+            elif species == "real":
+                self.llvmGenerator.printf_real(ID)
+            elif species[-1] == "str":
+                self.llvmGenerator.printf_str()
+
+        elif not self.stack.empty():
+            v = self.stack.get_nowait()
+            if v[-1] == "int":
+                self.llvmGenerator.printf_undefined_i32(v[0])
+            if v[-1] == "real":
+                self.llvmGenerator.printf_undefined_real(v[0])
+            elif v[-1] == "str":
+                value = v[0]
+                value = value[:-1]
+                value = value[1:]
+                value = "%s" + value
+                self.llvmGenerator.printf_undefined_str(value)
+        else:
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"unknown variable {ID} at line:{l}, column:{c}")
 
     def exitFunction_definiotion(self, ctx: HelloParser.Function_definiotionContext):
         self.llvmGenerator.exitFunction()
