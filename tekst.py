@@ -1,4 +1,6 @@
 
+glob = 2
+
 fn foo() -> int {
     return 2
 }
@@ -6,7 +8,7 @@ fn foo() -> int {
 fn main() -> int {
     x = foo()
 
-    glob = x + 2
+    gl = @glob + 2
     print glob
 
     return 0
