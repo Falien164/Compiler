@@ -1,17 +1,23 @@
-fn none() -> int { 
-    return 2
-}
-fn passing(int a) -> int { 
-    return a
-}
-fn diff(int a,int b) -> real {
-    return (real)(a + b)
-}
-
+# fn none() -> int { 
+    # return 2
+# }
+# fn passing(int a) -> int { 
+    # return a
+# }
+# fn diff(int a,int b) -> real {
+    # return (real)(a + b)
+# }
+#
 fn main() -> int {
-    x = 1 
-    y = 0
-    print y + x
+    x = none()
+    print x
+    tab = {0,1,2,3,4,5,6}
+    l = 7
+    i = 0
+    while (i < l){
+        print tab[i]
+        i = i + 1
+    }
     return 0
 }
 # fn main() -> int {
