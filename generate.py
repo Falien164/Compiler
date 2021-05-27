@@ -14,6 +14,15 @@ class llvmType(Enum):
     def __str__(self) -> str:
         return self.value
 
+    def zero(self) -> str:
+        if self == llvmType.i32:
+            return "0"
+        elif self == llvmType.double:
+            return "0.000000e+00"
+
+
+TypeInfo = Any
+
 
 class LLVMGenerator:
     def __init__(self, mapper: Callable[[Any], llvmType]):
@@ -59,6 +68,21 @@ class LLVMGenerator:
     def ret_function(self, value, value_type: Any):
         v_t = self.mapper(value_type)
         self.main_text += f"ret {v_t} {value}\n"
+
+    def declare_global(self, id, var_type: TypeInfo):
+        # raise NotImplemented
+        ty = self.mapper(var_type)
+        z = ty.zero()
+        self.header_text += f"@{id} = global {ty} {z}\n"
+
+    def assign_global(self, id, var_type: TypeInfo, value: str):
+        ty = self.mapper(var_type)
+        self.main_text += f"store {ty} {value}, {ty}* @{id}\n"
+
+    @__dec
+    def load_global(self, id, typ):
+        ty = self.mapper(typ)
+        self.main_text += f"%{self.reg} = load {ty}, {ty}* @{id}\n"
 
     @__dec
     def call_function(self, f_name: str, ret_type: Any, par_list: list[Any]):
