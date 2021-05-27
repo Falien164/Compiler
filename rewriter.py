@@ -356,7 +356,6 @@ class RewriteHelloListener(HelloListener):
                 l = ctx.start.line
                 c = ctx.start.column
                 self.error(f"cannot read variable: {variable} at line:{l}, column:{c}")
-                raise NotImplementedError
 
     def exitArray(self, ctx: HelloParser.ArrayContext):
         self.stack.put(("", f"ARRAY"))
@@ -602,6 +601,36 @@ class RewriteHelloListener(HelloListener):
             self.error(f"empty stack of labels at line:{l}, column:{c}")
         self.llvmGenerator.goToLabel(while_cond)
         self.llvmGenerator.emitLabel(while_end)
+
+    def exitIdGlobalReference(self, ctx: HelloParser.IdGlobalReferenceContext):
+        z: str = ctx.ID().getText()
+        if z in self.globa_variables:
+            ty = self.globa_variables[z]
+            self.llvmGenerator.load_global(z, ty)
+            self.stack.put((f"%{self.llvmGenerator.reg - 1}"), ty)
+        else:
+            s = ctx.start
+            l = s.line
+            c = s.column
+            self.error(
+                f"Referencing undeclared global variables {z} at line:{l} column:{c}"
+            )
+
+        # ID = ctx.ID().getText()
+        # species = self.variables.get(ID)  # "ID"
+        # if species == "int":
+        # self.llvmGenerator.load_i32((ID))
+        # self.stack.put(("%" + (str(self.llvmGenerator.reg - 1)), species))
+        # elif species == "real":
+        # self.llvmGenerator.load_real((ID))
+        # self.stack.put(("%" + (str(self.llvmGenerator.reg - 1)), species))
+        # elif type(species) is tuple and species[-1] == "str":
+        # self.llvmGenerator.load_str(ID, species[0])
+        # self.stack.put((ID, species))
+        # else:
+        # l = ctx.start.line
+        # c = ctx.start.column
+        # self.error(f"Unexpected type at line:{l}, column:{c}")
 
     ### comparison
 
