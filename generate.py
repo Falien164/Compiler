@@ -38,6 +38,7 @@ class LLVMGenerator:
     def enterFunction(self):
         """Resets registry number, previous number is put on stack"""
         self.reg_stack.append(self.reg)
+        # Because parameters are passed as pinters in registers 0+
         self.reg = 0
 
     def declare_function(self, fname: str, ret_type: Any, par_type_list: list[Any]):
@@ -50,6 +51,10 @@ class LLVMGenerator:
             ty = self.mapper(i)
             self.main_text += f",{ty}"
         self.main_text += ") {\n"
+
+    def function_offset(self, offset: int):
+        """it should be called once per function"""
+        self.reg += offset + 1
 
     def ret_function(self, value, value_type: Any):
         v_t = self.mapper(value_type)
@@ -161,7 +166,7 @@ class LLVMGenerator:
         )
         self.main_text += f"call void @llvm.memcpy.p0i8.p0i8.i64(i8* %{self.reg}, i8* getelementptr inbounds ([{len(value)} x i8], [{len(value)} x i8]* @{id}, i32 0, i32 0), i64 {len(value)}, i32 1, i1 false)\n"
 
-    def assign_array_i32(self, id, size: int):
+    def assign_array_i3(self, id, size: int):
         ty = "i32"
         self.main_text += f"%{id} = alloca [{size} x {ty}]\n"
 
