@@ -11,6 +11,9 @@ class llvmType(Enum):
     i32 = "i32"
     double = "double"
 
+    def __str__(self) -> str:
+        return self.value
+
 
 class LLVMGenerator:
     def __init__(self, mapper: Callable[[Any], llvmType]):
