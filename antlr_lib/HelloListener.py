@@ -71,12 +71,21 @@ class HelloListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by HelloParser#assign.
-    def enterAssign(self, ctx:HelloParser.AssignContext):
+    # Enter a parse tree produced by HelloParser#assign_local.
+    def enterAssign_local(self, ctx:HelloParser.Assign_localContext):
         pass
 
-    # Exit a parse tree produced by HelloParser#assign.
-    def exitAssign(self, ctx:HelloParser.AssignContext):
+    # Exit a parse tree produced by HelloParser#assign_local.
+    def exitAssign_local(self, ctx:HelloParser.Assign_localContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#assign_global.
+    def enterAssign_global(self, ctx:HelloParser.Assign_globalContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#assign_global.
+    def exitAssign_global(self, ctx:HelloParser.Assign_globalContext):
         pass
 
 

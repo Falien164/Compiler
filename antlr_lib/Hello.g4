@@ -7,7 +7,7 @@ grammar Hello;
 start: NEWLINE* (top_level_stat NEWLINE*)* EOF;
 block: (stat? NEWLINE)*;
 // Statement list
-top_level_stat: function_definiotion | assign;
+top_level_stat: function_definiotion | global_assign;
 
 stat:
 	printf
@@ -23,8 +23,10 @@ stat:
 printf: STD_OUT value;
 scanf: STD_IN ID;
 array_assign: ID '[' expr ']' ASSIGN value;
-assign: ID ASSIGN value;
-global_assign: '@' ID ASSIGN value;
+assign:
+	ID ASSIGN value			# assign_local
+	| '@' ID ASSIGN value	# assign_global;
+global_assign: ID ASSIGN value;
 
 function_definiotion:
 	'fn' function_name '(' (our_type ID (',' our_type ID)*)? ')' '->' return_type '{' function_body
