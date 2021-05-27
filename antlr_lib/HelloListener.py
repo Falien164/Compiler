@@ -359,6 +359,15 @@ class HelloListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by HelloParser#idGlobalReference.
+    def enterIdGlobalReference(self, ctx:HelloParser.IdGlobalReferenceContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#idGlobalReference.
+    def exitIdGlobalReference(self, ctx:HelloParser.IdGlobalReferenceContext):
+        pass
+
+
     # Enter a parse tree produced by HelloParser#array.
     def enterArray(self, ctx:HelloParser.ArrayContext):
         pass

@@ -79,6 +79,7 @@ atom:
 	| ID '[' expr ']'		# id_dereference
 	| '(' expr ')'			# par
 	| ID					# id
+	| '@' ID				# idGlobalReference
 	| '{' (value ','?)* '}'	# array
 	| STRING				# string;
 
