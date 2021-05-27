@@ -3,7 +3,7 @@ from functools import wraps
 from enum import Enum
 import queue
 from collections.abc import Callable
-from typing import Any
+from typing import Any, Tuple
 
 
 # maper type -> llvm type
@@ -59,6 +59,16 @@ class LLVMGenerator:
     def ret_function(self, value, value_type: Any):
         v_t = self.mapper(value_type)
         self.main_text += f"ret {v_t} {value}\n"
+
+    @__dec
+    def call_function(self, f_name: str, ret_type: Any, par_list: list[Any]):
+        r_type = self.mapper(ret_type)
+        self.main_text += f"%{self.reg} = call {r_type} @{f_name} ( "
+        for val_reg in par_list[:1]:
+            self.main_text += f"{val_reg}"
+        for val_reg in par_list[1:]:
+            self.main_text += f", {val_reg}"
+        self.main_text += f")\n"
 
     def exitFunction(self):
         if len(self.reg_stack) > 0:
