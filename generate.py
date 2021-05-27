@@ -3,6 +3,7 @@ from functools import wraps
 from enum import Enum
 import queue
 from collections.abc import Callable
+from typing import Any
 
 
 # maper type -> llvm type
@@ -12,7 +13,7 @@ class llvmType(Enum):
 
 
 class LLVMGenerator:
-    def __init__(self, mapper: Callable[[str], llvmType]):
+    def __init__(self, mapper: Callable[[Any], llvmType]):
         self.header_text = ""
         self.main_text = ""
         self.reg: int = 1
@@ -36,7 +37,7 @@ class LLVMGenerator:
         self.reg_stack.append(self.reg)
         self.reg = 0
 
-    def def_function(self, fname: str, ret_type: str, par_type_list: list[str]):
+    def declare_function(self, fname: str, ret_type: Any, par_type_list: list[Any]):
         r_type = self.mapper(ret_type)
         self.main_text += f"define {r_type} @{fname}("
         for i in par_type_list[:1]:
@@ -47,12 +48,10 @@ class LLVMGenerator:
             self.main_text += f",{ty}"
         self.main_text += ") {\n"
 
-    def end_def_function(self):
-        self.main_text += "}\n"
-
     def exitFunction(self):
         if len(self.reg_stack) > 0:
             self.reg = self.reg_stack.pop()
+            self.main_text += "}\n"
         else:
             raise RuntimeError(f"Attempted to pop empty reg_stack when reg {self.reg}")
 
