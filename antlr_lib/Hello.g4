@@ -28,7 +28,7 @@ function_definiotion:
 	'fn' function_name '(' (our_type ID (',' our_type ID)*)? ')' '->' return_type '{' function_body
 		'}';
 
-function_call: function_name '(' (expr (',' expr)*) ')';
+function_call: function_name '(' (expr (',' expr)*)? ')';
 
 function_body: block;
 return_stat: 'return'+ value;
