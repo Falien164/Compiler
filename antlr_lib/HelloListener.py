@@ -26,6 +26,15 @@ class HelloListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by HelloParser#top_level_stat.
+    def enterTop_level_stat(self, ctx:HelloParser.Top_level_statContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#top_level_stat.
+    def exitTop_level_stat(self, ctx:HelloParser.Top_level_statContext):
+        pass
+
+
     # Enter a parse tree produced by HelloParser#stat.
     def enterStat(self, ctx:HelloParser.StatContext):
         pass
@@ -68,6 +77,15 @@ class HelloListener(ParseTreeListener):
 
     # Exit a parse tree produced by HelloParser#assign.
     def exitAssign(self, ctx:HelloParser.AssignContext):
+        pass
+
+
+    # Enter a parse tree produced by HelloParser#global_assign.
+    def enterGlobal_assign(self, ctx:HelloParser.Global_assignContext):
+        pass
+
+    # Exit a parse tree produced by HelloParser#global_assign.
+    def exitGlobal_assign(self, ctx:HelloParser.Global_assignContext):
         pass
 
 

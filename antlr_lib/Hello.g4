@@ -4,9 +4,11 @@
 
 grammar Hello;
 
-start: block EOF;
+start: NEWLINE* (top_level_stat NEWLINE*)* EOF;
 block: (stat? NEWLINE)*;
 // Statement list
+top_level_stat: function_definiotion | assign;
+
 stat:
 	printf
 	| scanf
@@ -14,7 +16,6 @@ stat:
 	| assign
 	| if_statement
 	| while_stat
-	| function_definiotion
 	| return_stat;
 // ont Enter setInisde function flag
 
@@ -23,6 +24,7 @@ printf: STD_OUT value;
 scanf: STD_IN ID;
 array_assign: ID '[' expr ']' ASSIGN value;
 assign: ID ASSIGN value;
+global_assign: '@' ID ASSIGN value;
 
 function_definiotion:
 	'fn' function_name '(' (our_type ID (',' our_type ID)*)? ')' '->' return_type '{' function_body
