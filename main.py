@@ -14,7 +14,7 @@ def main(argv):
     parser = HelloParser(stream)
     tree = parser.start()
 
-    eprint(tree.toStringTree(recog=parser))
+    # eprint(tree.toStringTree(recog=parser))
 
     listener = RewriteHelloListener()
     walker = ParseTreeWalker()
