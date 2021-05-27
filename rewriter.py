@@ -432,7 +432,7 @@ class RewriteHelloListener(HelloListener):
             l_ifthen = self.llvmGenerator.getLabel()
 
         condition = self.getOneValueFromStack(ctx)
-        if condition[-1] == "BOOLEAN":
+        if condition[-1] == "boolean":
             self.llvmGenerator.conditional_branch(condition[0], l_ifthen, l_ifelse)
             self.llvmGenerator.emitLabel(l_ifthen)
             self.labels.put(l_ifelse)
@@ -511,6 +511,47 @@ class RewriteHelloListener(HelloListener):
         self.llvmGenerator.exitFunction()
         self.variables.clear()  # local bariables are out of scope
 
+    def exitFunction_call(self, ctx: HelloParser.Function_callContext):
+        f_name = ctx.function_name().ID().getText()
+        eprint(f_name)
+        fn = self.functions.get(f_name)
+        if fn:
+            r_typ = fn.return_type
+            f_name = fn.name
+            size = self.stack.qsize()
+            params_ref: list[int] = []
+            params_types: list[llvmType] = []
+            for _ in range(size):
+                ref, ty = self.stack.get_nowait()
+                val_reg = self.llvmGenerator.reg
+                if ty == "int":
+                    print(ref)
+                    self.llvmGenerator.load_i32(ref)
+                elif ty == "real":
+                    print(ref)
+                    self.llvmGenerator.load_real(ref)
+                else:
+                    raise NotImplemented("Type undefined")
+                params_ref.insert(0, val_reg)
+                params_types.insert(0, ty)
+            desire_par_type_list = fn.parameter_types
+            if len(desire_par_type_list) != len(params_types):
+                for (lw, pw) in zip(desire_par_type_list, params_types):
+                    if lw != pw:
+                        ctx.parameter_list().expr()
+                        self.error("Type mismatch")
+
+            else:
+                self.error("too much or to0 few arguments")
+
+            self.llvmGenerator.call_function(f_name, r_typ, params)
+            self.stack.put((f"%{self.llvmGenerator.reg-1}", r_typ))
+        else:
+            s = ctx.function_name().start
+            l = s.line
+            c = s.column
+            self.error(f"Call to undefined function {f_name} at line:{l}, column:{c}")
+
     #### WHILE LOOP
     # def enterWhile_stat(self, ctx:HelloParser.While_statContext):
     #     self.end_if_label.append(self.llvmGenerator.getLabel())
@@ -541,7 +582,7 @@ class RewriteHelloListener(HelloListener):
             while_body = self.llvmGenerator.getLabel()
             while_end = self.llvmGenerator.getLabel()
 
-        if v1[-1] == "BOOLEAN":
+        if v1[-1] == "boolean":
             self.llvmGenerator.conditional_branch(v1[0], while_body, while_end)
             self.llvmGenerator.emitLabel(while_body)
             self.labels.put(while_end)
@@ -576,7 +617,7 @@ class RewriteHelloListener(HelloListener):
             self.llvmGenerator.eq(v2[0], v1[0])
         elif str(ctx.NEQ()) == "!=":
             self.llvmGenerator.ne(v2[0], v1[0])
-        self.stack.put((f"%{self.llvmGenerator.reg-1}", "BOOLEAN"))
+        self.stack.put((f"%{self.llvmGenerator.reg-1}", "boolean"))
 
     def exitRelationalExpr(self, ctx: HelloParser.RelationalExprContext):
         v1, v2 = self.getTwoValueFromStack(ctx)
@@ -594,7 +635,7 @@ class RewriteHelloListener(HelloListener):
             self.llvmGenerator.slt(v2[0], v1[0])
         elif str(ctx.LTEQ()) == "<=":
             self.llvmGenerator.sle(v2[0], v1[0])
-        self.stack.put((f"%{self.llvmGenerator.reg-1}", "BOOLEAN"))
+        self.stack.put((f"%{self.llvmGenerator.reg-1}", "boolean"))
 
     def exitAndExpr(self, ctx: HelloParser.AndExprContext):
         v1, v2 = self.getTwoValueFromStack(ctx)
