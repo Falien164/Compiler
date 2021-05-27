@@ -89,7 +89,7 @@ class RewriteHelloListener(HelloListener):
                 self.llvmGenerator.printf_i32(ID)
             elif species == "real":
                 self.llvmGenerator.printf_real(ID)
-            elif species[-1] == "STR":
+            elif species[-1] == "str":
                 self.llvmGenerator.printf_str()
 
         elif not self.stack.empty():
@@ -98,7 +98,7 @@ class RewriteHelloListener(HelloListener):
                 self.llvmGenerator.printf_undefined_i32(v[0])
             if v[-1] == "real":
                 self.llvmGenerator.printf_undefined_real(v[0])
-            elif v[-1] == "STR":
+            elif v[-1] == "str":
                 value = v[0]
                 value = value[:-1]
                 value = value[1:]
@@ -123,7 +123,7 @@ class RewriteHelloListener(HelloListener):
                     self.llvmGenerator.declare_real(ID)
                     self.llvmGenerator.assign_real(ID, v[0])
                     self.variables[ID] = v[1]
-                elif v[-1] == "STR":
+                elif v[-1] == "str":
                     self.llvmGenerator.declare_str(ID, v[0])
                     self.variables[ID] = (v[-2], v[-1])  # insert type and value
                     value = v[0][:-1]
@@ -176,7 +176,7 @@ class RewriteHelloListener(HelloListener):
                     l = ctx.start.line
                     c = ctx.start.column
                     self.error(f"Re definition of array {ID} at line:{l}, column:{c}")
-                elif v[-1] == "STR":
+                elif v[-1] == "str":
                     l = ctx.start.line
                     c = ctx.start.column
                     self.error(f"Re definition of array {ID} at line:{l}, column:{c}")
@@ -199,9 +199,9 @@ class RewriteHelloListener(HelloListener):
                     self.llvmGenerator.add_real(v1[0], v2[0])
                     self.stack.put(("%" + str(self.llvmGenerator.reg - 1), "real"))
             elif v1[1][-1] == (v2[1][-1]):
-                if v1[1][-1] == "STR":
+                if v1[1][-1] == "str":
                     self.llvmGenerator.add_str(v1[0], v2[0])
-                    self.stack.put(("%" + str(self.llvmGenerator.reg - 1), "STR"))
+                    self.stack.put(("%" + str(self.llvmGenerator.reg - 1), "str"))
         elif str(ctx.SUB()) == "-":
             if v1[-1] == "int":
                 self.llvmGenerator.sub_i32(v1[0], v2[0])
@@ -245,7 +245,7 @@ class RewriteHelloListener(HelloListener):
         self.stack.put((ctx.real().getText(), "real"))
 
     def exitString(self, ctx: HelloParser.StringContext):
-        self.stack.put((ctx.STRING().getText(), "STR"))
+        self.stack.put((ctx.strING().getText(), "str"))
 
     def exitToint(self, ctx: HelloParser.TointContext):
         if self.stack.empty():
@@ -276,10 +276,10 @@ class RewriteHelloListener(HelloListener):
             self.error(f"EMPTY STACK during (str) command at line:{l}, column:{c}")
 
         if ctx.atom().getText() in self.variables:
-            self.stack.put((ctx.atom().getText(), "STR"))
+            self.stack.put((ctx.atom().getText(), "str"))
         else:
             text = '"' + ctx.atom().getText() + '"'
-            self.stack.put((text, "STR"))
+            self.stack.put((text, "str"))
 
     def exitId(self, ctx: HelloParser.IdContext):
         ID = ctx.ID().getText()
@@ -290,7 +290,7 @@ class RewriteHelloListener(HelloListener):
         elif species == "real":
             self.llvmGenerator.load_real((ID))
             self.stack.put(("%" + (str(self.llvmGenerator.reg - 1)), species))
-        elif type(species) is tuple and species[-1] == "STR":
+        elif type(species) is tuple and species[-1] == "str":
             self.llvmGenerator.load_str(ID, species[0])
             self.stack.put((ID, species))
         else:
