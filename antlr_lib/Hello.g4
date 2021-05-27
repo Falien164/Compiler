@@ -33,7 +33,7 @@ function_call: function_name '(' parameter_list? ')';
 parameter_list: (expr (',' expr)*);
 
 function_body: block;
-return_stat: 'return'+ expr;
+return_stat: 'return'+ value;
 return_type: our_type;
 our_type: builtin_type;
 builtin_type: 'int' | 'real';
