@@ -1,7 +1,7 @@
 from antlr4 import *
 from antlr_lib.HelloParser import HelloParser
 from antlr_lib.HelloListener import HelloListener
-from generate import LLVMGenerator
+from generate import LLVMGenerator, llvmType
 from util import eprint
 from typing import Tuple, Dict
 
@@ -12,6 +12,12 @@ import queue
 # Przerobic assign by LOAD i wczytywac ze zmiennej
 
 TypeTable = {"int": "INT", "real": "REAL"}
+LLVMTable = {"INT": llvmType.i32, "REAL": llvmType.double}
+
+
+def mapper(ty: str):
+    return LLVMTable[ty]
+
 
 # castowanie reala i inta na stringa
 # assing string do zmiennych
@@ -21,7 +27,7 @@ class RewriteHelloListener(HelloListener):
         self.labels = queue.LifoQueue()  # if context
         self.variables: dict[str, str] = {}  # dict    [variable, type]
         self.globa_variables: dict[str, str] = {}
-        self.llvmGenerator = LLVMGenerator()
+        self.llvmGenerator = LLVMGenerator(mapper)
         self.line = 1
         self.functions = []
         self.end_if_label = []  # if context
@@ -443,18 +449,30 @@ class RewriteHelloListener(HelloListener):
         fn_def_ctx = ctx.parentCtx
         f_name = fn_def_ctx.function_name().ID().getText()
         self.functions.append(f_name)
-        par = fn_def_ctx.ID()
-        if isinstance(par, list):
-            # pur type is list
-            gt = lambda x: x.getText()
-            types = map(gt, fn_def_ctx.our_type())
-            par_nam = map(gt, par)
-            params = zip(par_nam, types)
-            for name, t in params:
-                my_type = TypeTable[t]
-                self.variables[name] = my_type
+        par: list = fn_def_ctx.ID()
+        r_type = TypeTable[fn_def_ctx.return_type().getText()]
+        gt = lambda x: x.getText()
+        to_my_types = lambda x: TypeTable[x]
+        types = list(map(to_my_types, map(gt, fn_def_ctx.our_type())))
+        par_nam = map(gt, par)
+        params = zip(par_nam, types)
+        self.llvmGenerator.declare_function(f_name, r_type, types)
+        for (i, (name, t)) in enumerate(params):
+            self.variables[name] = t
+            # TODO :BArdzo to mi się nie podoba przecieka abstrakcja
+            # TODO Raz że naruszenie abstrakcji dwa że to sie powtarza
+            if t == "INT":
+                self.llvmGenerator.declare_i32(name)
+                self.llvmGenerator.assign_i32(name, f"%{i}")
+            elif t == "REAL":
+                self.llvmGenerator.declare_real(name)
+                self.llvmGenerator.assign_real(name, f"%{i}")
             # register 0..numberOfParameters are occupied by pointers
             # now alloca the same number of variables
+            print("end")
+
+    def exitReturn_stat(self, ctx: HelloParser.Return_statContext):
+        return super().exitReturn_stat(ctx)
 
     def exitFunction_definiotion(self, ctx: HelloParser.Function_definiotionContext):
         self.llvmGenerator.exitFunction()
