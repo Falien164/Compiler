@@ -28,6 +28,8 @@ class LLVMGenerator:
     def __init__(self, mapper: Callable[[Any], llvmType]):
         self.header_text = ""
         self.main_text = ""
+        self.should_load_global = 1
+        self.glob_load = ""
         self.reg: int = 1
         self.reg_stack: list[int] = []
         self.label: int = 0
@@ -60,6 +62,9 @@ class LLVMGenerator:
             ty = self.mapper(i)
             self.main_text += f",{ty}"
         self.main_text += ") {\n"
+        if(self.should_load_global == 1 and fname == "main"):
+            self.should_load_global = 0
+            self.main_text += self.glob_load
 
     def function_offset(self, offset: int):
         """it should be called once per function"""
@@ -77,7 +82,7 @@ class LLVMGenerator:
 
     def assign_global(self, id, var_type: TypeInfo, value: str):
         ty = self.mapper(var_type)
-        self.main_text += f"store {ty} {value}, {ty}* @{id}\n"
+        self.glob_load += f"store {ty} {value}, {ty}* @{id}\n"
 
     @__dec
     def load_global(self, id, typ):
