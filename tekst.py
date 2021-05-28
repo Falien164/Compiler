@@ -35,6 +35,11 @@ fn foo() -> int {
     return glob
 }
 
+fn bar(int a) -> int {
+    return a
+}
+
+
 fn main() -> int {
     @zmienna = 2.0
 
