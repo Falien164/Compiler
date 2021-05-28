@@ -119,8 +119,99 @@ class RewriteHelloListener(HelloListener):
             c = ctx.start.column
             self.error(f"unknown variable {ID} at line:{l}, column:{c}")
 
+    def exitGlobal_assign(self, ctx: HelloParser.Global_assignContext):
+        ID = ctx.ID().getText()
+        if not self.stack.empty():
+            v = self.stack.get()
+            value = v[0]
+            ty = v[1]
+            if not ID in self.variables:
+                self.llvmGenerator.declare_global(ID, ty)
+                self.globa_variables[ID] = ty
+            self.llvmGenerator.assign_global(ID, ty, value)
+        else:
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"EMPTY STACK with ID = {ID} at line:{l}, column:{c}")
+
+    def exitAssign_global(self, ctx: HelloParser.Assign_globalContext):
+        ID = ctx.ID().getText()
+        if not self.stack.empty():
+            v = self.stack.get_nowait()
+            if ID not in self.variables:  # for int and real not for string
+                if v[1] == "int":
+                    self.llvmGenerator.declare_i32(ID)
+                    self.llvmGenerator.assign_i32(ID, v[0])
+                    self.variables[ID] = v[1]
+                elif v[1] == "real":
+                    self.llvmGenerator.declare_real(ID)
+                    self.llvmGenerator.assign_real(ID, v[0])
+                    self.variables[ID] = v[1]
+                elif v[-1] == "str":
+                    self.llvmGenerator.declare_str(ID, v[0])
+                    self.variables[ID] = (v[-2], v[-1])  # insert type and value
+                    value = v[0][:-1]
+                    self.llvmGenerator.assign_str(ID, value)
+                elif v[1] == "ARRAY":
+                    size = self.stack.qsize()
+                    last = self.stack.get_nowait()
+                    ty = last[1]
+                    if ty == "int":
+                        # assign bo źle nazwałem metodę
+                        self.llvmGenerator.assign_array_i32(ID, size)
+                        self.llvmGenerator.store_array_i32(ID, size - 1, last[0], size)
+                    elif ty == "real":
+                        self.llvmGenerator.assign_array_double(ID, size)
+                        self.llvmGenerator.store_array_double(
+                            ID, size - 1, last[0], size
+                        )
+                    else:
+                        raise NotImplemented
+                    # reverse queue
+                    for i in range(size - 2, -1, -1):
+                        t = self.stack.get_nowait()
+                        if t[1] != ty:
+                            l = ctx.start.line
+                            c = ctx.start.column
+                            self.error(
+                                "Array types are inconsistent at line:{l}, column:{c}"
+                            )
+                        if ty == "int":
+                            # assign bo źle nazwałem metodę
+                            self.llvmGenerator.store_array_i32(ID, i, t[0], size)
+                        elif ty == "real":
+                            self.llvmGenerator.store_array_double(ID, i, t[0], size)
+                        else:
+                            raise NotImplemented
+
+                    self.variables[ID] = (v[1], size, ty)
+
+                else:
+                    raise NotImplemented
+            else:
+                # it re assignment
+                if v[1] == "int":
+                    self.llvmGenerator.assign_i32(ID, v[0])
+                    self.variables[ID] = v[1]
+                elif v[1] == "real":
+                    self.llvmGenerator.assign_real(ID, v[0])
+                    self.variables[ID] = v[1]
+                elif v[1] == "ARRAY":
+                    l = ctx.start.line
+                    c = ctx.start.column
+                    self.error(f"Re definition of array {ID} at line:{l}, column:{c}")
+                elif v[-1] == "str":
+                    l = ctx.start.line
+                    c = ctx.start.column
+                    self.error(f"Re definition of array {ID} at line:{l}, column:{c}")
+
+        else:
+            l = ctx.start.line
+            c = ctx.start.column
+            self.error(f"EMPTY STACK with ID = {ID} at line:{l}, column:{c}")
+
     # Exit a parse tree produced by HelloParser#assign.
-    def exitAssign(self, ctx: HelloParser.AssignContext):
+    def exitAssign_local(self, ctx: HelloParser.Assign_localContext):
         ID = ctx.ID().getText()
         if not self.stack.empty():
             v = self.stack.get_nowait()
