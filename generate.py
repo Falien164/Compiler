@@ -62,7 +62,7 @@ class LLVMGenerator:
             ty = self.mapper(i)
             self.main_text += f",{ty}"
         self.main_text += ") {\n"
-        if(self.should_load_global == 1 and fname == "main"):
+        if self.should_load_global == 1 and fname == "main":
             self.should_load_global = 0
             self.main_text += self.glob_load
 
@@ -90,13 +90,19 @@ class LLVMGenerator:
         self.main_text += f"%{self.reg} = load {ty}, {ty}* @{id}\n"
 
     @__dec
-    def call_function(self, f_name: str, ret_type: Any, par_list: list[Any]):
+    def call_function(
+        self, f_name: str, ret_type: Any, par_list: list[Any], par_ty: list[TypeInfo]
+    ):
         r_type = self.mapper(ret_type)
         self.main_text += f"%{self.reg} = call {r_type} @{f_name} ( "
         for val_reg in par_list[:1]:
-            self.main_text += f"{val_reg}"
+            t = self.mapper(par_ty[0])
+            self.main_text += f"{t} {val_reg}"
+        i = 1
         for val_reg in par_list[1:]:
-            self.main_text += f", {val_reg}"
+            t = self.mapper(par_ty[i])
+            self.main_text += f", {t} {val_reg}"
+            i += 1
         self.main_text += f")\n"
 
     def exitFunction(self):
@@ -197,14 +203,11 @@ class LLVMGenerator:
     def assign_global_i32(self, id, value):
         self.main_text += f"store i32 {value}, i32* @{id}\n"
 
-
     def assign_real(self, id, value):
         self.main_text += f"store double {value}, double* %{id}\n"
 
     def assign_global_real(self, id, value):
         self.main_text += f"store double {value}, double* @{id}\n"
-
-
 
     @__dec
     def assign_str(self, id, value):
