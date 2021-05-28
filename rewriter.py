@@ -140,7 +140,7 @@ class RewriteHelloListener(HelloListener):
         if not self.stack.empty():
             v = self.stack.get_nowait()
             if ID not in self.globa_variables:  # for int and real not for string
-                
+
                 if v[1] == "int":
                     self.llvmGenerator.declare_global(ID, v[1])
                     self.llvmGenerator.assign_global_i32(ID, v[0])
@@ -613,16 +613,19 @@ class RewriteHelloListener(HelloListener):
             params_types: list[llvmType] = []
             for _ in range(size):
                 ref, ty = self.stack.get_nowait()
-                val_reg = self.llvmGenerator.reg
+                # val_reg = f"%{self.llvmGenerator.reg}"
+                # ref = ref.lstrip("%")
                 if ty == "int":
-                    print(ref)
-                    self.llvmGenerator.load_i32(ref)
+                    pass
+                    # print(ref)
+                    # self.llvmGenerator.load_i32(ref)
                 elif ty == "real":
-                    print(ref)
-                    self.llvmGenerator.load_real(ref)
+                    pass
+                    # print(ref)
+                    # self.llvmGenerator.load_real(ref)
                 else:
                     raise NotImplemented("Type undefined")
-                params_ref.insert(0, val_reg)
+                params_ref.insert(0, ref)
                 params_types.insert(0, ty)
             desire_par_type_list = fn.parameter_types
             if len(desire_par_type_list) == len(params_types):
@@ -634,8 +637,8 @@ class RewriteHelloListener(HelloListener):
             else:
                 self.error("too much or to0 few arguments")
 
-            self.llvmGenerator.call_function(f_name, r_typ, desire_par_type_list)
-            self.stack.put((f"%{self.llvmGenerator.reg-1}", r_typ))
+            self.llvmGenerator.call_function(f_name, r_typ, params_ref, params_types)
+            self.stack.put((f"{self.llvmGenerator.reg}", r_typ))
         else:
             s = ctx.function_name().start
             l = s.line
