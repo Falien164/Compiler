@@ -1,5 +1,6 @@
 
 glob = 2
+m = 3
 
 fn foo() -> int {
     return 2

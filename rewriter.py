@@ -698,7 +698,7 @@ class RewriteHelloListener(HelloListener):
         if z in self.globa_variables:
             ty = self.globa_variables[z]
             self.llvmGenerator.load_global(z, ty)
-            self.stack.put((f"%{self.llvmGenerator.reg - 1}"), ty)
+            self.stack.put((f"%{self.llvmGenerator.reg - 1}", ty))
         else:
             s = ctx.start
             l = s.line
