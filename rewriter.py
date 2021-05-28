@@ -48,7 +48,8 @@ class RewriteHelloListener(HelloListener):
     # Exit a parse tree produced by HelloParser#start.
     def exitStart(self, ctx: HelloParser.StartContext):
         print(self.llvmGenerator.generate())
-        eprint(self.variables)
+        eprint(f"variables: {self.variables}")
+        eprint(f"globa_variables: {self.globa_variables}")
         eprint("Na stosie zostalo:")
         for i in range(0, self.stack.qsize()):
             eprint(self.stack.get())
@@ -138,15 +139,16 @@ class RewriteHelloListener(HelloListener):
         ID = ctx.ID().getText()
         if not self.stack.empty():
             v = self.stack.get_nowait()
-            if ID not in self.variables:  # for int and real not for string
+            if ID not in self.globa_variables:  # for int and real not for string
+                
                 if v[1] == "int":
-                    self.llvmGenerator.declare_i32(ID)
-                    self.llvmGenerator.assign_i32(ID, v[0])
-                    self.variables[ID] = v[1]
+                    self.llvmGenerator.declare_global(ID, v[1])
+                    self.llvmGenerator.assign_global_i32(ID, v[0])
+                    self.globa_variables[ID] = v[1]
                 elif v[1] == "real":
-                    self.llvmGenerator.declare_real(ID)
-                    self.llvmGenerator.assign_real(ID, v[0])
-                    self.variables[ID] = v[1]
+                    self.llvmGenerator.declare_global(ID, v[1])
+                    self.llvmGenerator.assign_global_real(ID, v[0])
+                    self.globa_variables[ID] = v[1]
                 elif v[-1] == "str":
                     self.llvmGenerator.declare_str(ID, v[0])
                     self.variables[ID] = (v[-2], v[-1])  # insert type and value
@@ -191,10 +193,9 @@ class RewriteHelloListener(HelloListener):
             else:
                 # it re assignment
                 if v[1] == "int":
-                    self.llvmGenerator.assign_i32(ID, v[0])
-                    self.variables[ID] = v[1]
+                    self.llvmGenerator.assign_global_i32(ID, v[0])
                 elif v[1] == "real":
-                    self.llvmGenerator.assign_real(ID, v[0])
+                    self.llvmGenerator.assign_global_real(ID, v[0])
                     self.variables[ID] = v[1]
                 elif v[1] == "ARRAY":
                     l = ctx.start.line

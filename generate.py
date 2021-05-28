@@ -179,8 +179,14 @@ class LLVMGenerator:
     def declare_i32(self, id):
         self.main_text += f"%{id} = alloca i32\n"
 
+    def declare_global_i32(self, id):
+        self.header_text += f"@{id} = alloca i32\n"
+
     def declare_real(self, id):
         self.main_text += f"%{id} = alloca double\n"
+
+    def declare_global_real(self, id):
+        self.main_text += f"@{id} = alloca double\n"
 
     def declare_str(self, id, text):
         self.main_text += f"%{id} = alloca [{len(text)-1} x i8]\n"
@@ -188,8 +194,17 @@ class LLVMGenerator:
     def assign_i32(self, id, value):
         self.main_text += f"store i32 {value}, i32* %{id}\n"
 
+    def assign_global_i32(self, id, value):
+        self.main_text += f"store i32 {value}, i32* @{id}\n"
+
+
     def assign_real(self, id, value):
         self.main_text += f"store double {value}, double* %{id}\n"
+
+    def assign_global_real(self, id, value):
+        self.main_text += f"store double {value}, double* @{id}\n"
+
+
 
     @__dec
     def assign_str(self, id, value):
