@@ -638,7 +638,7 @@ class RewriteHelloListener(HelloListener):
                 self.error("too much or to0 few arguments")
 
             self.llvmGenerator.call_function(f_name, r_typ, params_ref, params_types)
-            self.stack.put((f"{self.llvmGenerator.reg}", r_typ))
+            self.stack.put((f"%{self.llvmGenerator.reg-1}", r_typ))
         else:
             s = ctx.function_name().start
             l = s.line

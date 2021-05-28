@@ -45,7 +45,7 @@ fn main() -> int {
     print glob
 
     a = 99
-    #cond = condition(a)
+    cond = condition(a)
 
     tab = {0, 0, 0, 0, 0, 0}
     i = 0
